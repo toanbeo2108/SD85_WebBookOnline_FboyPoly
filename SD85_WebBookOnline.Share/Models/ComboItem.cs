@@ -12,9 +12,9 @@ namespace SD85_WebBookOnline.Share.Models
         public Guid? BookID { get; set; }
         public Guid? ComboID { get; set; }
         public string ItemName { get; set; }
-        public double Price { get; set; }
-        public double Quantity { get; set; }
-        public double ToTal { get; set; }
+        public decimal Price { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal ToTal { get; set; }
         public int Status { get; set; }
 
         public virtual Book? Book { get; set; }

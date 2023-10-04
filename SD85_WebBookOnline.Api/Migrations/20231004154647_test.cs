@@ -57,7 +57,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Authors",
+                name: "Author",
                 columns: table => new
                 {
                     AuthorID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -73,7 +73,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Authors", x => x.AuthorID);
+                    table.PrimaryKey("PK_Author", x => x.AuthorID);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,7 +98,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     CreatebyID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CartItemID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ComboName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -176,8 +176,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DiscountCondition = table.Column<double>(type: "float", nullable: true),
-                    DiscountAmount = table.Column<double>(type: "float", nullable: true),
+                    DiscountCondition = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    DiscountAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -328,8 +328,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     MainPhoto = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuantitySold = table.Column<int>(type: "int", nullable: false),
                     QuantityExists = table.Column<int>(type: "int", nullable: false),
-                    EntryPrice = table.Column<double>(type: "float", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
+                    EntryPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Information = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ISBN = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -365,13 +365,13 @@ namespace SD85_WebBookOnline.Api.Migrations
                 {
                     BillID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     VoucherID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    PriceBeforeVoucher = table.Column<double>(type: "float", nullable: false),
-                    Shipmoney = table.Column<double>(type: "float", nullable: false),
+                    PriceBeforeVoucher = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Shipmoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     UserPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Total = table.Column<double>(type: "float", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentMethod = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -397,8 +397,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                 {
                     CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     VoucherID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    PriceBeforeVoucher = table.Column<double>(type: "float", nullable: false),
-                    Total = table.Column<double>(type: "float", nullable: false),
+                    PriceBeforeVoucher = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
@@ -433,9 +433,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                 {
                     table.PrimaryKey("PK_BookDetails", x => x.BookDetailID);
                     table.ForeignKey(
-                        name: "FK_BookDetails_Authors_AuthorID",
+                        name: "FK_BookDetails_Author_AuthorID",
                         column: x => x.AuthorID,
-                        principalTable: "Authors",
+                        principalTable: "Author",
                         principalColumn: "AuthorID");
                     table.ForeignKey(
                         name: "FK_BookDetails_Book_BookID",
@@ -462,9 +462,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                     BookID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ComboID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ItemName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    Quantity = table.Column<double>(type: "float", nullable: false),
-                    ToTal = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ToTal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -502,16 +502,46 @@ namespace SD85_WebBookOnline.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "InputSlip",
+                columns: table => new
+                {
+                    InputSlipID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdNhanVienNhap = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IdSachNhap = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SoLuong = table.Column<int>(type: "int", nullable: false),
+                    GiaNhap = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    NgayNhap = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BookID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InputSlip", x => x.InputSlipID);
+                    table.ForeignKey(
+                        name: "FK_InputSlip_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_InputSlip_Book_BookID",
+                        column: x => x.BookID,
+                        principalTable: "Book",
+                        principalColumn: "BookID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BillItems",
                 columns: table => new
                 {
                     BillItemID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BookID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     BillID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ComboID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ItemName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    ToTal = table.Column<double>(type: "float", nullable: false),
+                    ToTal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -527,6 +557,11 @@ namespace SD85_WebBookOnline.Api.Migrations
                         column: x => x.BookID,
                         principalTable: "Book",
                         principalColumn: "BookID");
+                    table.ForeignKey(
+                        name: "FK_BillItems_Combo_ComboID",
+                        column: x => x.ComboID,
+                        principalTable: "Combo",
+                        principalColumn: "ComboID");
                 });
 
             migrationBuilder.CreateTable(
@@ -538,9 +573,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                     ComboID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     BookID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ItemName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Quantity = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ToTal = table.Column<double>(type: "float", nullable: false),
+                    ToTal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -566,12 +601,12 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "c013bd2a-3da1-48b6-8de2-cf6160076400", "8b682300-a8a4-42d6-92b8-6ac5e322b63f", "User", "USER" });
+                values: new object[] { "039703bf-e77f-42ed-9e5e-b48afb63136e", "8498f263-fc4f-4192-a4c4-7f6a5c2b7c65", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "eedad3f2-9866-4372-916f-d2c27108f774", "0727ca27-8e1d-4c8d-b402-ea28f86d4585", "Admin", "ADMIN" });
+                values: new object[] { "8deae500-f822-4f40-b35d-c404840e762c", "cf3de9e2-338b-4386-a175-56196f398e53", "User", "USER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -631,6 +666,11 @@ namespace SD85_WebBookOnline.Api.Migrations
                 name: "IX_BillItems_BookID",
                 table: "BillItems",
                 column: "BookID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BillItems_ComboID",
+                table: "BillItems",
+                column: "ComboID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Book_CouponID",
@@ -711,6 +751,16 @@ namespace SD85_WebBookOnline.Api.Migrations
                 name: "IX_Images_BookID",
                 table: "Images",
                 column: "BookID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InputSlip_BookID",
+                table: "InputSlip",
+                column: "BookID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InputSlip_UserId",
+                table: "InputSlip",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -749,13 +799,16 @@ namespace SD85_WebBookOnline.Api.Migrations
                 name: "Images");
 
             migrationBuilder.DropTable(
+                name: "InputSlip");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Bill");
 
             migrationBuilder.DropTable(
-                name: "Authors");
+                name: "Author");
 
             migrationBuilder.DropTable(
                 name: "Categories");

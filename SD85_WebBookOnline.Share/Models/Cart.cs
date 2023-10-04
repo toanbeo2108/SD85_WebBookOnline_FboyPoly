@@ -11,8 +11,8 @@ namespace SD85_WebBookOnline.Share.Models
     {
         public Guid CartId { get; set; }
         public Guid? VoucherID { get; set; }
-        public double PriceBeforeVoucher { get; set; } // Giá trước khi add thêm mã giảm giá
-        public double Total { get; set; }
+        public decimal PriceBeforeVoucher { get; set; } // Giá trước khi add thêm mã giảm giá
+        public decimal Total { get; set; }
         public int Status { get; set; }
 
         public virtual IEnumerable<CartItems>? CartItems { get; set; }   

@@ -12,9 +12,10 @@ namespace SD85_WebBookOnline.Share.Models
         public Guid? CreatebyID { get; set; }
         public Guid CartItemID { get; set; }
         public string ComboName { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public int Status { get; set; }
         public virtual IEnumerable<ComboItem>? ComboItems { get; set; }
         public virtual IEnumerable<CartItems>? CartItems { get; set; }
+        public virtual IEnumerable<BillItems>? BillItems { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SD85_WebBookOnline.Api.Data;
 
@@ -11,9 +12,10 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231004154647_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +53,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "443c3e7c-0467-443d-9caa-b65f4dd13c0a",
-                            ConcurrencyStamp = "d07207e0-0b7c-4d48-89f1-d8d60cfc2aab",
+                            Id = "039703bf-e77f-42ed-9e5e-b48afb63136e",
+                            ConcurrencyStamp = "8498f263-fc4f-4192-a4c4-7f6a5c2b7c65",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "d46f8c38-4726-479d-bc89-5d77d715d925",
-                            ConcurrencyStamp = "1a2f5c0c-4935-4f21-b3f9-35d1c1aae12f",
+                            Id = "8deae500-f822-4f40-b35d-c404840e762c",
+                            ConcurrencyStamp = "cf3de9e2-338b-4386-a175-56196f398e53",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -278,7 +280,7 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.HasKey("AuthorID");
 
-                    b.ToTable("Authors");
+                    b.ToTable("Author");
                 });
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Bill", b =>
@@ -839,36 +841,6 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasKey("ManufactureID");
 
                     b.ToTable("Manufacturer");
-                });
-
-            modelBuilder.Entity("SD85_WebBookOnline.Share.Models.PostBanner", b =>
-                {
-                    b.Property<Guid>("PostID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Images")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PostDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PostID");
-
-                    b.ToTable("PostBanner");
                 });
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Voucher", b =>
