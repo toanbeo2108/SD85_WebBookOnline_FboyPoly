@@ -28,6 +28,8 @@ namespace SD85_WebBookOnline.Api.Data
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Languge> Languges { get; set; }
         public virtual DbSet<Author> Authors { get; set; }
+        public virtual DbSet<PostBanner> PostBanner { get; set; }
+        public virtual DbSet<InputSlip> InputSlip { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

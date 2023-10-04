@@ -12,8 +12,8 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231004144839_test")]
-    partial class test
+    [Migration("20231004154744_test2")]
+    partial class test2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,22 +49,6 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "eedad3f2-9866-4372-916f-d2c27108f774",
-                            ConcurrencyStamp = "0727ca27-8e1d-4c8d-b402-ea28f86d4585",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "c013bd2a-3da1-48b6-8de2-cf6160076400",
-                            ConcurrencyStamp = "8b682300-a8a4-42d6-92b8-6ac5e322b63f",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -280,7 +264,7 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.HasKey("AuthorID");
 
-                    b.ToTable("Authors");
+                    b.ToTable("Author");
                 });
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Bill", b =>
@@ -302,17 +286,17 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
 
-                    b.Property<double>("PriceBeforeVoucher")
-                        .HasColumnType("float");
+                    b.Property<decimal>("PriceBeforeVoucher")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<double>("Shipmoney")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Shipmoney")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<double>("Total")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -345,12 +329,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<Guid?>("BookID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ComboID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ItemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -358,14 +345,16 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<double>("ToTal")
-                        .HasColumnType("float");
+                    b.Property<decimal>("ToTal")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("BillItemID");
 
                     b.HasIndex("BillID");
 
                     b.HasIndex("BookID");
+
+                    b.HasIndex("ComboID");
 
                     b.ToTable("BillItems");
                 });
@@ -392,8 +381,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("EntryPrice")
-                        .HasColumnType("float");
+                    b.Property<decimal>("EntryPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid?>("FormID")
                         .HasColumnType("uniqueidentifier");
@@ -412,8 +401,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<Guid?>("ManufacturerID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("QuantityExists")
                         .HasColumnType("int");
@@ -487,14 +476,14 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("PriceBeforeVoucher")
-                        .HasColumnType("float");
+                    b.Property<decimal>("PriceBeforeVoucher")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<double>("Total")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -530,8 +519,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Quantity")
                         .IsRequired()
@@ -540,8 +529,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<double>("ToTal")
-                        .HasColumnType("float");
+                    b.Property<decimal>("ToTal")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("CartItemID");
 
@@ -592,8 +581,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<Guid?>("CreatebyID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -619,17 +608,17 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<double>("ToTal")
-                        .HasColumnType("float");
+                    b.Property<decimal>("ToTal")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ComboItemID");
 
@@ -759,6 +748,42 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.ToTable("Images");
                 });
 
+            modelBuilder.Entity("SD85_WebBookOnline.Share.Models.InputSlip", b =>
+                {
+                    b.Property<Guid>("InputSlipID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BookID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("GiaNhap")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("IdNhanVienNhap")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("IdSachNhap")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("NgayNhap")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SoLuong")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("InputSlipID");
+
+                    b.HasIndex("BookID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("InputSlip");
+                });
+
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Languge", b =>
                 {
                     b.Property<Guid>("LangugeID")
@@ -817,11 +842,11 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("DiscountAmount")
-                        .HasColumnType("float");
+                    b.Property<decimal?>("DiscountAmount")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<double?>("DiscountCondition")
-                        .HasColumnType("float");
+                    b.Property<decimal?>("DiscountCondition")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
@@ -948,9 +973,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .WithMany("BillItems")
                         .HasForeignKey("BookID");
 
+                    b.HasOne("SD85_WebBookOnline.Share.Models.Combo", "Combo")
+                        .WithMany("BillItems")
+                        .HasForeignKey("ComboID");
+
                     b.Navigation("Bill");
 
                     b.Navigation("Book");
+
+                    b.Navigation("Combo");
                 });
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Book", b =>
@@ -1070,6 +1101,23 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Navigation("Book");
                 });
 
+            modelBuilder.Entity("SD85_WebBookOnline.Share.Models.InputSlip", b =>
+                {
+                    b.HasOne("SD85_WebBookOnline.Share.Models.Book", "Book")
+                        .WithMany("InputSlip")
+                        .HasForeignKey("BookID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SD85_WebBookOnline.Share.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Book");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Author", b =>
                 {
                     b.Navigation("BookDetails");
@@ -1091,6 +1139,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Navigation("ComboItems");
 
                     b.Navigation("Images");
+
+                    b.Navigation("InputSlip");
                 });
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Cart", b =>
@@ -1105,6 +1155,8 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Combo", b =>
                 {
+                    b.Navigation("BillItems");
+
                     b.Navigation("CartItems");
 
                     b.Navigation("ComboItems");

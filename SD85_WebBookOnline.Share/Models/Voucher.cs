@@ -15,8 +15,8 @@ namespace SD85_WebBookOnline.Share.Models
         public string? Description { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public double? DiscountCondition { get; set; } // Điều kiện giảm giá
-        public double? DiscountAmount { get; set; } // Số tiền được giảm
+        public decimal? DiscountCondition { get; set; } // Điều kiện giảm giá
+        public decimal? DiscountAmount { get; set; } // Số tiền được giảm
         public int Status { get; set; }
 
         public virtual IEnumerable<Bill>? Bill { get; set; }

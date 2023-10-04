@@ -12,13 +12,13 @@ namespace SD85_WebBookOnline.Share.Models
         public Guid BillID { get; set; }
         //public Guid? UserID { get; set; }
         public Guid? VoucherID { get; set; }
-        public double PriceBeforeVoucher { get; set; } // Gía gốc
-        public double Shipmoney { get; set; } // Tiền Ship
+        public decimal PriceBeforeVoucher { get; set; } // Gía gốc
+        public decimal Shipmoney { get; set; } // Tiền Ship
         public string UserPhone { get; set; } // SĐT Khách hàng
         public string AddressUser { get; set; } // Địa chỉ khách hàng
         public DateTime OrderDate { get; set; } // Ngày đặt hàng
         public DateTime DeliveryDate { get; set; } // Ngày giao hàng
-        public double Total { get; set; } // tổng giá tiền
+        public decimal Total { get; set; } // tổng giá tiền
         public int PaymentMethod { get; set; } // Phương thức thanh toán
         public int Status { get; set; }
 

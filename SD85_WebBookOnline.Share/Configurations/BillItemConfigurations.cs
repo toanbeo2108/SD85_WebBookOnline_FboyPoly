@@ -16,6 +16,7 @@ namespace SD85_WebBookOnline.Share.Configurations
             builder.HasKey(p => p.BillItemID);
             builder.HasOne(p => p.Book).WithMany(p => p.BillItems).HasForeignKey(p => p.BookID);
             builder.HasOne(p => p.Bill).WithMany(p => p.BillItems).HasForeignKey(p => p.BillID);
+            builder.HasOne(p => p.Combo).WithMany(p => p.BillItems).HasForeignKey(p => p.ComboID);
         }
     }
 }

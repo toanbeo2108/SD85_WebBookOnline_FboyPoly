@@ -17,8 +17,8 @@ namespace SD85_WebBookOnline.Share.Models
         public string MainPhoto { get; set; } // ảnh đại diện chính 
         public int QuantitySold { get; set; } // Số lượng bán được - sản lượng ...
         public int QuantityExists { get; set; } // Số lượng còn lại
-        public double EntryPrice { get; set; } // Giá đầu vào
-        public double Price { get; set; } // Giá bán
+        public decimal EntryPrice { get; set; } // Giá đầu vào
+        public decimal Price { get; set; } // Giá bán
         public string? Information { get; set; } // Thông tin sách
         public string? Description { get; set; } // Mô tả
         public string ISBN { get; set; } // Mã định danh
@@ -37,6 +37,7 @@ namespace SD85_WebBookOnline.Share.Models
         public virtual IEnumerable<ComboItem>? ComboItems { get; set; }
         public virtual IEnumerable<CartItems>? CartItems { get; set; }
         public virtual IEnumerable<BillItems>? BillItems { get; set; }
+        public virtual IEnumerable<InputSlip>? InputSlip { get; set; }
 
     }
 }
