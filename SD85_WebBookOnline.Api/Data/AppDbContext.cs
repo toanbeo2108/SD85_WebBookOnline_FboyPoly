@@ -37,12 +37,19 @@ namespace SD85_WebBookOnline.Api.Data
             base.OnModelCreating(builder);
             CreateRoles(builder);
         }
-        private void CreateRoles(ModelBuilder builder)
+		private void CreateRoles(ModelBuilder builder)
         {
             builder.Entity<IdentityRole>().HasData(
                     new IdentityRole() { Name = "Admin", NormalizedName = "ADMIN" },
                     new IdentityRole() { Name = "User", NormalizedName = "USER" }
                 );
         }
-    }
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			if (!optionsBuilder.IsConfigured)
+			{
+				optionsBuilder.UseSqlServer("Server=DESKTOP-QQ18T65\\SQLEXPRESS;Database=test_datn;Trusted_Connection=True;trustServerCertificate=True;");
+			}
+		}
+	}
 }
