@@ -14,7 +14,7 @@ namespace SD85_WebBookOnline.Share.Models
         public DateTime StartDate { get; set; } // Ngày bắt đầu
         public DateTime EndDate { get; set; }// Ngày kết thúc
         public string Description { get; set; } // Mô tả
-        public string Status { get; set; }
+        public int Status { get; set; }
 
         public virtual ICollection<Book>? Books { get; set; }
     }
