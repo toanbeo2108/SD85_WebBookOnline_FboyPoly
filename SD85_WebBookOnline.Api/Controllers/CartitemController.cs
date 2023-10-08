@@ -1,0 +1,80 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using SD85_WebBookOnline.Api.Data;
+using SD85_WebBookOnline.Api.IResponsitories;
+using SD85_WebBookOnline.Responsitories;
+using SD85_WebBookOnline.Share.Models;
+
+namespace SD85_WebBookOnline.Api.Controllers
+{
+    [Route("api/CartItem")]
+    [ApiController]
+    public class CartitemController : ControllerBase
+    {
+        private readonly IAllResponsitories<CartItems> _irp;
+        AppDbContext _context = new AppDbContext();
+        public CartitemController()
+        {
+            _irp = new AllResponsitories<CartItems>(_context, _context.CartItems);
+        }
+        [HttpGet("GetAll-CartItem")]
+        public async Task<IEnumerable<CartItems>> GetAllCartItem()
+        {
+            return await _irp.GetAll();
+        }
+        [HttpPost("Add-CartItem")]
+        public async Task<bool> AddCartItem(Guid? CartID, Guid? ComboID, Guid? BookID, string ItemName, decimal Price, string Quantity, decimal ToTal, int Status)
+        {
+            CartItems c = new CartItems();
+            c.CartItemID = Guid.NewGuid();
+            c.CartID = CartID;
+            c.ComboID = ComboID;
+            c.BookID = BookID;
+            c.ItemName = ItemName;
+            c.Price = Price;
+            c.Quantity = Quantity;
+            c.ToTal = ToTal;
+            c.Status = Status;
+            return await _irp.CreateItem(c);
+
+        }
+        [HttpPut("Update-CartItem/{id}")]
+        public async Task<bool> updateCartItem(Guid id, [FromBody]CartItems cart)
+        {
+            var list = await _irp.GetAll();
+            var c = list.FirstOrDefault(c=>c.CartItemID==id);
+            if (c!= null)
+            {
+                
+                c.CartID = cart.CartID;
+                c.ComboID = cart.ComboID;
+                c.BookID = cart.BookID;
+                c.ItemName = cart.ItemName;
+                c.Price = cart.Price;
+                c.Quantity = cart.Quantity;
+                c.ToTal = cart.ToTal;
+                c.Status = cart.Status;
+                return await _irp.UpdateItem(c);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        [HttpDelete("Delete-CartItem/{id}")]
+        public async Task<bool> DeletecartItem(Guid id)
+        {
+            var list = await _irp.GetAll();
+            var c = list.FirstOrDefault(c => c.CartItemID == id);
+            if (c != null)
+            {
+
+                return await _irp.DeleteItem(c);
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
