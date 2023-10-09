@@ -31,6 +31,7 @@ namespace SD85_WebBookOnline.Api.Data
         public virtual DbSet<PostBanner> PostBanner { get; set; }
         public virtual DbSet<InputSlip> InputSlip { get; set; }
         public virtual DbSet<BillItems> BillItems { get; set; }
+        public virtual DbSet<Images> Images { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
