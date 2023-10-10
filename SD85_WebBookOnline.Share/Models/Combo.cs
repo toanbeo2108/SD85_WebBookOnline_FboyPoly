@@ -14,6 +14,7 @@ namespace SD85_WebBookOnline.Share.Models
         public string ComboName { get; set; }
         public decimal Price { get; set; }
         public int Status { get; set; }
+        public string Image { get; set; }
         public virtual IEnumerable<ComboItem>? ComboItems { get; set; }
         public virtual IEnumerable<CartItems>? CartItems { get; set; }
         public virtual IEnumerable<BillItems>? BillItems { get; set; }
