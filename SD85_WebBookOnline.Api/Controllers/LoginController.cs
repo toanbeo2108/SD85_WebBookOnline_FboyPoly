@@ -6,7 +6,7 @@ using SD85_WebBookOnline.Share.ViewModels;
 
 namespace SD85_WebBookOnline.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/login")]
     [ApiController]
     public class LoginController : ControllerBase
     {

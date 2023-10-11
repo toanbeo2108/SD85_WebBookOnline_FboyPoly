@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SD85_WebBookOnline.Api.Data;
 using SD85_WebBookOnline.Api.IResponsitories;
 using SD85_WebBookOnline.Responsitories;
@@ -17,6 +18,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             _allResponsitories = new AllResponsitories<User>(_context,_context.Users);
         }
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IEnumerable<User>> getUser()
         {
             return await _allResponsitories.GetAll();
