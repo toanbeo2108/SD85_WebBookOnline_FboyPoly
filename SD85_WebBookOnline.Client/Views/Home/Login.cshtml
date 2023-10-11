@@ -1,0 +1,64 @@
+﻿@model SD85_WebBookOnline.Share.ViewModels.LoginUser;
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h4>LoginUser</h4>
+<hr />
+<form asp-action="Login">
+    <div class="form">
+        <label>Username:</label>
+        <input type="text" class="form-control" asp-for="Username" />
+    </div>
+    <div class="form">
+        <label>Password:</label>
+        <input type="password" class="form-control" asp-for="Password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+@* <form id="Login">
+    <div class="form">
+        <label>Username:</label>
+        <input type="text" class="form-control" id="Username" />
+    </div>
+    <div class="form">
+        <label>Password:</label>
+        <input type="password" class="form-control" id="Password" />
+    </div>
+    <hr />
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#Login').on('submit', function (e) {
+                e.preventDefault(); // Ngăn không cho form submit mặc định
+                // Lấy giá trị từ các trường nhập liệu
+                var name = $('#Username').val();
+                var pass = $('#Password').val();
+                var LoginUser = {
+                    Username: name,
+                    Password: pass,
+                };
+                // Gọi API để thêm danh mục
+                $.ajax({
+                    url: 'https://localhost:7079/api/login',
+                    type: 'POST',
+                    data: JSON.stringify(LoginUser),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        console.log(data);
+                        localStorage.setItem('jwtToken', data);
+                        window.location.href = '/Home/Test';
+                    },
+                    error: function (xhr, textStatus, error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+}
+ *@
