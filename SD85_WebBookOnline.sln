@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SD85_WebBookOnline.Share", "SD85_WebBookOnline.Share\SD85_WebBookOnline.Share.csproj", "{68399C41-50D2-4E1A-8FD6-46795799FE1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SD85_WebBookOnline.Share", "SD85_WebBookOnline.Share\SD85_WebBookOnline.Share.csproj", "{68399C41-50D2-4E1A-8FD6-46795799FE1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SD85_WebBookOnline.Api", "SD85_WebBookOnline.Api\SD85_WebBookOnline.Api.csproj", "{57F3FE30-F117-4CB6-BCC8-948E9E6AE34C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SD85_WebBookOnline.Api", "SD85_WebBookOnline.Api\SD85_WebBookOnline.Api.csproj", "{57F3FE30-F117-4CB6-BCC8-948E9E6AE34C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SD85_WebBookOnline.Client", "SD85_WebBookOnline.Client\SD85_WebBookOnline.Client.csproj", "{DA325CC8-1F22-43D6-8445-6A4BCD9130FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{57F3FE30-F117-4CB6-BCC8-948E9E6AE34C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57F3FE30-F117-4CB6-BCC8-948E9E6AE34C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57F3FE30-F117-4CB6-BCC8-948E9E6AE34C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA325CC8-1F22-43D6-8445-6A4BCD9130FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA325CC8-1F22-43D6-8445-6A4BCD9130FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA325CC8-1F22-43D6-8445-6A4BCD9130FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA325CC8-1F22-43D6-8445-6A4BCD9130FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

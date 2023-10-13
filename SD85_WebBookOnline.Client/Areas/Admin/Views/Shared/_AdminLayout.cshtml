@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SD85_WebBookOnline.Client</title>
+    <link rel="stylesheet" type="text/css" href="~/css/styles.css">
+</head>
+<body>
+    <div class="navigation">
+        <ul>
+            <li>
+                <a href="#">
+                    <span class="icon"><ion-icon name="laptop-outline"></ion-icon></span>
+                    <span class="title">Admin Manager</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon"><ion-icon name="laptop"></ion-icon></span>
+                    <span class="title">Loptop Manager</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon"><ion-icon name="key-outline"></ion-icon></span>
+                    <span class="title">Account</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon"><ion-icon name="accessibility-outline"></ion-icon></span>
+                    <span class="title">User</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon"><ion-icon name="person-circle-outline"></ion-icon></span>
+                    <span class="title">Employee</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon"><ion-icon name="airplane-outline"></ion-icon></span>
+                    <span class="title">Shipper</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon"><ion-icon name="business-outline"></ion-icon></span>
+                    <span class="title">Hãng</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon"><ion-icon name="film-outline"></ion-icon></span>
+                    <span class="title">Voucher</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon"><ion-icon name="list-outline"></ion-icon></span>
+                    <span class="title">Danh Mục</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon"><ion-icon name="call-outline"></ion-icon></span>
+                    <span class="title">Liên Hệ</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon"><ion-icon name="diamond-outline"></ion-icon></span>
+                    <span class="title">Coupon</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon"><ion-icon name="arrow-forward-circle-outline"></ion-icon></span>
+                    <span class="title">LogOut</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+    <div class="main">
+        <div class="topbar">
+            <div class="toggle">
+                <ion-icon name="menu"></ion-icon>
+            </div>
+            <!--Search-->
+            <div class="search">
+                <label>
+                    <input type="text" placeholder="Nhập tên sản phẩm">
+                    <ion-icon name="search"></ion-icon>
+                </label>
+            </div>
+            <!--User Img-->
+            <div class="user">
+                <img src="user.jpg">
+            </div>
+        </div>
+        <!--Cards-->
+        <div class="cardBox">
+            <div class="card">
+                <div>
+                    <div class="number">999</div>
+                    <div class="cardName">Tổng số Tài Khoản</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon name="accessibility-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="card">
+                <div>
+                    <div class="number">7532</div>
+                    <div class="cardName">Tổng số Sản Phẩm</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon name="laptop-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="card">
+                <div>
+                    <div class="number">2023</div>
+                    <div class="cardName">Số Sản Phẩm đã Bán</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon name="cart-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="card">
+                <div>
+                    <div class="number">1012</div>
+                    <div class="cardName">Tổng Số Hóa Đơn</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon name="id-card-outline"></ion-icon>
+                </div>
+            </div>
+        </div>
+        <div class="details">
+            <div class="recentOrder">
+                <div class="cardHeader">
+                    <h2>Khách Hàng Tiềm Năng</h2>
+                    <a href="#" class="btn">View All</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Họ Tên</td>
+                            <td>Số Điện Thoai</td>
+                            <td>Email</td>
+                            <td>Trạng Thái</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nguyễn Tiến Hiệp</td>
+                            <td>0339414711</td>
+                            <td>Hiepdepzai2k3@gmail.com</td>
+                            <td><span class="status delivered">Đang Hoạt Động</span></td>
+                        </tr>
+                        <tr>
+                            <td>Nguyễn Tiến Hiệp</td>
+                            <td>0339414711</td>
+                            <td>Hiepdepzai2k3@gmail.com</td>
+                            <td><span class="status delivered">Đang Hoạt Động</span></td>
+                        </tr>
+                        <tr>
+                            <td>Nguyễn Tiến Hiệp</td>
+                            <td>0339414711</td>
+                            <td>Hiepdepzai2k3@gmail.com</td>
+                            <td><span class="status delivered">Đang Hoạt Động</span></td>
+                        </tr>
+                        <tr>
+                            <td>Nguyễn Tiến Hiệp</td>
+                            <td>0339414711</td>
+                            <td>Hiepdepzai2k3@gmail.com</td>
+                            <td><span class="status DeoOnroi">Đéo ổn rồi</span></td>
+                        </tr>
+                        <tr>
+                            <td>Nguyễn Tiến Hiệp</td>
+                            <td>0339414711</td>
+                            <td>Hiepdepzai2k3@gmail.com</td>
+                            <td><span class="status tamkhoa">Tạm Khóa</span></td>
+                        </tr>
+                        <tr>
+                            <td>Nguyễn Tiến Hiệp</td>
+                            <td>0339414711</td>
+                            <td>Hiepdepzai2k3@gmail.com</td>
+                            <td><span class="status delivered">Đang Hoạt Động</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--Danh sách nhân viên-->
+            <div class="recentEmpolyees">
+                <div class="cardHeader">
+                    <h2>Danh Sách Nhân viên</h2>
+                </div>
+                <table>
+                    <tr>
+                        <td with="60px"><div class="imgBx"><img src="1.jpg" alt=""></div></td>
+                        <td><h4>Quang Dũng<br><span>0357412589</span></h4></td>
+                    </tr>
+                    <tr>
+                        <td with="60px"><div class="imgBx"><img src="2.jpg" alt=""></div></td>
+                        <td><h4>Đình Hưng<br><span>0123456789</span></h4></td>
+                    </tr>
+                    <tr>
+                        <td with="60px"><div class="imgBx"><img src="3.jpg" alt=""></div></td>
+                        <td><h4>Tuấn Đạt<br><span>0987654321</span></h4></td>
+                    </tr>
+                    <tr>
+                        <td with="60px"><div class="imgBx"><img src="4.jpg" alt=""></div></td>
+                        <td><h4>Khắc Toàn<br><span>0157698322</span></h4></td>
+                    </tr>
+                    <tr>
+                        <td with="60px"><div class="imgBx"><img src="5.jpg" alt=""></div></td>
+                        <td><h4>Ngọc Huy<br><span>0357412589</span></h4></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+        
+   
+
+    
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+        //Menu toggle
+        let toggle = document.querySelector('.toggle');
+        let navigation = document.querySelector('.navigation');
+        let main = document.querySelector('.main');
+
+        toggle.onclick = function () {
+            navigation.classList.toggle('active');
+            main.classList.toggle('active');
+
+        }
+        // add hovered class
+        let list = document.querySelectorAll('.navigation li');
+        function activeLink() {
+            list.forEach((item) =>
+                item.classList.remove('hovered'));
+            this.classList.add('hovered');
+        }
+        list.forEach((item) =>
+            item.addEventListener('mouseover', activeLink));
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
