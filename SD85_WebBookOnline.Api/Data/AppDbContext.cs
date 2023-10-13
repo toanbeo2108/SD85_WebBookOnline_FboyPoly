@@ -34,6 +34,8 @@ namespace SD85_WebBookOnline.Api.Data
         public virtual DbSet<Images> Images { get; set; }
         public virtual DbSet<Bill> Bill { get; set; }
         public virtual DbSet<Voucher> Voucher { get; set; }
+        public virtual DbSet<DeliveryAddress> DeliveryAddress { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -51,7 +53,7 @@ namespace SD85_WebBookOnline.Api.Data
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseSqlServer("Server=DESKTOP-QQ18T65\\SQLEXPRESS;Database=test_datn;Trusted_Connection=True;trustServerCertificate=True;");
+				optionsBuilder.UseSqlServer("Server=DESKTOP-3A6J796\\SQLEXPRESS;Database=test_datn2;Trusted_Connection=True;trustServerCertificate=True;");
 			}
 		}
 	}
