@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SD85_WebBookOnline.Api.Data;
 using SD85_WebBookOnline.Api.IResponsitories;
@@ -16,8 +17,9 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             irespon = new AllResponsitories<Voucher>(context, context.Voucher);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet("[Action]")]
-        public async Task<IEnumerable<Voucher>> GetAllBill()
+        public async Task<IEnumerable<Voucher>> GetAllVoucher()
         {
             return await irespon.GetAll();
         }
