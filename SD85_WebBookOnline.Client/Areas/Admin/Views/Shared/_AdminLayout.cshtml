@@ -18,7 +18,7 @@
             <li>
                 <a href="#">
                     <span class="icon"><ion-icon name="laptop"></ion-icon></span>
-                    <span class="title">Loptop Manager</span>
+                    <span class="title">Book Manager</span>
                 </a>
             </li>
             <li>
@@ -52,7 +52,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a asp-area="Admin" asp-controller="VoucherManager" asp-action="AllVoucherManager">
                     <span class="icon"><ion-icon name="film-outline"></ion-icon></span>
                     <span class="title">Voucher</span>
                 </a>
@@ -140,90 +140,7 @@
                 </div>
             </div>
         </div>
-        <div class="details">
-            <div class="recentOrder">
-                <div class="cardHeader">
-                    <h2>Khách Hàng Tiềm Năng</h2>
-                    <a href="#" class="btn">View All</a>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <td>Họ Tên</td>
-                            <td>Số Điện Thoai</td>
-                            <td>Email</td>
-                            <td>Trạng Thái</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Nguyễn Tiến Hiệp</td>
-                            <td>0339414711</td>
-                            <td>Hiepdepzai2k3@gmail.com</td>
-                            <td><span class="status delivered">Đang Hoạt Động</span></td>
-                        </tr>
-                        <tr>
-                            <td>Nguyễn Tiến Hiệp</td>
-                            <td>0339414711</td>
-                            <td>Hiepdepzai2k3@gmail.com</td>
-                            <td><span class="status delivered">Đang Hoạt Động</span></td>
-                        </tr>
-                        <tr>
-                            <td>Nguyễn Tiến Hiệp</td>
-                            <td>0339414711</td>
-                            <td>Hiepdepzai2k3@gmail.com</td>
-                            <td><span class="status delivered">Đang Hoạt Động</span></td>
-                        </tr>
-                        <tr>
-                            <td>Nguyễn Tiến Hiệp</td>
-                            <td>0339414711</td>
-                            <td>Hiepdepzai2k3@gmail.com</td>
-                            <td><span class="status DeoOnroi">Đéo ổn rồi</span></td>
-                        </tr>
-                        <tr>
-                            <td>Nguyễn Tiến Hiệp</td>
-                            <td>0339414711</td>
-                            <td>Hiepdepzai2k3@gmail.com</td>
-                            <td><span class="status tamkhoa">Tạm Khóa</span></td>
-                        </tr>
-                        <tr>
-                            <td>Nguyễn Tiến Hiệp</td>
-                            <td>0339414711</td>
-                            <td>Hiepdepzai2k3@gmail.com</td>
-                            <td><span class="status delivered">Đang Hoạt Động</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!--Danh sách nhân viên-->
-            <div class="recentEmpolyees">
-                <div class="cardHeader">
-                    <h2>Danh Sách Nhân viên</h2>
-                </div>
-                <table>
-                    <tr>
-                        <td with="60px"><div class="imgBx"><img src="1.jpg" alt=""></div></td>
-                        <td><h4>Quang Dũng<br><span>0357412589</span></h4></td>
-                    </tr>
-                    <tr>
-                        <td with="60px"><div class="imgBx"><img src="2.jpg" alt=""></div></td>
-                        <td><h4>Đình Hưng<br><span>0123456789</span></h4></td>
-                    </tr>
-                    <tr>
-                        <td with="60px"><div class="imgBx"><img src="3.jpg" alt=""></div></td>
-                        <td><h4>Tuấn Đạt<br><span>0987654321</span></h4></td>
-                    </tr>
-                    <tr>
-                        <td with="60px"><div class="imgBx"><img src="4.jpg" alt=""></div></td>
-                        <td><h4>Khắc Toàn<br><span>0157698322</span></h4></td>
-                    </tr>
-                    <tr>
-                        <td with="60px"><div class="imgBx"><img src="5.jpg" alt=""></div></td>
-                        <td><h4>Ngọc Huy<br><span>0357412589</span></h4></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

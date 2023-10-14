@@ -47,8 +47,10 @@ namespace SD85_WebBookOnline.Client.Controllers
             var stringContent = new StringContent(loginUserJSON, Encoding.UTF8, "application/json");
             // Send request POST to register API
             var response = await _httpClient.PostAsync($"https://localhost:7079/api/login", stringContent);
+            var check = User.Identity.IsAuthenticated;
             if (response.IsSuccessStatusCode)
             {
+                
                 string token = await response.Content.ReadAsStringAsync();
                 var handler = new JwtSecurityTokenHandler();
                 var jwt = handler.ReadJwtToken(token);
@@ -56,9 +58,22 @@ namespace SD85_WebBookOnline.Client.Controllers
                 identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Name).Value));
                 identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role).Value));
                 var principal = new ClaimsPrincipal(identity);
-                await HttpContext.SignInAsync(principal);
-                var check = User.Identity.IsAuthenticated;
-                return RedirectToAction("Index", "AdminHome",new { Area = "Admin" });
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                // Kiểm tra quyền hạn của người dùng
+                check = true;
+                
+                    if (User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("Index", "AdminHome", new { Area = "Admin" });
+                        // Thực hiện các hành động chỉ dành cho admin
+                    }
+                    else
+                    {
+                        return View();
+                        // Thực hiện các hành động cho người dùng thông thường
+                    }
+               
             }
             else
             {

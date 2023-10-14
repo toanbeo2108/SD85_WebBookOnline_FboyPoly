@@ -11,7 +11,13 @@ builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromSeconds(10);
 });
-
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", Role => Role.RequireRole("Admin"));
+    options.AddPolicy("User", Role => Role.RequireRole("User"));
+    //options.AddPolicy("Shipper", Role => Role.RequireRole("Shipper"));
+    //options.AddPolicy("Employee", Role => Role.RequireRole("Enployee"));
+});
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
               .AddCookie(options =>
               {

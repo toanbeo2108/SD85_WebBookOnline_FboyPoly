@@ -10,5 +10,9 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         {
             return View();
         }
+        public IActionResult VoucherManager()
+        {
+            return RedirectToAction("AllVoucherManager", "VoucherManager",new {area = "Admin"});
+        }
     }
 }
