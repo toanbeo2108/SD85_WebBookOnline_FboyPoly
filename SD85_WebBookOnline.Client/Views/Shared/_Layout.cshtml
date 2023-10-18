@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,75 +8,280 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SD85_WebBookOnline.Client.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="~/css/styles.css">
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SD85_WebBookOnline.Client</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                @if (!User.Identity.IsAuthenticated)
-                {
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home"
+                        asp-action="Index">SD85_WebBookOnline.Client</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
+                                    asp-action="Privacy">Privacy</a>
                             </li>
                         </ul>
                         <ul class="navbar-nav flex-grow-1" style="flex-direction:row-reverse">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Register">Register</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
+                                    asp-action="Register">Register</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
                             </li>
                         </ul>
                     </div>
-                }
-                else
-                {
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav flex-grow-1" style="flex-direction:row-reverse">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
-                            </li>
-                        </ul>
-                    </div>
-                }
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
+                    <div></div>
+            </nav>
+        </header>
         <div class="container">
-            &copy; 2023 - SD85_WebBookOnline.Client - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-    </footer>
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2023 - SD85_WebBookOnline.Client - <a asp-area="" asp-controller="Home"
+                    asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
+    }
+    else
+    {
+        @if (User.IsInRole("Admin"))
+        {
+            <div>
+                <div class="navigation">
+                    <ul>
+                        <li>
+                            <a href="">
+                                <span class="icon"><ion-icon name="laptop-outline"></ion-icon></span>
+                                <span class="title">Admin Manager</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon"><ion-icon name="laptop"></ion-icon></span>
+                                <span class="title">Loptop Manager</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon"><ion-icon name="key-outline"></ion-icon></span>
+                                <span class="title">Account</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon"><ion-icon name="accessibility-outline"></ion-icon></span>
+                                <span class="title">User</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon"><ion-icon name="person-circle-outline"></ion-icon></span>
+                                <span class="title">Employee</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon"><ion-icon name="airplane-outline"></ion-icon></span>
+                                <span class="title">Shipper</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon"><ion-icon name="business-outline"></ion-icon></span>
+                                <span class="title">Hãng</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon"><ion-icon name="film-outline"></ion-icon></span>
+                                <span class="title">Voucher</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon"><ion-icon name="list-outline"></ion-icon></span>
+                                <span class="title">Danh Mục</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon"><ion-icon name="call-outline"></ion-icon></span>
+                                <span class="title">Liên Hệ</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon"><ion-icon name="diamond-outline"></ion-icon></span>
+                                <span class="title">Coupon</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon"><ion-icon name="arrow-forward-circle-outline"></ion-icon></span>
+                                <span class="title">LogOut</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="main">
+                    <div class="topbar">
+                        <div class="toggle">
+                            <ion-icon name="menu"></ion-icon>
+                        </div>
+                        <!--Search-->
+                        <div class="search">
+                            <label>
+                                <input type="text" placeholder="Nhập tên sản phẩm">
+                                <ion-icon name="search"></ion-icon>
+                            </label>
+                        </div>
+                        <!--User Img-->
+                        <div class="user">
+                            <a asp-controller="Home" asp-action="Logout"><img src="user.jpg"></a>
+                        </div>
+                    </div>
+                    <!--Cards-->
+                    <div class="cardBox">
+                        <div class="card">
+                            <div>
+                                <div class="number">999</div>
+                                <div class="cardName">Tổng số Tài Khoản</div>
+                            </div>
+                            <div class="iconBx">
+                                <ion-icon name="accessibility-outline"></ion-icon>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div>
+                                <div class="number">7532</div>
+                                <div class="cardName">Tổng số Sản Phẩm</div>
+                            </div>
+                            <div class="iconBx">
+                                <ion-icon name="laptop-outline"></ion-icon>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div>
+                                <div class="number">2023</div>
+                                <div class="cardName">Số Sản Phẩm đã Bán</div>
+                            </div>
+                            <div class="iconBx">
+                                <ion-icon name="cart-outline"></ion-icon>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div>
+                                <div class="number">1012</div>
+                                <div class="cardName">Tổng Số Hóa Đơn</div>
+                            </div>
+                            <div class="iconBx">
+                                <ion-icon name="id-card-outline"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <main role="main" class="pb-3">
+                        @RenderBody()
+                    </main>
+                </div>
+            </div>
+        }
+        else if (User.IsInRole("User"))
+        {
+            <header>
+                <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" asp-area="" asp-controller="Home"
+                            asp-action="Index">SD85_WebBookOnline.Client</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home"
+                                        asp-action="Privacy">Privacy</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Category"
+                                        asp-action="Index">Category</a>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav flex-grow-1" style="flex-direction:row-reverse">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home"
+                                        asp-action="Logout">Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+            <div class="container">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+            <footer class="border-top footer text-muted">
+                <div class="container">
+                    &copy; 2023 - SD85_WebBookOnline.Client - <a asp-area="" asp-controller="Home"
+                        asp-action="Privacy">Privacy</a>
+                </div>
+            </footer>
+        }
+    }
+
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+        //Menu toggle
+        let toggle = document.querySelector('.toggle');
+        let navigation = document.querySelector('.navigation');
+        let main = document.querySelector('.main');
+
+        toggle.onclick = function () {
+            navigation.classList.toggle('active');
+            main.classList.toggle('active');
+
+        }
+        // add hovered class
+        let list = document.querySelectorAll('.navigation li');
+        function activeLink() {
+            list.forEach((item) =>
+                item.classList.remove('hovered'));
+            this.classList.add('hovered');
+        }
+        list.forEach((item) =>
+            item.addEventListener('mouseover', activeLink));
+    </script>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
