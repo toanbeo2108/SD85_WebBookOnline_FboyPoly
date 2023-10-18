@@ -64,8 +64,8 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td style="text-align : center;">
-                    <a asp-action="UpdateVoucher" asp-route-id="@item.VoucherID" class="btn btn-warning">Update</a>
-                    <a asp-action="VoucherDetail" asp-route-id="@item.VoucherID" class="btn btn-info">Details</a>
+                    <a asp-action="UpdateVoucher" asp-controller="VoucherManager" asp-area="Admin" asp-route-id="@item.VoucherID" class="btn btn-warning">Update</a>
+                    <a asp-action="VoucherDetail" asp-controller="VoucherManager" asp-area="Admin" asp-route-id="@item.VoucherID" class="btn btn-info">Details</a>
             </td>
         </tr>
 }
