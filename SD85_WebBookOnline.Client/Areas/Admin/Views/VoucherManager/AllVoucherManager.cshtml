@@ -3,46 +3,37 @@
 @{
     ViewData["Title"] = "AllVoucherManager";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
-
 }
 
 <h1>AllVoucherManager</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="CreateVoucher" class=" btn btn-primary">Create New</a>
 </p>
-<table class="table">
+<table class="table" style="width : 100%;">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.VoucherID)
+           
+            <th style="text-align : center;">
+               Tên Voucher
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreateByID)
+            <th style="text-align : center;">
+                Chú Thích
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeletByID)
+            <th style="text-align : center;">
+                Ngày Bắt Đầu
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
+            <th style="text-align : center;">
+                Ngày Kết Thúc
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
+            <th style="text-align : center;">
+                Giảm Giá(%)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
+            <th style="text-align : center;">
+                Giảm Giá(Đồng)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiscountCondition)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiscountAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
+            <th style="text-align : center;">
+                Trạng Thái
             </th>
             <th></th>
         </tr>
@@ -50,41 +41,32 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.VoucherID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateByID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeletByID)
-            </td>
-            <td>
+           
+                <td style="text-align : center;">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+                <td style="text-align : center;">
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
-            <td>
+                <td style="text-align : center;">
                 @Html.DisplayFor(modelItem => item.StartDate)
             </td>
-            <td>
+                <td style="text-align : center;">
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
-            <td>
+                <td style="text-align : center;">
                 @Html.DisplayFor(modelItem => item.DiscountCondition)
             </td>
-            <td>
+            <td style="text-align : center;">
                 @Html.DisplayFor(modelItem => item.DiscountAmount)
             </td>
-            <td>
+            <td style="text-align : center;">
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
-             <td>
-                    <a asp-area="Admin" asp-controller="VoucherAdmin" asp-action="UpdateVoucher" asp-route-id="@item.VoucherID" class="btn btn-info">Sửa</a>
-                    <a asp-area="Admin" asp-controller="VoucherAdmin" asp-action="VoucherDetail" asp-route-id="@item.VoucherID" class="btn btn-warning">Xem CT</a>
-                    <a asp-area="Admin" asp-controller="VoucherAdmin" asp-action="DeleteVoucher" asp-route-id="@item.VoucherID" class="btn btn-danger">Xóa</a>
-             </td>
+            <td style="text-align : center;">
+                    <a asp-action="UpdateVoucher" asp-route-id="@item.VoucherID" class="btn btn-warning">Update</a>
+                    <a asp-action="VoucherDetail" asp-route-id="@item.VoucherID" class="btn btn-info">Details</a>
+            </td>
         </tr>
 }
     </tbody>

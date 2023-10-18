@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace SD85_WebBookOnline.Client.Controllers
 {
@@ -47,11 +48,18 @@ namespace SD85_WebBookOnline.Client.Controllers
             var stringContent = new StringContent(loginUserJSON, Encoding.UTF8, "application/json");
             // Send request POST to register API
             var response = await _httpClient.PostAsync($"https://localhost:7079/api/login", stringContent);
-            var check = User.Identity.IsAuthenticated;
             if (response.IsSuccessStatusCode)
             {
-                
                 string token = await response.Content.ReadAsStringAsync();
+                Response.Cookies.Append("Token", token);
+                // Tạo một đối tượng HttpRequestMessage.
+                HttpRequestMessage request = new HttpRequestMessage();
+
+                // Thêm token vào header của yêu cầu HTTP.
+                request.Headers.Add("Authorization", $"Bearer {token}");
+
+                // Gửi yêu cầu HTTP.
+
                 var handler = new JwtSecurityTokenHandler();
                 var jwt = handler.ReadJwtToken(token);
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -59,21 +67,9 @@ namespace SD85_WebBookOnline.Client.Controllers
                 identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role).Value));
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                var check = User.Identity.IsAuthenticated;
 
-                // Kiểm tra quyền hạn của người dùng
-                check = true;
-                
-                    if (User.IsInRole("Admin"))
-                    {
-                        return RedirectToAction("Index", "AdminHome", new { Area = "Admin" });
-                        // Thực hiện các hành động chỉ dành cho admin
-                    }
-                    else
-                    {
-                        return View();
-                        // Thực hiện các hành động cho người dùng thông thường
-                    }
-               
+                return RedirectToAction("Index", "AdminHome",new {area = "Admin"});
             }
             else
             {
