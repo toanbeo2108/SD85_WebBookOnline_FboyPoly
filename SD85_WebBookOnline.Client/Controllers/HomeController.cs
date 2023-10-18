@@ -51,6 +51,9 @@ namespace SD85_WebBookOnline.Client.Controllers
             if (response.IsSuccessStatusCode)
             {
                 string token = await response.Content.ReadAsStringAsync();
+
+                Response.Cookies.Append("Token", token);
+
                 // Tạo một đối tượng HttpRequestMessage.
                 HttpRequestMessage request = new HttpRequestMessage();
 
@@ -58,7 +61,8 @@ namespace SD85_WebBookOnline.Client.Controllers
                 request.Headers.Add("Authorization", $"Bearer {token}");
 
                 // Gửi yêu cầu HTTP.
-                HttpResponseMessage responses = await _httpClient.SendAsync(request);
+
+
 
                 var handler = new JwtSecurityTokenHandler();
                 var jwt = handler.ReadJwtToken(token);
@@ -69,7 +73,9 @@ namespace SD85_WebBookOnline.Client.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 var check = User.Identity.IsAuthenticated;
 
-                return RedirectToAction("Index", "Home");
+
+                return RedirectToAction("Index", "AdminHome",new {area = "Admin"});
+
             }
             else
             {

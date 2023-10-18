@@ -17,14 +17,14 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             irespon = new AllResponsitories<Voucher>(context, context.Voucher);
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles ="Admin")]
         [HttpGet("[Action]")]
         public async Task<IEnumerable<Voucher>> GetAllVoucher()
         {
             return await irespon.GetAll();
         }
         [HttpPost("[Action]")]
-        public async Task<bool> CreateVoucher(Guid createByID, Guid deletByID, string name, string description, DateTime startDate, DateTime endDate, decimal discountCondition, decimal discountAmount, int status)
+        public async Task<bool> CreateVoucher(Guid createByID, Guid deletByID, string name, string description, DateTime endDate, decimal discountCondition, decimal discountAmount, int status)
         {
             Voucher v = new Voucher();
             v.VoucherID = Guid.NewGuid();
@@ -32,7 +32,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             v.DeletByID = deletByID;
             v.Name = name;
             v.Description = description;
-            v.StartDate = startDate;
+            v.StartDate = DateTime.Now;
             v.EndDate = endDate;
             v.DiscountCondition = discountCondition;
             v.DiscountAmount = discountAmount;
