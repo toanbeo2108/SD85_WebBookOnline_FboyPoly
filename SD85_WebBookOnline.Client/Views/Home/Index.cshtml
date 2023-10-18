@@ -3,6 +3,26 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="text-center">
+            <h1 class="display-4">Welcome Admin</h1>
+        </div>
+    }
+    else if (User.IsInRole("User"))
+    {
+        <div class="text-center">
+            <h1 class="display-4">Welcome User</h1>
+        </div>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    }
+    else
+    {
+        <div class="text-center">
+            <h1 class="display-4">Welcome Guest</h1>
+        </div>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    }
+
 </div>
