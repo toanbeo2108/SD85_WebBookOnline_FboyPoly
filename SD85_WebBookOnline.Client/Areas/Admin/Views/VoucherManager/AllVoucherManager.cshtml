@@ -2,72 +2,86 @@
 
 @{
     ViewData["Title"] = "AllVoucherManager";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>AllVoucherManager</h1>
 
-<p>
-    <a asp-action="CreateVoucher" class=" btn btn-primary">Create New</a>
-</p>
-<table class="table" style="width : 100%;">
-    <thead>
-        <tr>
-           
-            <th style="text-align : center;">
-               Tên Voucher
-            </th>
-            <th style="text-align : center;">
-                Chú Thích
-            </th>
-            <th style="text-align : center;">
-                Ngày Bắt Đầu
-            </th>
-            <th style="text-align : center;">
-                Ngày Kết Thúc
-            </th>
-            <th style="text-align : center;">
-                Giảm Giá(%)
-            </th>
-            <th style="text-align : center;">
-                Giảm Giá(Đồng)
-            </th>
-            <th style="text-align : center;">
-                Trạng Thái
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-           
-                <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-                <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-                <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-                <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-                <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.DiscountCondition)
-            </td>
-            <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.DiscountAmount)
-            </td>
-            <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td style="text-align : center;">
-                    <a asp-action="UpdateVoucher" asp-controller="VoucherManager" asp-area="Admin" asp-route-id="@item.VoucherID" class="btn btn-warning">Update</a>
-                    <a asp-action="VoucherDetail" asp-controller="VoucherManager" asp-area="Admin" asp-route-id="@item.VoucherID" class="btn btn-info">Details</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+
+
+
+
+<div class="details" style="width : 100%">
+    <div class="recentOrder">
+        <div class="cardHeader">
+            <h2>Danh Sách Voucher</h2>
+            <p>
+                <a asp-action="CreateVoucher" asp-controller="VoucherManager" asp-area="Admin" class=" btn status primary">Create New</a>
+            </p>
+        </div>
+        <table>
+            <thead>
+                <tr>
+
+                    <th style="text-align : center;">
+                        Tên Voucher
+                    </th>
+                    <th style="text-align : center;">
+                        Chú Thích
+                    </th>
+                    <th style="text-align : center;">
+                        Ngày Bắt Đầu
+                    </th>
+                    <th style="text-align : center;">
+                        Ngày Kết Thúc
+                    </th>
+                    <th style="text-align : center;">
+                        Giảm Giá(%)
+                    </th>
+                    <th style="text-align : center;">
+                        Giảm Giá(Đồng)
+                    </th>
+                    <th style="text-align : center;">
+                        Trạng Thái
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.EndDate)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.DiscountCondition)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.DiscountAmount)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            <a asp-action="UpdateVoucher" asp-route-id="@item.VoucherID" class="btn status delivered" >Update</a>
+                            <a asp-action="VoucherDetail" asp-route-id="@item.VoucherID" class="btn status tamkhoa" > Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <!--Danh sách nhân viên-->
+</div>
