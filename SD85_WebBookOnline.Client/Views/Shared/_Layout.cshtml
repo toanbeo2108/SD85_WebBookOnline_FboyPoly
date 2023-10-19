@@ -5,23 +5,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SD85_WebBookOnline.Client</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/SD85_WebBookOnline.Client.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" type="text/css" href="~/css/styles.css">
+
+
 </head>
 
 <body>
 
     @if (!User.Identity.IsAuthenticated)
     {
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/SD85_WebBookOnline.Client.styles.css" asp-append-version="true" />
         <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div class="container-fluid">
                     <a class="navbar-brand" asp-area="" asp-controller="Home"
-                        asp-action="Index">SD85_WebBookOnline.Client</a>
+                       asp-action="Index">SD85_WebBookOnline.Client</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -31,13 +32,13 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="Privacy">Privacy</a>
+                                   asp-action="Privacy">Privacy</a>
                             </li>
                         </ul>
                         <ul class="navbar-nav flex-grow-1" style="flex-direction:row-reverse">
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="Register">Register</a>
+                                   asp-action="Register">Register</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
@@ -55,15 +56,20 @@
         <footer class="border-top footer text-muted">
             <div class="container">
                 &copy; 2023 - SD85_WebBookOnline.Client - <a asp-area="" asp-controller="Home"
-                    asp-action="Privacy">Privacy</a>
+                                                             asp-action="Privacy">Privacy</a>
             </div>
         </footer>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
     }
     else
     {
         @if (User.IsInRole("Admin"))
         {
-            <div>
+            <link rel="stylesheet" type="text/css" href="~/css/styles.css">
+            <div class="container">
                 <div class="navigation">
                     <ul>
                         <li>
@@ -109,7 +115,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a asp-action="AllVoucherManager" asp-controller="VoucherManager" asp-area="Admin">
                                 <span class="icon"><ion-icon name="film-outline"></ion-icon></span>
                                 <span class="title">Voucher</span>
                             </a>
@@ -154,7 +160,7 @@
                         </div>
                         <!--User Img-->
                         <div class="user">
-                            <a asp-controller="Home" asp-action="Logout"><img src="user.jpg"></a>
+                            <a asp-controller="Home" asp-action="Logout"><img src="~/user.jpg"></a>
                         </div>
                     </div>
                     <!--Cards-->
@@ -196,23 +202,49 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="container">
-                    <main role="main" class="pb-3">
-                        @RenderBody()
-                    </main>
+                    <div>
+                        <main role="main" class="pb-3">
+                            @RenderBody()
+                        </main>
+                    </div>
                 </div>
             </div>
+            <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+            <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+            <script>
+                //Menu toggle
+                let toggle = document.querySelector('.toggle');
+                let navigation = document.querySelector('.navigation');
+                let main = document.querySelector('.main');
+
+                toggle.onclick = function () {
+                    navigation.classList.toggle('active');
+                    main.classList.toggle('active');
+
+                }
+                // add hovered class
+                let list = document.querySelectorAll('.navigation li');
+                function activeLink() {
+                    list.forEach((item) =>
+                        item.classList.remove('hovered'));
+                    this.classList.add('hovered');
+                }
+                list.forEach((item) =>
+                    item.addEventListener('mouseover', activeLink));
+            </script>
         }
         else if (User.IsInRole("User"))
         {
+            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+            <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+            <link rel="stylesheet" href="~/SD85_WebBookOnline.Client.styles.css" asp-append-version="true" />
             <header>
                 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                     <div class="container-fluid">
                         <a class="navbar-brand" asp-area="" asp-controller="Home"
-                            asp-action="Index">SD85_WebBookOnline.Client</a>
+                           asp-action="Index">SD85_WebBookOnline.Client</a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -222,17 +254,17 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                        asp-action="Privacy">Privacy</a>
+                                       asp-action="Privacy">Privacy</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Category"
-                                        asp-action="Index">Category</a>
+                                       asp-action="Index">Category</a>
                                 </li>
                             </ul>
                             <ul class="navbar-nav flex-grow-1" style="flex-direction:row-reverse">
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                        asp-action="Logout">Logout</a>
+                                       asp-action="Logout">Logout</a>
                                 </li>
                             </ul>
                         </div>
@@ -247,40 +279,15 @@
             <footer class="border-top footer text-muted">
                 <div class="container">
                     &copy; 2023 - SD85_WebBookOnline.Client - <a asp-area="" asp-controller="Home"
-                        asp-action="Privacy">Privacy</a>
+                                                                 asp-action="Privacy">Privacy</a>
                 </div>
             </footer>
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="~/js/site.js" asp-append-version="true"></script>
+            @await RenderSectionAsync("Scripts", required: false)
         }
     }
-
-
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script>
-        //Menu toggle
-        let toggle = document.querySelector('.toggle');
-        let navigation = document.querySelector('.navigation');
-        let main = document.querySelector('.main');
-
-        toggle.onclick = function () {
-            navigation.classList.toggle('active');
-            main.classList.toggle('active');
-
-        }
-        // add hovered class
-        let list = document.querySelectorAll('.navigation li');
-        function activeLink() {
-            list.forEach((item) =>
-                item.classList.remove('hovered'));
-            this.classList.add('hovered');
-        }
-        list.forEach((item) =>
-            item.addEventListener('mouseover', activeLink));
-    </script>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

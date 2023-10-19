@@ -17,7 +17,7 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             irespon = new AllResponsitories<Voucher>(context, context.Voucher);
         }
-        [Authorize(Roles ="Admin")]
+        [Authorize]
         [HttpGet("[Action]")]
         public async Task<IEnumerable<Voucher>> GetAllVoucher()
         {
