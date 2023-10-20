@@ -38,14 +38,18 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateVoucher(Voucher vc)
         {
-            var urlVoucher = $"https://localhost:7079/api/Voucher/CreateVoucher?name={vc.Name}&description={vc.Description}&endDate={vc.EndDate}&discountCondition={vc.DiscountCondition}&discountAmount={vc.DiscountAmount}&status={1}";
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             vc.VoucherID = Guid.NewGuid();
+            vc.StartDate = DateTime.Now;
+            var urlVoucher = $"https://localhost:7079/api/Voucher/CreateVoucher?name={vc.Name}&description={vc.Description}&endDate={vc.EndDate}&discountCondition={vc.DiscountCondition}&discountAmount={vc.DiscountAmount}&status={1}";
+            
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8,"application/json");
             var respon = await httpClient.PostAsync(urlVoucher, content);
             if (respon.IsSuccessStatusCode)
             {
-               return RedirectToAction("AllVoucherManager", "VoucherAdmin",new {area = "Admin"});
+               return RedirectToAction("AllVoucherManager", "VoucherManager",new {area = "Admin"});
             }
             TempData["Erro Message"] = "Thêm Thất Bại";
             return View();
@@ -53,6 +57,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> VoucherDetail(Guid id)
         {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var urlVoucher = $"https://localhost:7079/api/Voucher/GetAllVoucher";
             var responVoucher = await _httpClient.GetAsync(urlVoucher);
             string apiDataVoucher = await responVoucher.Content.ReadAsStringAsync();
@@ -67,8 +73,11 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return View(voucher);   
             }
         }
+        [HttpGet]
         public async Task<IActionResult> UpdateVoucher(Guid id)
         {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var urlVoucher = $"https://localhost:7079/api/Voucher/GetAllVoucher";
             var responVoucher = await _httpClient.GetAsync(urlVoucher);
             string apiDataVoucher = await responVoucher.Content.ReadAsStringAsync();
@@ -93,12 +102,16 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             {
                 return BadRequest();
             }
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             return RedirectToAction("AllVoucherManager", "VoucherAdmin", new { area = "Admin" });
 
         }
         [HttpGet]
         public async Task<IActionResult> DeleteVoucher(Guid id)
         {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var urlVoucher = $"https://localhost:7079/api/Voucher/DeleteVoucher/{id}";
             var respon =  await _httpClient.DeleteAsync(urlVoucher);
             if (!respon.IsSuccessStatusCode)

@@ -1,4 +1,4 @@
-@import url('https:fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+﻿@import url('https:fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
 *
 {
 margin: 0;
@@ -260,7 +260,6 @@ body
 .btn{
     position: relative;
     padding: 5px 10px;
-    background: var(--blue);
     text-decoration: none;
     color: var(--white);
     border-radius: 6px;
@@ -316,6 +315,14 @@ body
     font-size: 14px;
     font-weight: 500px;
 }
+.status.primary {
+    padding: 2px 4px;
+    background: var(--blue);
+    color: var(--white);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500px;
+}
 .recentEmpolyees{
     position: relative;
     display: grid;
@@ -340,7 +347,28 @@ body
     height: 100%;
     object-fit: cover;
 }
+.form-group {
+    margin-bottom: 15px;
+}
 
+/* CSS cho control-label */
+.control-label {
+    font-weight: bold;
+}
+
+/* CSS cho form-control */
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* CSS cho text-danger */
+.text-danger {
+    color: #ff0000;
+    font-size: 14px;
+}
 .recentEmpolyees table tr td{
     padding: 12px 10px;
 }
