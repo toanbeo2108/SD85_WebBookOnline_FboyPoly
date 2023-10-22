@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SD85_WebBookOnline.Api.Data;
 using SD85_WebBookOnline.Api.IResponsitories;
 using SD85_WebBookOnline.Responsitories;
 using SD85_WebBookOnline.Share.Models;
+using System.Data;
 
 namespace SD85_WebBookOnline.Api.Controllers
 {
@@ -17,13 +19,14 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             ires = new AllResponsitories<Book>(context, context.Book);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet("get-all-book")]
         public async Task<IEnumerable<Book>> GetAllbook()
         {
             return await ires.GetAll();
         }
         [HttpPost("add-book")]
-        public async Task<bool> addbook(Guid ManufacturerID,Guid FormID, Guid CouponID, string BookName, int TotalQuantity, string MainPhoto, int QuantitySold, int QuantityExists, decimal EntryPrice, string Information, string Description, string ISBN, int YearOfRelease, DateTime CreateDate, DateTime DeleteDate, int TransactionStatus, int Status)
+        public async Task<bool> addbook(Guid? ManufacturerID,Guid? FormID, Guid? CouponID, string BookName, int TotalQuantity, string MainPhoto, int QuantitySold, int QuantityExists, decimal EntryPrice,decimal Price, string Information, string Description, string ISBN, int YearOfRelease, DateTime? DeleteDate, int TransactionStatus, int Status)
         {
 
                 Book b = new Book();
@@ -37,11 +40,12 @@ namespace SD85_WebBookOnline.Api.Controllers
                 b.QuantitySold = QuantitySold;
                 b.QuantityExists = QuantityExists;
                 b.EntryPrice = EntryPrice;
+                b.Price = Price;
                 b.Information = Information;
                 b.Description = Description;
                 b.ISBN = ISBN;
                 b.YearOfRelease = YearOfRelease;
-                b.CreateDate = CreateDate;
+                b.CreateDate = DateTime.Now;
                 b.DeleteDate = DeleteDate;
                 b.TransactionStatus = TransactionStatus;
                 b.Status = Status;

@@ -1,0 +1,85 @@
+﻿@model IEnumerable<SD85_WebBookOnline.Share.Models.Coupon>
+
+@{
+    ViewData["Title"] = "AllCouponManager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>AllCouponManager</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="details" style="width : 100%">
+    <div class="recentOrder">
+        <div class="cardHeader">
+            <h2>Danh Sách Coupon</h2>
+            <p>
+                <a asp-action="CreateCoupon" asp-controller="BookManager" asp-area="Admin" class=" btn status primary">Create New</a>
+            </p>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="text-align : center;">
+                        ID coupon
+                    </th>
+                    <th style="text-align : center;">
+                        Tên hoặc mã coupon
+                    </th>
+
+                    <th style="text-align : center;">
+                        Phần trăm giảm giá
+                    </th>
+                    <th style="text-align : center;">
+                        Ngày bắt đầu
+                    </th>
+                    <th style="text-align : center;">
+                        Ngày kết thúc
+                    </th>
+                    <th style="text-align : center;">
+                        Mô tả
+                    </th>
+                    <th style="text-align : center;">
+                        trạng thái
+                    </th>
+                    <th></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.CouponID)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.CouponName)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.PercentDiscount)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.EndDate)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            <a asp-action="UpdateCoupon" asp-route-id="@item.CouponID" class="btn status delivered">Update</a>
+                            <a asp-action="VoucherDetail" asp-route-id="@item.CouponID" class="btn status tamkhoa"> Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <!--Danh sách nhân viên-->
+</div>
