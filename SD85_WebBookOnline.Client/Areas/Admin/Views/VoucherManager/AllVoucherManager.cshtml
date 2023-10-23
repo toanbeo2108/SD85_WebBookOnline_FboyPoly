@@ -9,7 +9,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/js/sc_voucherpage.js"></script>
 <p>
@@ -19,73 +19,74 @@
 <div class="details" style="width:100%">
     <div class="recentOrder">
         <div class="cardHeader">
-             <h2>Danh Sách Voucher</h2>
-             <div class="d-flex justify-content-end gap-1">
-                  <button type="button" class="btn btn-sm btn-info" id="btn-openfilter-voucher"><i class="fa-solid fa-filter"></i></button>
-                   <a asp-action="CreateVoucher" asp-controller="VoucherManager" asp-area="Admin" class=" btn status primary">Create New</a>
-             </div>
+            <h2>Danh Sách Voucher</h2>
+            <div class="d-flex justify-content-end gap-1">
+                <button type="button" class="btn btn-sm btn-info" id="btn-openfilter-voucher"><i class="fa-solid fa-filter"></i></button>
+                <a asp-action="CreateVoucher" asp-controller="VoucherManager" asp-area="Admin" class=" btn status primary">Create New</a>
+            </div>
         </div>
         <table class="table" style="width : 100%;" id="table-voucher">
-    <thead>
-        <tr>
-           
-            <th style="text-align : center;">
-               Tên Voucher
-            </th>
-            <th style="text-align : center;">
-                Chú Thích
-            </th>
-            <th style="text-align : center;">
-                Ngày Bắt Đầu
-            </th>
-            <th style="text-align : center;">
-                Ngày Kết Thúc
-            </th>
-            <th style="text-align : center;">
-                Giảm Giá(%)
-            </th>
-            <th style="text-align : center;">
-                Giảm Giá(Đồng)
-            </th>
-            <th style="text-align : center;">
-                Trạng Thái
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-           
-                <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-                <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-                <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-                <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-                <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.DiscountCondition)
-            </td>
-            <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.DiscountAmount)
-            </td>
-            <td style="text-align : center;">
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td style="text-align : center;">
-                    <a asp-action="UpdateVoucher" asp-route-id="@item.VoucherID" class="btn btn-warning">Update</a>
-                    <a asp-action="VoucherDetail" asp-route-id="@item.VoucherID" class="btn btn-info">Details</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+            <thead>
+                <tr>
+
+                    <th style="text-align : center;">
+                        Tên Voucher
+                    </th>
+                    <th style="text-align : center;">
+                        Chú Thích
+                    </th>
+                    <th style="text-align : center;">
+                        Ngày Bắt Đầu
+                    </th>
+                    <th style="text-align : center;">
+                        Ngày Kết Thúc
+                    </th>
+                    <th style="text-align : center;">
+                        Giảm Giá(%)
+                    </th>
+                    <th style="text-align : center;">
+                        Giảm Giá(Đồng)
+                    </th>
+                    <th style="text-align : center;">
+                        Trạng Thái
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td style="text-align : center;">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td style="text-align : center;">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td style="text-align : center;">
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td style="text-align : center;">
+                            @Html.DisplayFor(modelItem => item.EndDate)
+                        </td>
+                        <td style="text-align : center;">
+                            @Html.DisplayFor(modelItem => item.DiscountCondition)
+                        </td>
+                        <td style="text-align : center;">
+                            @Html.DisplayFor(modelItem => item.DiscountAmount)
+                        </td>
+                        <td style="text-align : center;">
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td style="text-align : center;">
+                            <a asp-action="UpdateVoucher" asp-route-id="@item.VoucherID" class="btn btn-warning">Update</a>
+                            <a asp-action="VoucherDetail" asp-route-id="@item.VoucherID" class="btn btn-info">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 
 
@@ -96,60 +97,60 @@
 </div>
 
 
- <div class="modal fade" id="modal-filter-voucher">
-                           <div class=modal-dialog>
-                               <div class="modal-content">
-                                   <div class="modal-header">
-                                       <h5 class="modal-title">Lọc nâng cao</h5>
-                                   </div>
-                                   <div class="modal-body">
-                                       <div class="row">
-                                           <div class="col-md-6">
-                                               <div class="form-group">
-                                                   <label for="ft_TUNGAY_tu">Ngày bắt đầu từ</label>
-                                                   <input id="ft_TUNGAY_tu" type="date" class="form-control" />
-                                               </div>
-                                           </div>
-                                           <div class="col-md-6">
-                                               <div class="form-group">
-                                                   <label for="ft_TUNGAY_den">Ngày bắt đầu đến</label>
-                                                   <input id="ft_TUNGAY_den" type="date" class="form-control"  />
-                                               </div>
-                                           </div>
-                                           <div class="col-md-6">
-                                               <div class="form-group">
-                                                   <label for="ft_kethuc_tu">Ngày kết thúc từ</label>
-                                                   <input id="ft_kethuc_tu" type="date" class="form-control"  />
-                                               </div>
-                                           </div>
-                                           <div class="col-md-6">
-                                               <div class="form-group">
-                                                   <label for="ft_kethuc_den">Ngày kết thúc đến </label>
-                                                   <input id="ft_kethuc_den" type="date" class="form-control"  />
-                                               </div>
-                                           </div>
-                                           <div class="col-md-12">
-                                               <div class="form-group">
-                                                   <label for="ft_trangthai">Trạng thái</label>
-                                                 <select class="form-select" id="ft_trangthai">
-                                                     <option>1</option>
-                                                     <option>2</option>
-                                                     <option>3</option>
-                                                 </select>
-                                               </div>
-                                           </div>
-                                           <div class="col-md-12">
-                                               <label for="btn_search">Tìm kiếm</label>
-                                                <input id="btn_search" type="text" class="form-control" />
-                                           </div>
-                                       </div>
-                                           <div class="modal-footer justify-content-center">
-                                               <button  id="btn_loc" type="button" class="btn btn-sm btn-success ">Lọc</button>
-                                               <button id="btn_clear" type="button" class="btn btn-sm btn-primary ">Làm mới</button>
-                                               <button type="button" class="btn btn-sm btn-dark ">Thoát</button>
-                                           </div>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
+<div class="modal fade" id="modal-filter-voucher">
+    <div class=modal-dialog>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Lọc nâng cao</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ft_TUNGAY_tu">Ngày bắt đầu từ</label>
+                            <input id="ft_TUNGAY_tu" type="date" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ft_TUNGAY_den">Ngày bắt đầu đến</label>
+                            <input id="ft_TUNGAY_den" type="date" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ft_kethuc_tu">Ngày kết thúc từ</label>
+                            <input id="ft_kethuc_tu" type="date" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ft_kethuc_den">Ngày kết thúc đến </label>
+                            <input id="ft_kethuc_den" type="date" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="ft_trangthai">Trạng thái</label>
+                            <select class="form-select" id="ft_trangthai">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="btn_search">Tìm kiếm</label>
+                        <input id="btn_search" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button id="btn_loc" type="button" class="btn btn-sm btn-success ">Lọc</button>
+                    <button id="btn_clear" type="button" class="btn btn-sm btn-primary ">Làm mới</button>
+                    <button type="button" class="btn btn-sm btn-dark ">Thoát</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 

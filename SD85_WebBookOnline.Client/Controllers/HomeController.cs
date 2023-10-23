@@ -74,7 +74,7 @@ namespace SD85_WebBookOnline.Client.Controllers
                 var check = User.Identity.IsAuthenticated;
 
 
-                return RedirectToAction("Index", "AdminHome",new {area = "Admin"});
+                return RedirectToAction("Index", "Home");
 
             }
             else

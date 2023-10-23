@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SD85_WebBookOnline.Api.Data;
 using SD85_WebBookOnline.Api.IResponsitories;
@@ -16,13 +17,14 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             irespon = new AllResponsitories<Combo>(context, context.Combo);
         }
+        [Authorize]
         [HttpGet("[Action]")]
-        public async Task<IEnumerable<Combo>> GetAllBill()
+        public async Task<IEnumerable<Combo>> GetAllCombo()
         {
             return await irespon.GetAll();
         }
         [HttpPost("[Action]")]
-        public async Task<bool> CreateCombo(Guid createbyID, Guid cartItemID, string comboName, decimal price, string image, int status)
+        public async Task<bool> CreateCombo(Guid createbyID, Guid cartItemID, string comboName, decimal price,string image, /*IFormFile imageFile,*/ int status)
         {
             Combo cb = new Combo();
             cb.ComboID = Guid.NewGuid();
@@ -30,10 +32,30 @@ namespace SD85_WebBookOnline.Api.Controllers
             cb.CartItemID = cartItemID;
             cb.ComboName = comboName;
             cb.Price = price;
-            cb.Image = image;
             cb.Status = 1;
+            cb.Image = image;
             return await irespon.CreateItem(cb);
+
+            // Xử lý tệp ảnh
+            //if (imageFile != null && imageFile.Length > 0)
+            //{
+            //    // Lưu tệp ảnh vào thư mục trên máy chủ
+            //    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+            //    string uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+            //    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            //    using (var fileStream = new FileStream(filePath, FileMode.Create))
+            //    {
+            //        await imageFile.CopyToAsync(fileStream);
+            //    }
+
+            //    // Cập nhật đường dẫn đến tệp ảnh trong thuộc tính Image của Combo
+            //    cb.Image = "/images/" + uniqueFileName; // Đường dẫn dựa vào thư mục bạn lưu trữ tệp ảnh trong wwwroot
+            //}
         }
+
+
+
         [HttpPut("[Action]/{id}")]
         public async Task<bool> UpdateCombo(Guid id, [FromBody] Combo? dm)
         {
