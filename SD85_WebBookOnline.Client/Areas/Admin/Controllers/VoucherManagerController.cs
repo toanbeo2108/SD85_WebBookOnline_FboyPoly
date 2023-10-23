@@ -43,7 +43,6 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             vc.VoucherID = Guid.NewGuid();
             vc.StartDate = DateTime.Now;
             var urlVoucher = $"https://localhost:7079/api/Voucher/CreateVoucher?name={vc.Name}&description={vc.Description}&endDate={vc.EndDate}&discountCondition={vc.DiscountCondition}&discountAmount={vc.DiscountAmount}&status={1}";
-            
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8,"application/json");
             var respon = await httpClient.PostAsync(urlVoucher, content);
