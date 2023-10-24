@@ -44,10 +44,7 @@
                             <td style="text-align: center;">@item?.Price</td>
                             <td style="text-align: center;">@item?.Status</td>
                             <td style="text-align: center;">
-                                @if (!string.IsNullOrEmpty(item?.Image))
-                                {
-                                    <img src="@item?.Image" alt="Combo Image" style="max-width: 100px; max-height: 100px;" />
-                                }
+                                <img src="~/images/@item?.Image" alt="Combo Image" width="100" height="100" />
                             </td>
                             <td style="text-align: center;">
                                 <a asp-action="UpdateCombo" asp-route-id="@item?.ComboID" class="btn btn-info">Update</a>
@@ -58,9 +55,6 @@
                                 </form>
                             </td>
                         </tr>
-
-
-
                     }
                 }
                 else
