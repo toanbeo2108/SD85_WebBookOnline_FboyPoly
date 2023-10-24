@@ -12,7 +12,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateBook">
+        <form asp-action="CreateBook" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
             <div class="form-group">
@@ -41,9 +41,8 @@
                 <span asp-validation-for="TotalQuantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MainPhoto" class="control-label"></label>
-                <input asp-for="MainPhoto" class="form-control" />
-                <span asp-validation-for="MainPhoto" class="text-danger"></span>
+                <label for="formFile" class="form-label">Chọn ảnh cho sản phẩm</label>
+                <input asp-for="MainPhoto" class="form-control" type="file" name="imageFile" accept="image/*">
             </div>
             <div class="form-group">
                 <label asp-for="QuantitySold" class="control-label"></label>
@@ -84,11 +83,6 @@
                 <label asp-for="YearOfRelease" class="control-label"></label>
                 <input asp-for="YearOfRelease" class="form-control" />
                 <span asp-validation-for="YearOfRelease" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreateDate" class="control-label"></label>
-                <input asp-for="CreateDate" class="form-control" />
-                <span asp-validation-for="CreateDate" class="text-danger"></span>
             </div>
             
             <div class="form-group">

@@ -71,10 +71,6 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCombo(Combo cb, IFormFile imageFile)
         {
-
-                
-                // Xác định đường dẫn ảnh
-                //string uniqueFileName = null;
                 if (imageFile != null && imageFile.Length > 0)
                 {
                     var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageFile.FileName);

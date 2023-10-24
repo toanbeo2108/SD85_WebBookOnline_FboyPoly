@@ -352,7 +352,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     ISBN = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     YearOfRelease = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TransactionStatus = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -618,12 +618,12 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "34f3aa5a-08d5-4e93-9bc8-c01d8e62d038", "3ccbe0e6-0c63-44ae-84a9-3768e920746a", "Admin", "ADMIN" });
+                values: new object[] { "056acf70-7451-4f6e-a92d-a6160d909247", "fc3ba04d-c651-4b2e-a819-457061349efc", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "f32fb58b-08b7-4057-b5cc-03f651ea60fd", "01a24713-bc46-4166-8bb2-c8bbbea9085b", "User", "USER" });
+                values: new object[] { "a3c3fa24-6aab-4442-b48b-1ad96623ce3f", "e5cc19f3-fee5-4f19-984c-64be43455628", "User", "USER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

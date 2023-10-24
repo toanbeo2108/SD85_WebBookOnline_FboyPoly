@@ -12,7 +12,7 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231024032312_123")]
+    [Migration("20231024063756_123")]
     partial class _123
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,15 +53,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "34f3aa5a-08d5-4e93-9bc8-c01d8e62d038",
-                            ConcurrencyStamp = "3ccbe0e6-0c63-44ae-84a9-3768e920746a",
+                            Id = "056acf70-7451-4f6e-a92d-a6160d909247",
+                            ConcurrencyStamp = "fc3ba04d-c651-4b2e-a819-457061349efc",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f32fb58b-08b7-4057-b5cc-03f651ea60fd",
-                            ConcurrencyStamp = "01a24713-bc46-4166-8bb2-c8bbbea9085b",
+                            Id = "a3c3fa24-6aab-4442-b48b-1ad96623ce3f",
+                            ConcurrencyStamp = "e5cc19f3-fee5-4f19-984c-64be43455628",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -391,7 +391,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeleteDate")
+                    b.Property<DateTime?>("DeleteDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
