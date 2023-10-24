@@ -43,7 +43,25 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
             return View(lstCombo);
         }
-
+        [HttpGet]
+        public async Task<IActionResult> ComboDetail(Guid id)
+        {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+            var responCombo = await _httpClient.GetAsync(urlCombo);
+            string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+            var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+            var combo = lstCombo.FirstOrDefault(x => x.ComboID == id);
+            if (combo == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                return View(combo);
+            }
+        }
 
         public IActionResult CreateCombo()
         {
@@ -109,6 +127,73 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return false;
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> UpdateCombo(Guid id)
+        {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+            var responCombo = await _httpClient.GetAsync(urlCombo);
+            string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+            var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+            var combo = lstCombo.FirstOrDefault(x => x.ComboID == id);
+            if (combo == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                return View(combo);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCombo(Guid id, Combo cb, IFormFile imageFile)
+        {
+            var urlCombo = $"https://localhost:7079/api/Combo/UpdateCombo/{id}";
+
+            // Kiểm tra xem id đã được cung cấp có khớp với ComboID hay không
+            if (id != cb.ComboID)
+            {
+                return BadRequest();
+            }
+
+            // Kiểm tra xem tệp hình ảnh mới có được cung cấp hay không
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                // Xác định đường dẫn lưu trữ hình ảnh mới
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageFile.FileName);
+
+                // Lưu tệp hình ảnh mới
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+
+                // Cập nhật thuộc tính 'Image' với tên tệp hình ảnh mới
+                cb.Image = imageFile.FileName;
+            }
+
+            // Chuyển đổi dữ liệu Combo thành chuỗi JSON
+            var content = new StringContent(JsonConvert.SerializeObject(cb), Encoding.UTF8, "application/json");
+
+            // Gửi yêu cầu PUT đến API để cập nhật Combo
+            var response = await _httpClient.PutAsync(urlCombo, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Nếu cập nhật thành công, chuyển hướng đến trang quản lý Combo
+                return RedirectToAction("AllComboManager", "ComboManager", new { area = "Admin" });
+            }
+            else
+            {
+                // Nếu cập nhật thất bại, hiển thị thông báo lỗi và trở về trang chỉnh sửa Combo
+                TempData["ErrorMessage"] = "Cập nhật không thành công";
+                return View(cb);
+            }
+        }
+
+
 
 
 

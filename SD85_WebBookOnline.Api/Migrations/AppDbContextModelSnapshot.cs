@@ -51,15 +51,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7e2f894e-39f6-4a61-a391-e8a52e685a80",
-                            ConcurrencyStamp = "ba6b743f-c6fa-4c87-99e8-8aea0f7b7215",
+                            Id = "34f3aa5a-08d5-4e93-9bc8-c01d8e62d038",
+                            ConcurrencyStamp = "3ccbe0e6-0c63-44ae-84a9-3768e920746a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "af4afd42-43c9-4795-9c19-b6f6d25c2066",
-                            ConcurrencyStamp = "50675a57-f14f-4fad-8c2b-9921f5aa8cfd",
+                            Id = "f32fb58b-08b7-4057-b5cc-03f651ea60fd",
+                            ConcurrencyStamp = "01a24713-bc46-4166-8bb2-c8bbbea9085b",
                             Name = "User",
                             NormalizedName = "USER"
                         });
