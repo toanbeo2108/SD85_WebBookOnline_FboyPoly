@@ -16,7 +16,7 @@
                 <a asp-action="CreateBook" asp-controller="BookManager" asp-area="Admin" class=" btn status primary">Create New</a>
             </p>
         </div>
-        <table class="table">
+        <table class="table" id="page">
             <thead>
                 <tr>
 
@@ -99,3 +99,20 @@
     </div>
     <!--Danh sách nhân viên-->
 </div>
+@*Link datatable*@
+<link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+@section scripts
+    {
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Khởi tạo DataTable
+            var dataTable = $('#page').DataTable();
+            // Chuyển datatable thành JSON
+            var data = table.toJSON();
+
+            // In dữ liệu JSON ra console
+            console.log(data);
+        });
+    </script>
+}

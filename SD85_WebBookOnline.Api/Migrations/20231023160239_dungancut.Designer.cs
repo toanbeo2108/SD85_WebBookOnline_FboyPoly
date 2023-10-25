@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SD85_WebBookOnline.Api.Data;
 
@@ -11,9 +12,10 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231023160239_dungancut")]
+    partial class dungancut
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,19 +53,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-
-                            Id = "056acf70-7451-4f6e-a92d-a6160d909247",
-                            ConcurrencyStamp = "fc3ba04d-c651-4b2e-a819-457061349efc",
-
+                            Id = "dca0cba9-409d-423f-83a9-9b029575cddc",
+                            ConcurrencyStamp = "7ec4b1ba-030c-4ade-b63e-dcba28116bbc",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-
-                            Id = "a3c3fa24-6aab-4442-b48b-1ad96623ce3f",
-                            ConcurrencyStamp = "e5cc19f3-fee5-4f19-984c-64be43455628",
-
+                            Id = "1f300e29-d655-4f54-8460-1069723352cc",
+                            ConcurrencyStamp = "77d48f92-00cc-4bca-b229-6b822158ee79",
                             Name = "User",
                             NormalizedName = "USER"
                         });

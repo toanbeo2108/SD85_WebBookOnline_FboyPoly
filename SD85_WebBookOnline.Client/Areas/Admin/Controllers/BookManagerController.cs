@@ -57,11 +57,17 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             bk.BookID = Guid.NewGuid();
             //bk.CreateDate = DateTime.Now;
-            var urlBook = $"https://localhost:7079/api/Book/add-book?ManufacturerID={bk.ManufacturerID}&FormID={bk.FormID}&CouponID={bk.CouponID}&BookName={bk.BookName}" +
-                $"&TotalQuantity={bk.TotalQuantity}&MainPhoto={bk.MainPhoto}&QuantitySold={bk.QuantitySold}&QuantityExists={bk.QuantityExists}&EntryPrice={bk.EntryPrice}" +
-                $"&Price={bk.Price}&Information={bk.Information}&Description={bk.Description}&ISBN={bk.ISBN}" +
-                $"&YearOfRelease={bk.YearOfRelease}&TransactionStatus={bk.TransactionStatus}&Status={bk.Status}";
-            
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageFile.FileName);
+                var stream = new FileStream(path, FileMode.Create);
+                imageFile.CopyTo(stream);
+                bk.MainPhoto = imageFile.FileName;
+            }
+            var urlBook = $"https://localhost:7079/api/Book/add-book?ManufacturerID={bk.ManufacturerID}&FormID={bk.FormID}&CouponID={bk.CouponID}&BookName={bk.BookName}&TotalQuantity={bk.TotalQuantity}&MainPhoto={bk.MainPhoto}&QuantitySold={bk.QuantitySold}&QuantityExists={bk.QuantityExists}&EntryPrice={bk.EntryPrice}&Price={bk.Price}&Information={bk.Information}&Description={bk.Description}&ISBN={bk.ISBN}&YearOfRelease={bk.YearOfRelease}&TransactionStatus={bk.TransactionStatus}&Status={bk.Status}";
+            var httpClient = new HttpClient();
+
             var content = new StringContent(JsonConvert.SerializeObject(bk), Encoding.UTF8, "application/json");
             var respon = await _httpClient.PostAsync(urlBook, content);
             if (respon.IsSuccessStatusCode)

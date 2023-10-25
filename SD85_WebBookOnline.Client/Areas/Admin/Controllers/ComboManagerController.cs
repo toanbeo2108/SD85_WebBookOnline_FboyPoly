@@ -25,8 +25,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             _httpClient = new HttpClient();
             _webHostEnvironment = webHostEnvironment;
         }
+        [AutoValidateAntiforgeryToken]        
         
-
         public IActionResult Index()
         {
             return View();
