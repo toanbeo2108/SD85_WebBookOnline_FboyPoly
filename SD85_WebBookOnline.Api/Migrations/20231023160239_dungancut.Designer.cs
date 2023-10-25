@@ -12,8 +12,8 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231004154744_test2")]
-    partial class test2
+    [Migration("20231023160239_dungancut")]
+    partial class dungancut
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,22 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "dca0cba9-409d-423f-83a9-9b029575cddc",
+                            ConcurrencyStamp = "7ec4b1ba-030c-4ade-b63e-dcba28116bbc",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "1f300e29-d655-4f54-8460-1069723352cc",
+                            ConcurrencyStamp = "77d48f92-00cc-4bca-b229-6b822158ee79",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -264,7 +280,7 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.HasKey("AuthorID");
 
-                    b.ToTable("Author");
+                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Bill", b =>
@@ -375,7 +391,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeleteDate")
+                    b.Property<DateTime?>("DeleteDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -556,9 +572,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("CategoryID");
 
@@ -580,6 +595,10 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.Property<Guid?>("CreatebyID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -652,9 +671,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("CouponID");
 
@@ -797,9 +815,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("LangugeID");
 
@@ -825,6 +842,36 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasKey("ManufactureID");
 
                     b.ToTable("Manufacturer");
+                });
+
+            modelBuilder.Entity("SD85_WebBookOnline.Share.Models.PostBanner", b =>
+                {
+                    b.Property<Guid>("PostID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Images")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PostDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PostID");
+
+                    b.ToTable("PostBanner");
                 });
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Voucher", b =>

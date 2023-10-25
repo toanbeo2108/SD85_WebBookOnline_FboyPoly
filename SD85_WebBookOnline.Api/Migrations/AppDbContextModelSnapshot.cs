@@ -51,15 +51,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7e2f894e-39f6-4a61-a391-e8a52e685a80",
-                            ConcurrencyStamp = "ba6b743f-c6fa-4c87-99e8-8aea0f7b7215",
+                            Id = "dca0cba9-409d-423f-83a9-9b029575cddc",
+                            ConcurrencyStamp = "7ec4b1ba-030c-4ade-b63e-dcba28116bbc",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "af4afd42-43c9-4795-9c19-b6f6d25c2066",
-                            ConcurrencyStamp = "50675a57-f14f-4fad-8c2b-9921f5aa8cfd",
+                            Id = "1f300e29-d655-4f54-8460-1069723352cc",
+                            ConcurrencyStamp = "77d48f92-00cc-4bca-b229-6b822158ee79",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -389,7 +389,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeleteDate")
+                    b.Property<DateTime?>("DeleteDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")

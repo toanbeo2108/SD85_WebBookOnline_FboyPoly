@@ -6,19 +6,20 @@ using System.Text;
 
 namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 {
-    public class LangureManagerController : Controller
+    public class LanguageManagerController : Controller
     {
         private HttpClient _httpClient;
-        public LangureManagerController()
+        public LanguageManagerController()
         {
             _httpClient = new HttpClient();
         }
+        public int pageSize = 6;
         public IActionResult Index()
         {
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> AllLangugeManager()
+        public async Task<IActionResult> AllLanguageManager(string txtSearch, int? page)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -26,8 +27,37 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var httpClient = new HttpClient();
             var responBook = await _httpClient.GetAsync(urlBook);
             string apiDataBook = await responBook.Content.ReadAsStringAsync();
-            var lstBook = JsonConvert.DeserializeObject<List<Languge>>(apiDataBook);
-            return View(lstBook);
+            var lstLanguage = JsonConvert.DeserializeObject<List<Languge>>(apiDataBook);
+
+            if(lstLanguage == null)
+            {
+                return BadRequest();
+            }
+
+            var data = (from s in lstLanguage select s);
+            if (!string.IsNullOrEmpty(txtSearch))
+            {
+                ViewBag.TxtSearch = txtSearch;
+                data = data.Where(s => s.Name.Contains(txtSearch)).ToList();
+            }
+
+            if(page > 0)
+            {
+                page = page;
+            }
+            else
+            {
+                page = 1;
+            }
+            
+            int start = (int)(page - 1) * pageSize;
+            ViewBag.pageCurrent = page;
+            int totalPage = data.Count();
+            float totalNumberSize = (totalPage/(float)pageSize);
+            int numSize = (int)Math.Ceiling(totalNumberSize);
+            ViewBag.numSize = numSize;
+            ViewBag.listLanguage = data.OrderByDescending(x => x.LangugeID).Skip(start).Take(pageSize);
+            return View();
         }
         [HttpGet]
         public IActionResult CreateLanguge()
@@ -35,7 +65,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateLanguge(Languge bk)
+        public async Task<IActionResult> CreateLanguage(Languge bk)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -53,7 +83,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> LangugeDetail(Guid id)
+        public async Task<IActionResult> LanguageDetail(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -72,7 +102,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> UpdateLanguge(Guid id)
+        public async Task<IActionResult> UpdateLanguage(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -91,7 +121,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateLanguge(Guid id, Languge vc)
+        public async Task<IActionResult> UpdateLanguage(Guid id, Languge vc)
         {
             var urlBook = $"https://localhost:7079/api/Languge/UpdateLaguge/{id}";
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8, "application/json");
