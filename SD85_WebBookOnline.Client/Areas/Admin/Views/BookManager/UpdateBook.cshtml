@@ -8,11 +8,9 @@
 
 <h1>UpdateBook</h1>
 
-<h4>Book</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="UpdateBook">
+        <form asp-action="UpdateBook" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="BookID" class="control-label"></label>
@@ -45,9 +43,8 @@
                 <span asp-validation-for="TotalQuantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MainPhoto" class="control-label"></label>
-                <input asp-for="MainPhoto" class="form-control" />
-                <span asp-validation-for="MainPhoto" class="text-danger"></span>
+                <label for="formFile" class="form-label">Chọn ảnh cho sản phẩm</label>
+                <input asp-for="MainPhoto" class="form-control" type="file" name="imageFile" accept="image/*">
             </div>
             <div class="form-group">
                 <label asp-for="QuantitySold" class="control-label"></label>
@@ -121,5 +118,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

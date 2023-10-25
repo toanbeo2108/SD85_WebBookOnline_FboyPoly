@@ -12,7 +12,9 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+
         <form asp-action="CreateBook" enctype="multipart/form-data" method="post">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
             <div class="form-group">
@@ -83,11 +85,6 @@
                 <label asp-for="YearOfRelease" class="control-label"></label>
                 <input asp-for="YearOfRelease" class="form-control" />
                 <span asp-validation-for="YearOfRelease" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreateDate" class="control-label"></label>
-                <input asp-for="CreateDate" class="form-control" />
-                <span asp-validation-for="CreateDate" class="text-danger"></span>
             </div>
             
             <div class="form-group">

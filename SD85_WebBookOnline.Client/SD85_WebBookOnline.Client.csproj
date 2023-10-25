@@ -18,10 +18,12 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
+
   </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\Imagebackground\pexels-cottonbro-studio-4153146.jpg" />
+
   </ItemGroup>
 
 </Project>
