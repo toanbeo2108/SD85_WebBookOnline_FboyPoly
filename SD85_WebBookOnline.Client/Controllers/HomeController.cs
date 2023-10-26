@@ -61,9 +61,6 @@ namespace SD85_WebBookOnline.Client.Controllers
                 request.Headers.Add("Authorization", $"Bearer {token}");
 
                 // Gửi yêu cầu HTTP.
-
-
-
                 var handler = new JwtSecurityTokenHandler();
                 var jwt = handler.ReadJwtToken(token);
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -72,9 +69,9 @@ namespace SD85_WebBookOnline.Client.Controllers
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 var check = User.Identity.IsAuthenticated;
-
-
+                
                 return RedirectToAction("Index", "Home");
+
 
             }
             else

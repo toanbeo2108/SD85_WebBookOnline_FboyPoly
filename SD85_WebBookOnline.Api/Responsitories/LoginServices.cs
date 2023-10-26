@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using SD85_WebBookOnline.Api.IResponsitories;
+using SD85_WebBookOnline.Share.Models;
 using SD85_WebBookOnline.Share.ViewModels;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,9 +11,9 @@ namespace SD85_WebBookOnline.Api.IServices.Services
 {
     public class LoginServices : ILoginServices
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
-        public LoginServices(UserManager<IdentityUser> userManager, IConfiguration configuration)
+        public LoginServices(UserManager<User> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _configuration = configuration;

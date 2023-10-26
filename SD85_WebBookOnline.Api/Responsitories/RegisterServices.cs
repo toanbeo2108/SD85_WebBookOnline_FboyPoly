@@ -6,9 +6,9 @@ namespace SD85_WebBookOnline.Api.IServices.Services
 {
     public class RegisterServices : IRegisterServices
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public RegisterServices(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public RegisterServices(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -51,7 +51,8 @@ namespace SD85_WebBookOnline.Api.IServices.Services
             User NewUser = new()
             {
                 UserName = registerUser.Username,
-                Email = registerUser.Email
+                Email = registerUser.Email,
+                PhoneNumber = registerUser.PhoneNumber
             };
 
             // Check if roles is exists or not

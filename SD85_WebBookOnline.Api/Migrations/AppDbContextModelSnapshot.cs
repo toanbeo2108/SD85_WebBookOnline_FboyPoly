@@ -52,6 +52,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                         new
                         {
 
+
                             Id = "056acf70-7451-4f6e-a92d-a6160d909247",
                             ConcurrencyStamp = "fc3ba04d-c651-4b2e-a819-457061349efc",
 
@@ -61,8 +62,10 @@ namespace SD85_WebBookOnline.Api.Migrations
                         new
                         {
 
+
                             Id = "a3c3fa24-6aab-4442-b48b-1ad96623ce3f",
                             ConcurrencyStamp = "e5cc19f3-fee5-4f19-984c-64be43455628",
+
 
                             Name = "User",
                             NormalizedName = "USER"
@@ -920,27 +923,24 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<string>("Avatar")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CardNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DeliveryAddressID")
+                    b.Property<Guid?>("DeliveryAddressID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdateDate")
+                    b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
                     b.HasDiscriminator().HasValue("User");
@@ -1135,7 +1135,7 @@ namespace SD85_WebBookOnline.Api.Migrations
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.DeliveryAddress", b =>
                 {
                     b.HasOne("SD85_WebBookOnline.Share.Models.User", "User")
-                        .WithMany("DeliveryAddresses")
+                        .WithMany("DeliveryAddress")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
@@ -1240,7 +1240,7 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.User", b =>
                 {
-                    b.Navigation("DeliveryAddresses");
+                    b.Navigation("DeliveryAddress");
                 });
 #pragma warning restore 612, 618
         }
