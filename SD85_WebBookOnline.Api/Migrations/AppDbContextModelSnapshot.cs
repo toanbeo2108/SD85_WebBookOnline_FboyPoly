@@ -51,15 +51,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b1115a76-e783-428d-8567-801f9f90cdbb",
-                            ConcurrencyStamp = "2ed5b706-14b5-4a79-90e3-ac38c8703db9",
+                            Id = "a3e56054-b8ec-4553-9a97-0aed7c7d8e22",
+                            ConcurrencyStamp = "fc5ca2f2-8754-48eb-a6c7-c44c95d2f45b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "dcc9a2cd-3ffe-4f6a-be40-fd12bfddecf9",
-                            ConcurrencyStamp = "f900e723-459d-4f32-a7bd-12074b735287",
+                            Id = "7acc91e0-828f-4781-9d70-d926795ee281",
+                            ConcurrencyStamp = "499871f6-fafc-4d06-99b6-2020eaae1b19",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -916,27 +916,24 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<string>("Avatar")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CardNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DeliveryAddressID")
+                    b.Property<Guid?>("DeliveryAddressID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdateDate")
+                    b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
                     b.HasDiscriminator().HasValue("User");
@@ -1131,7 +1128,7 @@ namespace SD85_WebBookOnline.Api.Migrations
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.DeliveryAddress", b =>
                 {
                     b.HasOne("SD85_WebBookOnline.Share.Models.User", "User")
-                        .WithMany("DeliveryAddresses")
+                        .WithMany("DeliveryAddress")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
@@ -1236,7 +1233,7 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.User", b =>
                 {
-                    b.Navigation("DeliveryAddresses");
+                    b.Navigation("DeliveryAddress");
                 });
 #pragma warning restore 612, 618
         }

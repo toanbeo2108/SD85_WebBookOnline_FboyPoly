@@ -9,6 +9,7 @@ using SD85_WebBookOnline.Api.IServices.Services;
 using SD85_WebBookOnline.Api.IServices;
 using System;
 using System.Text;
+using SD85_WebBookOnline.Share.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +26,11 @@ builder.Services.AddScoped<IRegisterServices, RegisterServices>();
 builder.Services.AddScoped<ILoginServices, LoginServices>();
 
 // Add Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>();
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+//    .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 // Add Authentication
 builder.Services.AddAuthentication(options =>
