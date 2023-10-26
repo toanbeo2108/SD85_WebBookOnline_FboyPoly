@@ -24,7 +24,7 @@ namespace SD85_WebBookOnline.Share.Models
         public string ISBN { get; set; } // Mã định danh
         public int YearOfRelease { get; set; } // Năm phát hành
         public DateTime CreateDate { get; set; } // Ngày tạo
-        public DateTime DeleteDate { get; set; } // Ngày xóa
+        public DateTime? DeleteDate { get; set; } // Ngày xóa
         public int TransactionStatus { get; set; }// trạng thái giao dịch
         public int Status { get; set; } // trạng thái sách
 

@@ -1,0 +1,113 @@
+﻿@model SD85_WebBookOnline.Share.Models.Book
+
+@{
+    ViewData["Title"] = "CreateBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h1>CreateBook</h1>
+
+<h4>Book</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+
+        <form asp-action="CreateBook" enctype="multipart/form-data" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="ManufacturerID" class="control-label"></label>
+                <input asp-for="ManufacturerID" class="form-control" />
+                <span asp-validation-for="ManufacturerID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FormID" class="control-label"></label>
+                <input asp-for="FormID" class="form-control" />
+                <span asp-validation-for="FormID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CouponID" class="control-label"></label>
+                <input asp-for="CouponID" class="form-control" />
+                <span asp-validation-for="CouponID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookName" class="control-label"></label>
+                <input asp-for="BookName" class="form-control" />
+                <span asp-validation-for="BookName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalQuantity" class="control-label"></label>
+                <input asp-for="TotalQuantity" class="form-control" />
+                <span asp-validation-for="TotalQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="formFile" class="form-label">Chọn ảnh cho sản phẩm</label>
+                <input asp-for="MainPhoto" class="form-control" type="file" name="imageFile" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label asp-for="QuantitySold" class="control-label"></label>
+                <input asp-for="QuantitySold" class="form-control" />
+                <span asp-validation-for="QuantitySold" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QuantityExists" class="control-label"></label>
+                <input asp-for="QuantityExists" class="form-control" />
+                <span asp-validation-for="QuantityExists" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EntryPrice" class="control-label"></label>
+                <input asp-for="EntryPrice" class="form-control" />
+                <span asp-validation-for="EntryPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Information" class="control-label"></label>
+                <input asp-for="Information" class="form-control" />
+                <span asp-validation-for="Information" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ISBN" class="control-label"></label>
+                <input asp-for="ISBN" class="form-control" />
+                <span asp-validation-for="ISBN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="YearOfRelease" class="control-label"></label>
+                <input asp-for="YearOfRelease" class="form-control" />
+                <span asp-validation-for="YearOfRelease" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="TransactionStatus" class="control-label"></label>
+                <input asp-for="TransactionStatus" class="form-control" />
+                <span asp-validation-for="TransactionStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

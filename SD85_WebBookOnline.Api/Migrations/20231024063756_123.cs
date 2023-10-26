@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SD85_WebBookOnline.Api.Migrations
 {
-    public partial class test : Migration
+    public partial class _123 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,7 +57,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Author",
+                name: "Authors",
                 columns: table => new
                 {
                     AuthorID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -73,7 +73,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Author", x => x.AuthorID);
+                    table.PrimaryKey("PK_Authors", x => x.AuthorID);
                 });
 
             migrationBuilder.CreateTable(
@@ -83,7 +83,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     CategoryID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,7 +99,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     CartItemID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ComboName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -116,7 +117,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -144,7 +145,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     LangugeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -163,6 +164,22 @@ namespace SD85_WebBookOnline.Api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Manufacturer", x => x.ManufactureID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PostBanner",
+                columns: table => new
+                {
+                    PostID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Images = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostBanner", x => x.PostID);
                 });
 
             migrationBuilder.CreateTable(
@@ -335,7 +352,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     ISBN = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     YearOfRelease = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TransactionStatus = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -433,9 +450,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                 {
                     table.PrimaryKey("PK_BookDetails", x => x.BookDetailID);
                     table.ForeignKey(
-                        name: "FK_BookDetails_Author_AuthorID",
+                        name: "FK_BookDetails_Authors_AuthorID",
                         column: x => x.AuthorID,
-                        principalTable: "Author",
+                        principalTable: "Authors",
                         principalColumn: "AuthorID");
                     table.ForeignKey(
                         name: "FK_BookDetails_Book_BookID",
@@ -601,12 +618,12 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "039703bf-e77f-42ed-9e5e-b48afb63136e", "8498f263-fc4f-4192-a4c4-7f6a5c2b7c65", "Admin", "ADMIN" });
+                values: new object[] { "056acf70-7451-4f6e-a92d-a6160d909247", "fc3ba04d-c651-4b2e-a819-457061349efc", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "8deae500-f822-4f40-b35d-c404840e762c", "cf3de9e2-338b-4386-a175-56196f398e53", "User", "USER" });
+                values: new object[] { "a3c3fa24-6aab-4442-b48b-1ad96623ce3f", "e5cc19f3-fee5-4f19-984c-64be43455628", "User", "USER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -802,13 +819,16 @@ namespace SD85_WebBookOnline.Api.Migrations
                 name: "InputSlip");
 
             migrationBuilder.DropTable(
+                name: "PostBanner");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Bill");
 
             migrationBuilder.DropTable(
-                name: "Author");
+                name: "Authors");
 
             migrationBuilder.DropTable(
                 name: "Categories");

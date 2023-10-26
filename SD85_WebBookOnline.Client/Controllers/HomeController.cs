@@ -69,7 +69,10 @@ namespace SD85_WebBookOnline.Client.Controllers
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 var check = User.Identity.IsAuthenticated;
+                
                 return RedirectToAction("Index", "Home");
+
+
             }
             else
             {

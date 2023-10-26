@@ -62,13 +62,16 @@
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        @await RenderSectionAsync("Scripts", required: false)
+        
     }
     else
     {
         @if (User.IsInRole("Admin"))
         {
-            <link rel="stylesheet" type="text/css" href="~/css/styles.css">
+            <link href="~/css/styles.css" rel="stylesheet" type="text/css">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+            
+
             <div class="container">
                 <div class="navigation">
                     <ul>
@@ -79,9 +82,9 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a asp-action="AllBookManager" asp-controller="BookManager" asp-area="Admin">
                                 <span class="icon"><ion-icon name="laptop"></ion-icon></span>
-                                <span class="title">Loptop Manager</span>
+                                <span class="title">Book Manager</span>
                             </a>
                         </li>
                         <li>
@@ -121,9 +124,9 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a asp-action="AllComboManager" asp-controller="ComboManager" asp-area="Admin">
                                 <span class="icon"><ion-icon name="list-outline"></ion-icon></span>
-                                <span class="title">Danh Mục</span>
+                                <span class="title">Combo</span>
                             </a>
                         </li>
                         <li>
@@ -133,9 +136,15 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a asp-action="AllCouponManager" asp-controller="CouponManager" asp-area="Admin">
                                 <span class="icon"><ion-icon name="diamond-outline"></ion-icon></span>
                                 <span class="title">Coupon</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="AllLanguageManager" asp-controller="LanguageManager" asp-area="Admin">
+                                <span class="icon"><ion-icon name="language-outline"></ion-icon></span>
+                                <span class="title">Ngôn Ngữ</span>
                             </a>
                         </li>
                         <li>
@@ -285,7 +294,7 @@
             <script src="~/lib/jquery/dist/jquery.min.js"></script>
             <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
             <script src="~/js/site.js" asp-append-version="true"></script>
-            @await RenderSectionAsync("Scripts", required: false)
+            
         }
     }
     @await RenderSectionAsync("Scripts", required: false)
