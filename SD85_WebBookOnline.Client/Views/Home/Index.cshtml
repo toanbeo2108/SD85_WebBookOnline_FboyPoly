@@ -1,5 +1,9 @@
-﻿@{
+﻿@using SD85_WebBookOnline.Share.Models
+
+@{
     ViewData["Title"] = "Home Page";
+    IEnumerable<Book> lsttopBookTime = ViewBag.lstSelectNew as IEnumerable<Book>;
+    IEnumerable<Book> lsttopBookTopQuantitySold = ViewBag.lstTopquantitySold as IEnumerable<Book>;
 }
 
 
@@ -100,10 +104,77 @@ else if (User.IsInRole("User"))
 }
 else
 {
-    <div class="text-center">
-        <h1 class="display-4">Welcome Guest</h1>
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5 pb-3">
+        @foreach(var item in lsttopBookTime)
+        {
+            <a asp-action="deTail" asp-controller="Home" asp-route-id="@item.BookID">
+                    <div class="col-lg-4 col-md-6 pb-1">
+                        <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;background-color: rgb(171, 201, 231);border-radius: 15%;">
+                            <p class="text-right">@item.QuantityExists Products</p>
+                            <a href="" class="cat-img position-relative overflow-hidden mb-3">
+                                <img class="img-fluid" src="~/photoBooks/@item.MainPhoto" alt="">
+                            </a>
+                            <h5 class="font-weight-semi-bold m-0">@item.BookName</h5>
+                        </div>
+                    </div>
+            </a>
+        }
+        </div>
     </div>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    
+    <div class="container-fluid offer pt-5">
+        <div class="row px-xl-5">
+            <div class="col-md-6 pb-4">
+                <div class="position-relative bg-secondary text-center text-md-right text-white mb-2 py-5 px-5">
+                    <img src="~/img/ombo sach 3.jpg" alt="">
+                    <div class="position-relative" style="z-index: 1;">
+                        <h5 class="text-uppercase text-primary mb-3">Giảm giá mạnh</h5>
+                        <h1 class="mb-4 font-weight-semi-bold">Sản Phẩm Bán Chạy</h1>
+                        <a href="" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 pb-4">
+                <div class="position-relative bg-secondary text-center text-md-left text-white mb-2 py-5 px-5">
+                    <img src="~/img/Combo Sách 2.jpg" alt="">
+                    <div class="position-relative" style="z-index: 1;">
+                        <h5 class="text-uppercase text-primary mb-3">Giảm giá mạnh</h5>
+                        <h1 class="mb-4 font-weight-semi-bold">Sản Phẩm Mới Nhất</h1>
+                        <a href="" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid pt-5">
+        <div class="text-center mb-4">
+            <h2 class="section-title px-5"><span class="px-2">Sản Phẩm Bán Chạy</span></h2>
+        </div>
+        <div class="row px-xl-5 pb-3">
+            @foreach( var item in lsttopBookTopQuantitySold)
+            {
+                <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                    <div class="card product-item border-0 mb-4">
+                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                            <img class="img-fluid w-100" src="~/photoBooks/@item.MainPhoto" alt="">
+                        </div>
+                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                            <h6 class="text-truncate mb-3">@item.BookName</h6>
+                            <div class="d-flex justify-content-center">
+                                <h6>@item.Price</h6><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between bg-light border">
+                            <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                            <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 }
 
 

@@ -39,16 +39,56 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             
         }
         [HttpGet]
-        public IActionResult CreateBook()
+        public async Task<IActionResult> CreateBook()
         {
+            var urlManufacturer = $"https://localhost:7079/api/Manufacturer/GetAllManufacturer";
+            var responManufacturer = await _httpClient.GetAsync(urlManufacturer);
+            string apiDataManufacturer = await responManufacturer.Content.ReadAsStringAsync();
+            var lstManufacturer = JsonConvert.DeserializeObject<List<Manufacturer>>(apiDataManufacturer);
+            ViewBag.lstManufacturer = lstManufacturer;
+
+            var urlCoupon = $"https://localhost:7079/api/Coupon/GetAllCoupon";
+            var responCoupon = await _httpClient.GetAsync(urlCoupon);
+            string apiDataCoupon = await responCoupon.Content.ReadAsStringAsync();
+            var lstCoupon = JsonConvert.DeserializeObject<List<Coupon>>(apiDataCoupon);
+            ViewBag.lstCoupon = lstCoupon;
+
+
+
+            var urlForm = $"https://localhost:7079/api/Form/GetAllForm";
+            var responForm = await _httpClient.GetAsync(urlForm);
+            string apiDataForm = await responForm.Content.ReadAsStringAsync();
+            var lstForm = JsonConvert.DeserializeObject<List<Form>>(apiDataForm);
+            ViewBag.lstForm = lstForm;
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> CreateBook(Book bk, IFormFile imageFile)
         {
+            var urlManufacturer = $"https://localhost:7079/api/Manufacturer/GetAllManufacturer";
+            var responManufacturer = await _httpClient.GetAsync(urlManufacturer);
+            string apiDataManufacturer = await responManufacturer.Content.ReadAsStringAsync();
+            var lstManufacturer = JsonConvert.DeserializeObject<List<Manufacturer>>(apiDataManufacturer);
+            ViewBag.lstManufacturer = lstManufacturer;
+
+            var urlCoupon = $"https://localhost:7079/api/Coupon/GetAllCoupon";
+            var responCoupon = await _httpClient.GetAsync(urlCoupon);
+            string apiDataCoupon= await responCoupon.Content.ReadAsStringAsync();
+            var lstCoupon = JsonConvert.DeserializeObject<List<Coupon>>(apiDataCoupon);
+            ViewBag.lstCoupon = lstCoupon;
+
+            
+
+            var urlForm = $"https://localhost:7079/api/Form/GetAllForm";
+            var responForm = await _httpClient.GetAsync(urlForm);
+            string apiDataForm = await responForm.Content.ReadAsStringAsync();
+            var lstForm = JsonConvert.DeserializeObject<List<Form>>(apiDataForm);
+            ViewBag.lstForm = lstForm;
+
+
             if (imageFile != null && imageFile.Length > 0)
             {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photos", imageFile.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photoBooks", imageFile.FileName);
                 var stream = new FileStream(path, FileMode.Create);
                 imageFile.CopyTo(stream);
                 bk.MainPhoto = imageFile.FileName;
