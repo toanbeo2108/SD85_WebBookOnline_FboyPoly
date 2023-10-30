@@ -19,7 +19,7 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             ires = new AllResponsitories<Book>(context, context.Book);
         }
-        [Authorize(Roles = "Admin")]
+        
         [HttpGet("get-all-book")]
         public async Task<IEnumerable<Book>> GetAllbook()
         {

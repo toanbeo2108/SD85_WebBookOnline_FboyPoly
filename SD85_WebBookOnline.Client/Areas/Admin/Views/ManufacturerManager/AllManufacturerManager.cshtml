@@ -2,18 +2,20 @@
 
 @{
     ViewData["Title"] = "AllManufacturerManager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
-<h1>AllManufacturerManager</h1>
+<h1>Danh Sách Nhà Sản Xuất</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="CreateManufacturer" class="btn btn-primary">Create New</a>
 </p>
-<table class="table">
+<table class="table" id="tb_Manu">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ManufactureID)
+                STT
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ManufactureName)
@@ -29,9 +31,11 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
+     int i = 1;
         <tr>
+               
             <td>
-                @Html.DisplayFor(modelItem => item.ManufactureID)
+                @i
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ManufactureName)
@@ -47,7 +51,19 @@
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
-        </tr>
-}
+            </tr>
+            i++;
+        }
     </tbody>
 </table>
+@*Link datatable*@
+<link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+
+<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Khởi tạo DataTable
+        var dataTable = $('#tb_Manu').DataTable();
+    });
+</script>

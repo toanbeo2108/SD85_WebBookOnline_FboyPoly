@@ -17,7 +17,7 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             irespon = new AllResponsitories<Combo>(context, context.Combo);
         }
-        [Authorize]
+        
         [HttpGet("[Action]")]
         public async Task<IEnumerable<Combo>> GetAllCombo()
         {

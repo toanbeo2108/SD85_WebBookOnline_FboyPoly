@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using SD85_WebBookOnline.Share.Models;
 
 namespace SD85_WebBookOnline.Client.Controllers
 {
@@ -17,15 +18,49 @@ namespace SD85_WebBookOnline.Client.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly HttpClient _httpClient;
-
+        private readonly HttpClient _HttpClient;
         public HomeController(ILogger<HomeController> logger, HttpClient httpClient)
         {
             _logger = logger;
             _httpClient = httpClient;
+            _HttpClient = new HttpClient();
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var urlBook = $"https://localhost:7079/api/Book/get-all-book";
+            var responBook =  await _httpClient.GetAsync(urlBook);
+            string apiDataBook = await responBook.Content.ReadAsStringAsync();
+            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            if(lstBook == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var lstBookOk = lstBook.Where(x => x.Status == 1).ToList();
+                if(lstBookOk == null)
+                {
+                    return NotFound();
+                }
+                var lstSelectNew = lstBookOk.OrderByDescending(x => x.CreateDate).Take(6).ToList();
+                ViewBag.lstSelectNew = lstSelectNew;
+                var lstselectTopquantitysold = lstBookOk.OrderByDescending(x => x.QuantitySold).Take(8).ToList();
+                ViewBag.lstTopquantitySold = lstselectTopquantitysold;
+            }
+            
+
+            //var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+            //var httpClient = new HttpClient();
+            //var responCombo = await _HttpClient.GetAsync(urlCombo);
+            //string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+            //var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+            //if(lstCombo == null)
+            //{
+            //    return NotFound() ;
+            //}
+            //var lstselectcombotop = lstCombo.OrderByDescending(x => x.Price).Take(6).ToList();
+            //ViewBag.lstComboTop = lstselectcombotop;
             return View();
         }
 
@@ -111,6 +146,32 @@ namespace SD85_WebBookOnline.Client.Controllers
         {
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> deTail(Guid id)
+        {
+            var urlBook = $"https://localhost:7079/api/Book/get-all-book";
+            var responBook = await _httpClient.GetAsync(urlBook);
+            string apiDataBook = await responBook.Content.ReadAsStringAsync();
+            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            var Book = lstBook.FirstOrDefault(x => x.BookID == id);
+            if (Book == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                var urlImage = $"https://localhost:7079/api/Image/getAll_Image";
+                var responImage = await _httpClient.GetAsync(urlImage);
+                string apiDataImage = await responImage.Content.ReadAsStringAsync();
+                var lstImage = JsonConvert.DeserializeObject<List<Images>>(apiDataImage);
+                var lstImageBookDetail = lstImage.Where(x => x.BookID == Book.BookID).ToList();
+                if(lstImageBookDetail != null)
+                {
+                    ViewBag.lstImageBookDetail = lstImageBookDetail;
+                }
+                return View(Book);
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

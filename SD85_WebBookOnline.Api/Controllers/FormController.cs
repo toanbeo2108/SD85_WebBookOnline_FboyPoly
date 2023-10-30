@@ -17,7 +17,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             irespon = new AllResponsitories<Form>(context, context.Form);
         }
         [HttpGet("[Action]")]
-        public async Task<IEnumerable<Form>> GetAllBill()
+        public async Task<IEnumerable<Form>> GetAllForm()
         {
             return await irespon.GetAll();
         }
