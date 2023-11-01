@@ -33,7 +33,7 @@ body
     background: var(--blue);
     border-left: 10px solid var(--blue);
     transition: 0.5s;
-    overflow: hidden;
+    overflow-y : auto !important;
 }
 .navigation ul{
     position: absolute;

@@ -53,8 +53,6 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var lstCoupon = JsonConvert.DeserializeObject<List<Coupon>>(apiDataCoupon);
             ViewBag.lstCoupon = lstCoupon;
 
-
-
             var urlForm = $"https://localhost:7079/api/Form/GetAllForm";
             var responForm = await _httpClient.GetAsync(urlForm);
             string apiDataForm = await responForm.Content.ReadAsStringAsync();
@@ -98,13 +96,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             bk.BookID = Guid.NewGuid();
             //bk.CreateDate = DateTime.Now;
 
-            if (imageFile != null && imageFile.Length > 0)
-            {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageFile.FileName);
-                var stream = new FileStream(path, FileMode.Create);
-                imageFile.CopyTo(stream);
-                bk.MainPhoto = imageFile.FileName;
-            }
+           
             var urlBook = $"https://localhost:7079/api/Book/add-book?ManufacturerID={bk.ManufacturerID}&FormID={bk.FormID}&CouponID={bk.CouponID}&BookName={bk.BookName}&TotalQuantity={bk.TotalQuantity}&MainPhoto={bk.MainPhoto}&QuantitySold={bk.QuantitySold}&QuantityExists={bk.QuantityExists}&EntryPrice={bk.EntryPrice}&Price={bk.Price}&Information={bk.Information}&Description={bk.Description}&ISBN={bk.ISBN}&YearOfRelease={bk.YearOfRelease}&TransactionStatus={bk.TransactionStatus}&Status={bk.Status}";
             var httpClient = new HttpClient();
 
