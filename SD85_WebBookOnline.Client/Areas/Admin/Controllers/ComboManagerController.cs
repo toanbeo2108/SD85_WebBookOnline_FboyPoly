@@ -25,7 +25,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             _httpClient = new HttpClient();
             _webHostEnvironment = webHostEnvironment;
         }
-        
+
 
         public IActionResult Index()
         {
@@ -62,38 +62,49 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return View(combo);
             }
         }
-
-        public IActionResult CreateCombo()
+        [HttpGet]
+        public async Task<IActionResult> CreateCombo()
         {
+            var urlComboItem = $"https://localhost:7079/api/ComboItem/GetAll-ComboItem";
+            var responComboItem = await _httpClient.GetAsync(urlComboItem);
+            string apiDataComboItem = await responComboItem.Content.ReadAsStringAsync();
+            var lstComboItem = JsonConvert.DeserializeObject<List<Book>>(apiDataComboItem);
+            ViewBag.lstComboItem = lstComboItem;
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateCombo(Combo cb, IFormFile imageFile)
         {
-                if (imageFile != null && imageFile.Length > 0)
-                {
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageFile.FileName);
-                    var stream = new FileStream(path, FileMode.Create);
-                    imageFile.CopyTo(stream);
-                    cb.Image = imageFile.FileName;
-                }
-                var urlCombo = $"https://localhost:7079/api/Combo/CreateCombo?comboname={cb.ComboName}&price={cb.Price}&status={cb.Status}&image={cb.Image}";
-                var token = Request.Cookies["Token"];
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                var content = new StringContent(JsonConvert.SerializeObject(cb), Encoding.UTF8, "application/json");
-                var respon = await _httpClient.PostAsync(urlCombo, content);
-                if (respon.IsSuccessStatusCode)
-                {
-                    return RedirectToAction("AllComboManager", "ComboManager", new { area = "Admin" });
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Thêm Thất Bại";
-                    return View();
-                }
+            //var urlBook = $"https://localhost:7079/api/Book/get-all-book";
+            //var responBook = await _httpClient.GetAsync(urlBook);
+            //string apiDataBook = await responBook.Content.ReadAsStringAsync();
+            //var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            //ViewBag.lstBook = lstBook;
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageFile.FileName);
+                var stream = new FileStream(path, FileMode.Create);
+                imageFile.CopyTo(stream);
+                cb.Image = imageFile.FileName;
             }
-           
+            var urlCombo = $"https://localhost:7079/api/Combo/CreateCombo?comboname={cb.ComboName}&price={cb.Price}&status={cb.Status}&image={cb.Image}";
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var content = new StringContent(JsonConvert.SerializeObject(cb), Encoding.UTF8, "application/json");
+            var respon = await _httpClient.PostAsync(urlCombo, content);
+            if (respon.IsSuccessStatusCode)
+            {
+                return RedirectToAction("AllComboManager", "ComboManager", new { area = "Admin" });
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Thêm Thất Bại";
+                return View();
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> DeleteCombo(Guid id)
         {
