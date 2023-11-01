@@ -27,8 +27,10 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             _httpClient = new HttpClient();
             _webHostEnvironment = webHostEnvironment;
         }
+
         [AutoValidateAntiforgeryToken]        
         
+
         public IActionResult Index()
         {
             return View();
@@ -71,6 +73,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return View(combo);
             }
         }
+
 
         public async Task<IActionResult> CreateCombo()
         {
@@ -140,6 +143,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCombo(Combo cb, IFormFile imageFile)
         {
+
             var urlBook = $"https://localhost:7079/api/Book/get-all-book";
             var httpClient = new HttpClient();
             var responBook = await _httpClient.GetAsync(urlBook);
@@ -176,8 +180,24 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                     TempData["ErrorMessage"] = "Thêm Thất Bại";
                     return View();
                 }
+
             }
-           
+            var urlCombo = $"https://localhost:7079/api/Combo/CreateCombo?comboname={cb.ComboName}&price={cb.Price}&status={cb.Status}&image={cb.Image}";
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var content = new StringContent(JsonConvert.SerializeObject(cb), Encoding.UTF8, "application/json");
+            var respon = await _httpClient.PostAsync(urlCombo, content);
+            if (respon.IsSuccessStatusCode)
+            {
+                return RedirectToAction("AllComboManager", "ComboManager", new { area = "Admin" });
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Thêm Thất Bại";
+                return View();
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> DeleteCombo(Guid id)
         {

@@ -1,9 +1,12 @@
+
 ﻿@using SD85_WebBookOnline.Share.Models
 @model SD85_WebBookOnline.Share.Models.Combo
+
 
 @{
     ViewData["Title"] = "CreateCombo";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
     IEnumerable<Book> lstBook = ViewBag.lstBook as IEnumerable<Book>;
     IEnumerable<ComboItem> lstComboItem = ViewBag.ListComboItem as IEnumerable<ComboItem>;
 }
@@ -95,12 +98,24 @@
         }
     </tbody>
 </table>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateCombo" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+@*             <div class="form-group">
+                <label asp-for="ComboID" class="control-label"></label>
+                <input asp-for="BookID" class="form-control" />
+                <span asp-validation-for="BookID" class="text-danger"></span>
+                <select class="form-select" asp-for="BookID" aria-label="Default select example">
+                    <option selected>Manufacturer</option>
+                    @foreach (Book item in lstBook)
+                    {
+                        <option value="@item.BookID">@item.BookName</option>
+                    }
+                </select>
+            </div> *@
          
             <div class="form-group">
                 <label asp-for="ComboName" class="control-label"></label>

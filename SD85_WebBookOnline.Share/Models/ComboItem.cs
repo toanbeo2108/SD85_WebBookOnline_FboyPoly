@@ -16,7 +16,6 @@ namespace SD85_WebBookOnline.Share.Models
         public decimal Quantity { get; set; }
         public decimal ToTal { get; set; }
         public int Status { get; set; }
-
         public virtual Book? Book { get; set; }
         public virtual Combo? Combo { get; set; }
     }
