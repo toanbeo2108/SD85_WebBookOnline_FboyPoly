@@ -1,13 +1,100 @@
-﻿@model SD85_WebBookOnline.Share.Models.Combo
+﻿@using SD85_WebBookOnline.Share.Models
+@model SD85_WebBookOnline.Share.Models.Combo
 
 @{
     ViewData["Title"] = "CreateCombo";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    IEnumerable<Book> lstBook = ViewBag.lstBook as IEnumerable<Book>;
+    IEnumerable<ComboItem> lstComboItem = ViewBag.ListComboItem as IEnumerable<ComboItem>;
 }
 
-<h1>CreateCombo</h1>
+<table class="table" id="page">
+    <thead>
+        <tr>
 
-<h4>Combo</h4>
+            <th style="text-align : center;">
+                Tên Sách
+            </th>
+
+            <th style="text-align : center;">
+                Ảnh đại diện
+            </th>
+            <th style="text-align : center;">
+                Giá bán
+            </th>
+            <th>
+                Action
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in lstBook)
+        {
+            <tr>
+
+                <td style="text-align : center; margin-bottom : 20px">
+                    @item.BookName
+                </td>
+                <td style="text-align: center;">
+                    <img src="~/photoBooks/@item?.MainPhoto" alt="Combo Image" width="100" height="100" />
+                </td>
+                <td style="text-align : center; margin-bottom : 20px">
+                    @item.Price
+                </td>       
+                <td style="text-align : center; margin-bottom : 20px">
+                    <a asp-action="AddToCombo" asp-route-id="@item.BookID" class="btn status delivered">Thêm</a>
+@*                    <a asp-action="/ComboManager/DeleteToCombo" asp-route-id="@item.BookID" class="btn status tamkhoa"> Details</a>*@
+@*                    <form asp-action="DeleteBook" asp-route-id="@item?.BookID" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+<table class="table" id="page">
+    <thead>
+        <tr>
+
+            <th style="text-align : center;">
+                Tên Sách
+            </th>
+            <th style="text-align : center;">
+                Giá bán
+            </th>
+            <th>
+                Action
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in lstComboItem)
+        {
+            <tr>
+
+                <td style="text-align : center; margin-bottom : 20px">
+                    @item.ItemName
+                </td>
+               
+                <td style="text-align : center; margin-bottom : 20px">
+                    @item.Price
+                </td>
+                <td style="text-align : center; margin-bottom : 20px">
+                    <a asp-action="/ComboManager/DeleteToCombo" asp-route-id="@item.ComboItemID" class="btn status delivered">Xóa</a>
+                    @*                    <a asp-action="/ComboManager/DeleteToCombo" asp-route-id="@item.BookID" class="btn status tamkhoa"> Details</a>*@
+                    @*                    <form asp-action="DeleteBook" asp-route-id="@item?.BookID" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger">Delete</button>
+                </form>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 <hr />
 <div class="row">
     <div class="col-md-4">

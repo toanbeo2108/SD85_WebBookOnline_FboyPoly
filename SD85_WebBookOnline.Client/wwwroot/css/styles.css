@@ -19,7 +19,7 @@ body
     min-height: 100vh;
     overflow-x: hidden;
 }
-.container{
+.containers{
     position: relative;
     width: 100% ;
 }
@@ -33,7 +33,7 @@ body
     background: var(--blue);
     border-left: 10px solid var(--blue);
     transition: 0.5s;
-    overflow: hidden;
+    overflow-y : auto !important;
 }
 .navigation ul{
     position: absolute;
@@ -235,7 +235,6 @@ body
     width: 100%;
     padding: 20px;
     display: grid;
-    grid-template-columns: 2fr 1fr;
     grid-gap: 30px;
     margin-top: 10px;
 }
