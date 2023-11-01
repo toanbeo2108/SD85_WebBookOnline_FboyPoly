@@ -9,16 +9,16 @@ namespace SD85_WebBookOnline.Share.Models
 {
     public class User : IdentityUser
     {
-        public Guid DeliveryAddressID { get; set; } // Id địa chỉ nhận hàng
-        public string Country { get; set; } // Quốc gia
-        public string Avatar { get; set; } // Link ảnh đại diện
-        public DateTime CreateDate { get; set; } // Ngày tạo
-        public DateTime UpdateDate { get; set; } // Ngày chỉnh sửa
-        public string CardNumber { get; set; } // CMT
-        public int Status { get; set; } // trạng thái : 0 == Ko còn hoạt động, ẩn nick ,....
+        public Guid? DeliveryAddressID { get; set; } // Id địa chỉ nhận hàng
+        public string? Country { get; set; } // Quốc gia
+        public string? Avatar { get; set; } // Link ảnh đại diện
+        public DateTime? CreateDate { get; set; } // Ngày tạo
+        public DateTime? UpdateDate { get; set; } // Ngày chỉnh sửa
+        public string? CardNumber { get; set; } // CMT
+        public int? Status { get; set; } // trạng thái : 0 == Ko còn hoạt động, ẩn nick ,....
 
         // Set Quan hệ
-        public virtual IEnumerable<DeliveryAddress>? DeliveryAddresses { get; set;}
+        public virtual IEnumerable<DeliveryAddress>? DeliveryAddress { get; set;}
 
     }
 }

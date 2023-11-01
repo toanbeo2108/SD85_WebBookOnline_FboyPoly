@@ -2,18 +2,20 @@
 
 @{
     ViewData["Title"] = "AllFormManager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
-<h1>AllFormManager</h1>
+<h1>Các Hình Thức Sách</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="CreateFrom" class="btn btn-primary">Create New</a>
 </p>
-<table class="table">
+<table class="table" id="tb_form">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FormId)
+                STT
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FormName)
@@ -29,9 +31,10 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+            int i = 1;
+            <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FormId)
+                @i
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FormName)
@@ -43,11 +46,22 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <a asp-action="UpdateForm" asp-route-id="@item.FormId" class="btn status delivered">Update</a>
+                    <a asp-action="FormDetail" asp-route-id="@item.FormId" class="btn status tamkhoa"> Details</a>
             </td>
-        </tr>
-}
+            </tr>
+            i++;
+        }
     </tbody>
 </table>
+@*Link datatable*@
+<link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+
+<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Khởi tạo DataTable
+        var dataTable = $('#tb_form').DataTable();
+    });
+</script>

@@ -1,9 +1,12 @@
-﻿@model SD85_WebBookOnline.Share.Models.Book
+﻿@using SD85_WebBookOnline.Share.Models
+@model SD85_WebBookOnline.Share.Models.Book
 
 @{
     ViewData["Title"] = "CreateBook";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    IEnumerable<Manufacturer> lstManu = ViewBag.lstManufacturer as IEnumerable<Manufacturer>;
+    IEnumerable<Form> lstForm = ViewBag.lstForm as IEnumerable<Form>;
+    IEnumerable<Coupon> lstCoupon = ViewBag.lstCoupon as IEnumerable<Coupon>;
 }
 
 <h1>CreateBook</h1>
@@ -12,23 +15,40 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateBook" method="post" enctype="multipart/form-data">
+
+        <form asp-action="CreateBook" enctype="multipart/form-data" method="post">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
             <div class="form-group">
                 <label asp-for="ManufacturerID" class="control-label"></label>
-                <input asp-for="ManufacturerID" class="form-control" />
-                <span asp-validation-for="ManufacturerID" class="text-danger"></span>
+                <select class="form-select" asp-for="ManufacturerID" aria-label="Default select example">
+                    <option selected>Manufacturer</option>
+                    @foreach (Manufacturer item in lstManu)
+                    {
+                        <option value="@item.ManufactureID">@item.ManufactureName</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="FormID" class="control-label"></label>
-                <input asp-for="FormID" class="form-control" />
-                <span asp-validation-for="FormID" class="text-danger"></span>
+                <select class="form-select" asp-for="FormID" aria-label="Default select example">
+                    <option selected>Form</option>
+                    @foreach (Form item in lstForm)
+                    {
+                        <option value="@item.FormId">@item.FormName</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="CouponID" class="control-label"></label>
-                <input asp-for="CouponID" class="form-control" />
-                <span asp-validation-for="CouponID" class="text-danger"></span>
+                <select class="form-select" asp-for="CouponID" aria-label="Default select example">
+                    <option selected>Coupon</option>
+                    @foreach (Coupon item in lstCoupon)
+                    {
+                        <option value="@item.CouponID">@item.CouponName</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="BookName" class="control-label"></label>

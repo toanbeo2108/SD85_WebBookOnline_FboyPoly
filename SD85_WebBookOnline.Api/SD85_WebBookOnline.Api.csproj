@@ -22,4 +22,10 @@
     <ProjectReference Include="..\SD85_WebBookOnline.Share\SD85_WebBookOnline.Share.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+
 </Project>

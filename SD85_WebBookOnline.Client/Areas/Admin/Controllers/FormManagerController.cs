@@ -22,7 +22,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var urlForm = $"https://localhost:7079/api/Form/GetAllBill";
+            var urlForm = $"https://localhost:7079/api/Form/GetAllForm";
             var httpClient = new HttpClient();
             var responForm = await _httpClient.GetAsync(urlForm);
             string apiDataForm = await responForm.Content.ReadAsStringAsync();
