@@ -5,7 +5,7 @@
 }
 
 <h1>ComboDetail</h1>
-<hr />
+
 <div>
     <h4>Voucher</h4>
     <hr />
@@ -50,11 +50,12 @@
             <span style="font-weight: bold;">Image : </span>
         </dt>
         <dd class="col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.Image))
+            @Html.DisplayFor(model => model.Image)
+            @*    @if (!string.IsNullOrEmpty(Model.Image))
             {
-                <img src="~/images/@Model?.Image" alt="Combo Image" width="100" height="100" />
+            <img src="@Model.Image" alt="Hình ảnh" style="max-width: 200px; max-height: 200px;" />
 
-            }
+            } *@
         </dd>
     </dl>
 </div>
