@@ -6,6 +6,7 @@ using SD85_WebBookOnline.Api.Data;
 using SD85_WebBookOnline.Api.IResponsitories;
 using SD85_WebBookOnline.Responsitories;
 using SD85_WebBookOnline.Share.Models;
+using SD85_WebBookOnline.Share.ViewModels;
 
 namespace SD85_WebBookOnline.Api.Controllers
 {
@@ -13,12 +14,10 @@ namespace SD85_WebBookOnline.Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IAllResponsitories<User> _allResponsitories;
         public AppDbContext _context = new AppDbContext();
         private readonly UserManager<User> _userManager;
         public UserController(UserManager<User> userManager)
         {   
-            _allResponsitories = new AllResponsitories<User>(_context, _context.Users);
             _userManager = userManager;
         }
 
@@ -27,7 +26,6 @@ namespace SD85_WebBookOnline.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IEnumerable<User>> getUser()
         {
-            //return await _allResponsitories.GetAll();
             return await _userManager.Users.ToListAsync();
         }
         [HttpGet]
@@ -48,7 +46,7 @@ namespace SD85_WebBookOnline.Api.Controllers
 
         [HttpPut]
         [Route("UpdateUser")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<User> UpdateUser(User model)
         {
             // Tìm người dùng theo ID
@@ -80,6 +78,27 @@ namespace SD85_WebBookOnline.Api.Controllers
 
         }
 
+        [HttpPost]
+        //[Authorize(Roles = "Admin")]
+        [Route("ChangePassword")]
+        public async Task<bool> ChangePassword(ChangePasswordModel model)
+        {
+            var user = await _userManager.FindByNameAsync(model.UserName);
+            if (user == null)
+            {
+                return false;
+            }
 
+            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }
