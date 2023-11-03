@@ -27,6 +27,8 @@ namespace SD85_WebBookOnline.Share.Models
         public DateTime? DeleteDate { get; set; } // Ngày xóa
         public int TransactionStatus { get; set; }// trạng thái giao dịch
         public int Status { get; set; } // trạng thái sách
+        public decimal Weight { get; set; } // cân nặng
+        public decimal Volume { get; set; } //Thể tích
 
         // Quan hệ
         public virtual Manufacturer? Manufacturer { get; set; } 

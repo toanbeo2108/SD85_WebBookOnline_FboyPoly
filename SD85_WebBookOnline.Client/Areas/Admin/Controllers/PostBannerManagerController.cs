@@ -55,13 +55,6 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             bk.PostID = Guid.NewGuid();
             //bk.CreateDate = DateTime.Now;
 
-            if (imageFile != null && imageFile.Length > 0)
-            {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageFile.FileName);
-                var stream = new FileStream(path, FileMode.Create);
-                imageFile.CopyTo(stream);
-                bk.Images = imageFile.FileName;
-            }
             var urlBook = $"https://localhost:7079/api/Postbanner/Create-postBaner?Images={bk.Images}&PostDate={bk.PostDate}&Title={bk.Title}&Content={bk.Content}&Status={bk.Status}";
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(bk), Encoding.UTF8, "application/json");
