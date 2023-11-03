@@ -26,7 +26,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await ires.GetAll();
         }
         [HttpPost("add-book")]
-        public async Task<bool> addbook(Guid? ManufacturerID,Guid? FormID, Guid? CouponID, string BookName, int TotalQuantity, string MainPhoto, int QuantitySold, int QuantityExists, decimal EntryPrice,decimal Price, string Information, string Description, string ISBN, int YearOfRelease, DateTime? DeleteDate, int TransactionStatus, int Status)
+        public async Task<bool> addbook(Guid? ManufacturerID,Guid? FormID, Guid? CouponID, string BookName, int TotalQuantity, string MainPhoto, int QuantitySold, int QuantityExists, decimal EntryPrice,decimal Price, string Information, string Description, string ISBN, int YearOfRelease, DateTime? DeleteDate, int TransactionStatus, int Status, decimal weight, decimal volume)
         {
 
                 Book b = new Book();
@@ -47,6 +47,8 @@ namespace SD85_WebBookOnline.Api.Controllers
                 b.YearOfRelease = YearOfRelease;
                 b.CreateDate = DateTime.Now;
                 b.DeleteDate = DeleteDate;
+                b.Weight = weight;
+                b.Volume = volume;
                 b.TransactionStatus = TransactionStatus;
                 b.Status = Status;
                 return await ires.CreateItem(b);
@@ -89,6 +91,8 @@ namespace SD85_WebBookOnline.Api.Controllers
                 b.YearOfRelease = book.YearOfRelease;
                 b.CreateDate = book.CreateDate;
                 b.DeleteDate = book.DeleteDate;
+                b.Weight = book.Weight;
+                b.Volume = book.Volume;
                 b.TransactionStatus = book.TransactionStatus;
                 b.Status = book.Status;
                 return await ires.UpdateItem(b);
