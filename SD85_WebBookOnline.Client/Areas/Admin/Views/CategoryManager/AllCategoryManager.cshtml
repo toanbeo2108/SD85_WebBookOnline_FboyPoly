@@ -2,18 +2,20 @@
 
 @{
     ViewData["Title"] = "AllCategoryManager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>AllCategoryManager</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="CreateCategory" class="btn btn-primary">Create New</a>
 </p>
-<table class="table">
+<table class="table" id="tb_category">
     <thead>
         <tr>
+            
             <th>
-                @Html.DisplayNameFor(model => model.CategoryID)
+                STT
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -28,10 +30,13 @@
         </tr>
     </thead>
     <tbody>
+        @{
+            int i = 1;
+        }
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CategoryID)
+                @i
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -43,11 +48,20 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <a asp-action="UpdateCategory" asp-route-id="@item.CategoryID" class="btn status delivered">Update</a>
+                    <a asp-action="CategoryDetail" asp-route-id="@item.CategoryID" class="btn status tamkhoa"> Details</a>
             </td>
         </tr>
+            i++;
 }
     </tbody>
 </table>
+@*Link datatable*@
+<link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Khởi tạo DataTable
+        var dataTable = $('#tb_category').DataTable();
+    });
+</script>

@@ -97,7 +97,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             //bk.CreateDate = DateTime.Now;
 
            
-            var urlBook = $"https://localhost:7079/api/Book/add-book?ManufacturerID={bk.ManufacturerID}&FormID={bk.FormID}&CouponID={bk.CouponID}&BookName={bk.BookName}&TotalQuantity={bk.TotalQuantity}&MainPhoto={bk.MainPhoto}&QuantitySold={bk.QuantitySold}&QuantityExists={bk.QuantityExists}&EntryPrice={bk.EntryPrice}&Price={bk.Price}&Information={bk.Information}&Description={bk.Description}&ISBN={bk.ISBN}&YearOfRelease={bk.YearOfRelease}&TransactionStatus={bk.TransactionStatus}&Status={bk.Status}";
+            var urlBook = $"https://localhost:7079/api/Book/add-book?ManufacturerID={bk.ManufacturerID}&FormID={bk.FormID}&CouponID={bk.CouponID}&BookName={bk.BookName}&TotalQuantity={bk.TotalQuantity}&MainPhoto={bk.MainPhoto}&QuantitySold={bk.QuantitySold}&QuantityExists={bk.QuantityExists}&EntryPrice={bk.EntryPrice}&Price={bk.Price}&Information={bk.Information}&Description={bk.Description}&ISBN={bk.ISBN}&YearOfRelease={bk.YearOfRelease}&weight={bk.Weight}&volume={bk.Volume}&TransactionStatus={bk.TransactionStatus}&Status={bk.Status}";
             var httpClient = new HttpClient();
 
             var content = new StringContent(JsonConvert.SerializeObject(bk), Encoding.UTF8, "application/json");

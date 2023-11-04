@@ -31,7 +31,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        [AutoValidateAntiforgeryToken]
+        [AutoValidateAntiforgeryToken]        
         public IActionResult Index()
         {
             return View();
@@ -169,8 +169,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCombo(Combo cb, IFormFile imageFile)
         {
-            // Tải danh sách sách từ API
-            var urlBook = "https://localhost:7079/api/Book/get-all-book";
+
+            var urlBook = $"https://localhost:7079/api/Book/get-all-book";
             var httpClient = new HttpClient();
             var responseBook = await httpClient.GetAsync(urlBook);
 
@@ -243,6 +243,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 }
             }
 
+
             // Lưu Combo vào cơ sở dữ liệu
             var urlCombo = $"https://localhost:7079/api/Combo/CreateCombo?comboname={cb.ComboName}&price={cb.Price}&status={cb.Status}&image={cb.Image}";
             var token = Request.Cookies["Token"];
@@ -261,8 +262,6 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 
             return RedirectToAction("AllComboManager", "ComboManager", new { area = "Admin" });
         }
-
-
 
         [HttpPost]
         public async Task<IActionResult> DeleteCombo(Guid id)

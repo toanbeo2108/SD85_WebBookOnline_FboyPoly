@@ -27,6 +27,8 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             PostBanner p = new PostBanner();
             p.PostID = Guid.NewGuid();
+            p.Images = Images;
+            p.PostDate = PostDate;
             p.Title = Title;
             p.Content = Content;
             p.Status = Status;
@@ -40,7 +42,8 @@ namespace SD85_WebBookOnline.Api.Controllers
             var p = list.FirstOrDefault(c => c.PostID == id);
             if (p != null)
             {
-             
+                p.Images = pb.Images;
+                p.PostDate = pb.PostDate;
                 p.Title = pb.Title;
                 p.Content = pb.Content;
                 p.Status = pb.Status;

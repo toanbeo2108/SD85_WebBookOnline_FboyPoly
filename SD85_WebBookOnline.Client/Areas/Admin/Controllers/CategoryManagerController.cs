@@ -26,15 +26,15 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var urlBook = $"https://localhost:7079/api/Category/GetAllCategory";
+            var urlForm = $"https://localhost:7079/api/Category/GetAllCategory";
             var httpClient = new HttpClient();
-            var responBook = await _httpClient.GetAsync(urlBook);
-            string apiDataBook = await responBook.Content.ReadAsStringAsync();
-            var lstBook = JsonConvert.DeserializeObject<List<Category>>(apiDataBook);
-            return View(lstBook);
+            var responForm = await _httpClient.GetAsync(urlForm);
+            string apiDataForm = await responForm.Content.ReadAsStringAsync();
+            var lstForm = JsonConvert.DeserializeObject<List<Category>>(apiDataForm);
+            return View(lstForm);
         }
         [HttpGet]
-        public IActionResult CreateBook()
+        public IActionResult CreateCategory()
         {
             return View();
         }
@@ -43,7 +43,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            bk.CategoryID    = Guid.NewGuid();
+            bk.CategoryID = Guid.NewGuid();
             //bk.CreateDate = DateTime.Now;
             var urlBook = $"https://localhost:7079/api/Category/CreateCategory?name={bk.Name}&description={bk.Description}&status={bk.Status}";
             var httpClient = new HttpClient();
@@ -95,7 +95,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateCategory(Guid id, Category vc)
+        public async Task<IActionResult> UpdateCategory(Guid id, Form vc)
         {
             var urlBook = $"https://localhost:7079/api/Category/UpdateCategory/{id}";
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8, "application/json");
@@ -106,7 +106,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             }
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            return RedirectToAction("AllCategoryManager", "CategoryManager", new { area = "Admin" });
+            return RedirectToAction("AllFormManager", "FormManager", new { area = "Admin" });
 
         }
     }
