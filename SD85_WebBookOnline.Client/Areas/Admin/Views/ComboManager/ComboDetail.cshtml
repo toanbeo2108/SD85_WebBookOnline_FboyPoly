@@ -1,36 +1,55 @@
-﻿@model SD85_WebBookOnline.Share.Models.Combo
+﻿@using SD85_WebBookOnline.Share.Models
+@model SD85_WebBookOnline.Share.Models.Combo
 @{
     ViewData["Title"] = "ComboDetail";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <h1>ComboDetail</h1>
 <hr />
 <div>
-    <h4>Voucher</h4>
+    <hr />
+    <table class="table" id="page">
+        <thead>
+            <tr>
+                <th style="text-align: center;">
+                    Tên sách
+                </th>
+                <th style="text-align: center;">
+                    Giá bán
+                </th>
+                <th>                          
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (ViewBag.lstComboItemOfCombo != null)
+            {
+                var lstComboItem = ViewBag.lstComboItemOfCombo as IEnumerable<ComboItem>;
+                foreach (var item in lstComboItem)
+                {
+                    <tr>
+                        <td style="text-align: center; margin-bottom: 20px">
+                            @item.ItemName
+                        </td>
+                        <td style="text-align: center; margin-bottom: 20px">
+                            @item.Price
+                        </td>
+                        <td style="text-align: center; margin-bottom: 20px">
+                            <a asp-action="DeleteToCombo" asp-route-id="@item.ComboItemID" class="btn status delivered">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            <span style="font-weight: bold;">ComboID : </span>
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ComboID)
-        </dd>
-        <dt class="col-sm-2">
-            <span style="font-weight: bold;">CreatebyID : </span>
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreatebyID)
-        </dd>
-        <dt class="col-sm-2">
-            <span style="font-weight: bold;">CartItemID : </span>
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CartItemID)
-        </dd>
-        <dt class="col-sm-2">
+
+        <dt class="col-sm-2">          
             <span style="font-weight: bold;">ComboName : </span>
-        </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ComboName)
         </dd>

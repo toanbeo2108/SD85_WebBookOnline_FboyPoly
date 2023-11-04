@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SD85_WebBookOnline.Api.Migrations
 {
-    public partial class _123 : Migration
+    public partial class copeHiepxamlincuadungdepzai : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -618,12 +618,12 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "056acf70-7451-4f6e-a92d-a6160d909247", "fc3ba04d-c651-4b2e-a819-457061349efc", "Admin", "ADMIN" });
+                values: new object[] { "648d553e-5e13-4144-8c87-5344b2014af6", "49ea3dc9-f776-4657-a2b0-30b4a4a65658", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "a3c3fa24-6aab-4442-b48b-1ad96623ce3f", "e5cc19f3-fee5-4f19-984c-64be43455628", "User", "USER" });
+                values: new object[] { "f9d98bf9-47f2-478e-b3e7-6b7e4ced6b65", "064b47c8-121f-4449-b7b4-1d3718b41cd0", "User", "USER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

@@ -12,8 +12,8 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231024063756_123")]
-    partial class _123
+    [Migration("20231102195558_copeHiepxamlincuadungdepzai")]
+    partial class copeHiepxamlincuadungdepzai
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,15 +53,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "056acf70-7451-4f6e-a92d-a6160d909247",
-                            ConcurrencyStamp = "fc3ba04d-c651-4b2e-a819-457061349efc",
+                            Id = "648d553e-5e13-4144-8c87-5344b2014af6",
+                            ConcurrencyStamp = "49ea3dc9-f776-4657-a2b0-30b4a4a65658",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "a3c3fa24-6aab-4442-b48b-1ad96623ce3f",
-                            ConcurrencyStamp = "e5cc19f3-fee5-4f19-984c-64be43455628",
+                            Id = "f9d98bf9-47f2-478e-b3e7-6b7e4ced6b65",
+                            ConcurrencyStamp = "064b47c8-121f-4449-b7b4-1d3718b41cd0",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -918,27 +918,24 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<string>("Avatar")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CardNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DeliveryAddressID")
+                    b.Property<Guid?>("DeliveryAddressID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdateDate")
+                    b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
                     b.HasDiscriminator().HasValue("User");
@@ -1133,7 +1130,7 @@ namespace SD85_WebBookOnline.Api.Migrations
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.DeliveryAddress", b =>
                 {
                     b.HasOne("SD85_WebBookOnline.Share.Models.User", "User")
-                        .WithMany("DeliveryAddresses")
+                        .WithMany("DeliveryAddress")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
@@ -1238,7 +1235,7 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.User", b =>
                 {
-                    b.Navigation("DeliveryAddresses");
+                    b.Navigation("DeliveryAddress");
                 });
 #pragma warning restore 612, 618
         }
