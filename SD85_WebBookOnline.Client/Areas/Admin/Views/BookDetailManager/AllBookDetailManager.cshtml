@@ -1,59 +1,79 @@
-﻿@model IEnumerable<SD85_WebBookOnline.Share.Models.BookDetail>
+﻿@using SD85_WebBookOnline.Share.Models
+@model IEnumerable<SD85_WebBookOnline.Share.Models.BookDetail>
 
 @{
     ViewData["Title"] = "AllBookDetailManager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IEnumerable<Book> lstBook = ViewBag.lstBook as IEnumerable<Book>;
+    IEnumerable<Category> lstCategory = ViewBag.lstCategory as IEnumerable<Category>;
+    IEnumerable<Author> lstAuthor = ViewBag.lstAuthor as IEnumerable<Author>;
+    IEnumerable<Languge> lstLanguge = ViewBag.lstLanguge as IEnumerable<Languge>;
+    IEnumerable<BookDetail> lstBookDetail = ViewBag.lstBookDetail as IEnumerable<BookDetail>;
 }
 
 <h1>AllBookDetailManager</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="CreateBookDetail" class="btn btn-primary">Create New</a>
 </p>
-<table class="table">
+<table class="table" id="tb_bookdetail">
     <thead>
         <tr>
+            
             <th>
-                @Html.DisplayNameFor(model => model.BookDetailID)
+                STT
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BookID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CategoriesID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AuthorID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LagugeID)
-            </th>
+            <th style="text-align : center;">
+                        Tên Sách
+                    </th>
+
+                    <th style="text-align : center;">
+                        Thể Loại
+                    </th>
+                    <th style="text-align : center;">
+                        Tác Giả
+                    </th>
+                    <th style="text-align : center;">
+                        Ngôn ngữ
+                    </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @{
+            int i = 1;
+        }
+@foreach (var item in lstBookDetail) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.BookDetailID)
+                @i
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BookID)
+                @lstBook.FirstOrDefault(c=>c.BookID == item.BookID).BookName
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CategoriesID)
+                @lstCategory.FirstOrDefault(c=>c.CategoryID == item.CategoriesID).Name
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AuthorID)
+                @lstAuthor.FirstOrDefault(c=>c.AuthorID == item.AuthorID).AuthorName
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LagugeID)
+                @lstLanguge.FirstOrDefault(c=>c.LangugeID == item.LagugeID).Name
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <a asp-action="UpdateBookDetail" asp-route-id="@item.BookDetailID" class="btn status delivered">Update</a>
+                    <a asp-action="BookDetailDetail" asp-route-id="@item.BookDetailID" class="btn status tamkhoa"> Details</a>
             </td>
         </tr>
+            i++;
 }
     </tbody>
 </table>
+@*Link datatable*@
+<link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Khởi tạo DataTable
+        var dataTable = $('#tb_bookdetail').DataTable();
+    });
