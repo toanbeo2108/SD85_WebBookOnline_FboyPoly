@@ -12,7 +12,7 @@ namespace SD85_WebBookOnline.Share.Models
         public Guid? BookID { get; set; }
         public string ImageName { get; set; }
         public int Status { get; set; }
-        public virtual Book Book { get; set; }
+        public virtual Book? Book { get; set; }
 
     }
 }
