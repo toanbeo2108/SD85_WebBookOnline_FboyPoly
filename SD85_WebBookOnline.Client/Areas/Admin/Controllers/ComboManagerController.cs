@@ -15,6 +15,7 @@ using System.Net.Http.Headers;
 using System.Net;
 using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 using System.Transactions;
+using SD85_WebBookOnline.Share.Data;
 
 namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 {
@@ -23,6 +24,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         private readonly HttpClient _httpClient;
         private readonly HttpClient _httpClientz;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        AppDbContext context;
         public List<ComboItem> ComboItems { get; set; } = new List<ComboItem>();
 
         public ComboManagerController(IWebHostEnvironment webHostEnvironment)
@@ -30,6 +32,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             _httpClient = new HttpClient();
             _httpClientz = new HttpClient();
             _webHostEnvironment = webHostEnvironment;
+            context = new AppDbContext();
         }
 
         [AutoValidateAntiforgeryToken]        
@@ -203,16 +206,15 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 }
                 cb.Image = imageFile.FileName;
             }
-            cb.ComboID = Guid.NewGuid();
             if (ComboItems == null)
             {
                 return BadRequest("Danh sách ComboItem rỗng.");
             }
-            
 
 
+            cb.ComboID = Guid.NewGuid();
             // Lưu Combo vào cơ sở dữ liệu
-            var urlCombo = $"https://localhost:7079/api/Combo/CreateCombo?comboname={cb.ComboName}&price={cb.Price}&status={cb.Status}&image={cb.Image}";
+            var urlCombo = $"https://localhost:7079/api/Combo/CreateCombo?ComBoId={cb.ComboID}&comboname={cb.ComboName}&price={cb.Price}&status={cb.Status}&image={cb.Image}";
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var content = new StringContent(JsonConvert.SerializeObject(cb), Encoding.UTF8, "application/json");
@@ -238,21 +240,23 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                         ComboID = cb.ComboID,
                         ItemName = item.ItemName,
                         Price = item.Price,
-                        Quantity = item.Quantity,
+                        Quantity = 1,
                         ToTal = item.ToTal,
                         Status = item.Status
                     };
 
-                    // Lưu từng ComboItem vào cơ sở dữ liệu
+                 
                     var urlComboItemOfCombo = $"https://localhost:7079/api/ComboItem/Add-ComboItem?BookID={cbItem.BookID}&ComboID={cbItem.ComboID}&ItemName={cbItem.ItemName}&Price={cbItem.Price}&Quantity={cbItem.Quantity}&ToTal={cbItem.ToTal}&Status={cbItem.Status}";
                     var contentComboItemDetail = new StringContent(JsonConvert.SerializeObject(cbItem), Encoding.UTF8, "application/json");
-                    var responseCBIT = await _httpClientz.PostAsync(urlComboItemOfCombo, contentComboItemDetail);
+                    var responseCBIT = await _httpClient.PostAsync(urlComboItemOfCombo, contentComboItemDetail);
 
                     if (!responseCBIT.IsSuccessStatusCode)
                     {
                         allRequestsSuccessful = false;
                         break;
                     }
+
+
                 }
 
                 if (allRequestsSuccessful)
