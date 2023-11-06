@@ -398,7 +398,7 @@
                             </a>
                         </li>
                         <li>
-                            <a asp-controller="User" asp-action="GetAllUser">
+                            <a asp-area="Admin" asp-controller="UserManager" asp-action="GetAllUser">
                                 <span class="icon"><ion-icon name="accessibility-outline"></ion-icon></span>
                                 <span class="title">User</span>
                             </a>
@@ -455,6 +455,12 @@
                             <a href="#">
                                 <span class="icon"><ion-icon name="arrow-forward-circle-outline"></ion-icon></span>
                                 <span class="title">LogOut</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="GetAllComboItem" asp-controller="ComboItem" asp-area="Admin">
+                                <span class="icon"><ion-icon name="arrow-forward-circle-outline"></ion-icon></span>
+                                <span class="title">ComboItem</span>
                             </a>
                         </li>
                     </ul>

@@ -15,8 +15,9 @@ namespace SD85_WebBookOnline.Share.Models
         public Guid? ComboID { get; set; }
         public Guid? BookID { get; set; }
         public string ItemName { get; set; }
+        public string? Image { get; set; }
         public decimal Price { get; set; }
-        public string Quantity   { get; set; }
+        public int Quantity   { get; set; }
         public decimal ToTal { get; set; }
         public int Status { get; set; }
 
