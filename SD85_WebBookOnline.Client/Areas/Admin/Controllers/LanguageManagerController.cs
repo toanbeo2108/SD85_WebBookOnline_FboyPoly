@@ -60,7 +60,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult CreateLanguge()
+        public IActionResult CreateLanguage()
         {
             return View();
         }
@@ -77,7 +77,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var respon = await httpClient.PostAsync(urlBook, content);
             if (respon.IsSuccessStatusCode)
             {
-                return RedirectToAction("AllLangugeManager", "LangugeManager", new { area = "Admin" });
+                return RedirectToAction("AllLanguageManager", "LanguageManager", new { area = "Admin" });
             }
             TempData["erro message"] = "thêm thất bại";
             return View();

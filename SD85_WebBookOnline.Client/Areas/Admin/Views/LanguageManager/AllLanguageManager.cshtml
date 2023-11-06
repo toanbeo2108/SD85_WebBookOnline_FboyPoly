@@ -12,7 +12,7 @@
 
             <div class="card-header">
                 Bạn Muốn Thêm Mới
-                <a href="@Url.Action("CreateLanguage", "LangugeManager")" class="btn btn-success">Thêm Mới</a>
+                <a asp-action="CreateLanguage" asp-controller="LanguageManager" asp-area="Admin" class="btn btn-success">Thêm Mới</a>
             </div>
             <div class="card-body">
                 <div class="card-header">
@@ -27,14 +27,9 @@
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Danh Mục</th>
-                            <th>Hãng Sản Xuất</th>
-                            <th>Đang Sale</th>
-                            <th>Tên SP</th>
-                            <th>Giá Nhập</th>
-                            <th>Giá Bán</th>
-                            <th>Tổng Số Lượng</th>
-                            <th>Trang Thái</th>
+                            <th>Tên Ngôn Ngữ</th>
+                            <th>Mô Tả</th>
+                            <th>TRạng Thái</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -48,7 +43,6 @@
 
                             <tr>
                                 <td>@i</td>
-                                <td>@item.LangugeID</td>
                                 <td>@item.Name</td>
                                 <td>@item.Description</td>
                                 @if (item.Status == 1)
@@ -74,48 +68,7 @@
                     </tbody>
 
                 </table>
-                <div class="card-footer">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
-
-                            @{
-                                int position;
-                                int pageCurrent = ViewBag.pageCurrent;
-                                string txtSearch = ViewBag.txtSearch;
-                                float numSize = ViewBag.numSize;
-                                if (pageCurrent > 1)
-                                {
-                                    <li class="page-item">
-                                        <a class="page-link" href="@Url.Action("AllLanguageManager", "LanguageManager", new { txtSearch = (txtSearch != "" ? txtSearch : null), page = pageCurrent-1 })" tabindex="-1">Previous</a>
-                                    </li>
-                                }
-
-                                for (position = 1; position <= numSize; position++)
-                                {
-
-                                    if (position == pageCurrent)
-                                    {
-                                        <li class="page-item active"><a class="page-link" href="@Url.Action("AllLanguageManager", "LanguageManager", new { txtSearch = (txtSearch != "" ? txtSearch : null), page = position })">@position</a></li>
-                                    }
-
-                                    else
-                                    {
-                                        <li class="page-item"><a class="page-link" href="@Url.Action("AllLanguageManager", "LanguageManager", new { txtSearch = (txtSearch != "" ? txtSearch : null), page = position })">@position</a></li>
-                                    }
-
-                                }
-                                if (pageCurrent > 0 && pageCurrent < numSize)
-                                {
-                                    <li class="page-item">
-                                        <a class="page-link" href="@Url.Action("AllLangugeManager", "LanguageManager", new { txtSearch = (txtSearch != "" ? txtSearch : null), page = pageCurrent+1 })" tabindex="-1">Next</a>
-                                    </li>
-                                }
-
-                            }
-
-                        </ul>
-                    </nav>
-                </div>
+                
             </div>
         </div>
     </div>
