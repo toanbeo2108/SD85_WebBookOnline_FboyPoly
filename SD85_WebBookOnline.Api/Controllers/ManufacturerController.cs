@@ -24,7 +24,7 @@ namespace SD85_WebBookOnline.Api.Controllers
 			return await irespon.GetAll();
 		}
 		[HttpPost("[Action]")]
-		public async Task<bool> CreateLanguge(string name, string? description, int status)
+		public async Task<bool> CreateManufacture(string name, string? description, int status)
 		{
 
 			var lstcp = await irespon.GetAll();

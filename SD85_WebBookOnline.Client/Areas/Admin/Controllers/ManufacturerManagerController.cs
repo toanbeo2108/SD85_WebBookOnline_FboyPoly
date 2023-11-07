@@ -41,7 +41,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             bk.ManufactureID = Guid.NewGuid();
             //bk.CreateDate = DateTime.Now;
-            var urlBook = $"https://localhost:7079/api/Manufacturer/CreateLanguge?name={bk.ManufactureName}&description={bk.Desciption}&status={bk.Status}";
+            var urlBook = $"https://localhost:7079/api/Manufacturer/CreateManufacture?name={bk.ManufactureName}&description={bk.Desciption}&status={1}";
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(bk), Encoding.UTF8, "application/json");
             var respon = await httpClient.PostAsync(urlBook, content);
