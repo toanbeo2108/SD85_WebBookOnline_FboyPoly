@@ -31,7 +31,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var respon = await _httpClient.GetAsync(url);
             string apiData = await respon.Content.ReadAsStringAsync();
             var lst = JsonConvert.DeserializeObject<List<Images>>(apiData);
-            ViewBag["b"] = new Book();
+           
             return View(lst);
         }
         [HttpGet]
