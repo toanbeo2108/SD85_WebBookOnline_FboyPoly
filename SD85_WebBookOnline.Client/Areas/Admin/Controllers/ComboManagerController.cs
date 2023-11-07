@@ -152,22 +152,76 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 myList = JsonConvert.DeserializeObject<List<ComboItem>>(json);
             }
 
-            ComboItem cbi = new ComboItem();
-            cbi.ComboItemID = Guid.NewGuid();
-            cbi.BookID = book.BookID;
-            cbi.ComboID = null;
-            cbi.ItemName = book.BookName;
-            cbi.Price = book.Price;
-            cbi.Quantity = 1;
-            cbi.ToTal = book.Price * cbi.Quantity;
-            cbi.Status = 1;
+            // Kiểm tra xem sách đã có trong danh sách ComboItem chưa
+            var existingItem = myList.FirstOrDefault(x => x.BookID == book.BookID);
+            if (existingItem != null)
+            {
+                // Nếu sách đã có, tăng số lượng lên 1
+                existingItem.Quantity += 1;
+                existingItem.ToTal = existingItem.Price * existingItem.Quantity;
+            }
+            else
+            {
+                // Nếu sách chưa có, thêm mới vào danh sách
+                ComboItem cbi = new ComboItem();
+                cbi.ComboItemID = Guid.NewGuid();
+                cbi.BookID = book.BookID;
+                cbi.ComboID = null;
+                cbi.ItemName = book.BookName;
+                cbi.Price = book.Price;
+                cbi.Quantity = 1;
+                cbi.ToTal = book.Price * cbi.Quantity;
+                cbi.Status = 1;
 
-            myList.Add(cbi);
+                myList.Add(cbi);
+            }
 
             string updatedJson = JsonConvert.SerializeObject(myList);
             Response.Cookies.Append("lstComboItem", updatedJson);
 
             return RedirectToAction("CreateCombo", "ComboManager", new { area = "Admin" });
+        }
+
+        public async Task<IActionResult> DeleteToCombo(Guid id)
+        {
+            var urlBook = "https://localhost:7079/api/Book/get-all-book";
+            var httpClient = new HttpClient();
+            var responseBook = await httpClient.GetAsync(urlBook);
+            if (!responseBook.IsSuccessStatusCode)
+            {
+                return BadRequest("Lỗi khi tải danh sách sách.");
+            }
+
+            string apiDataBook = await responseBook.Content.ReadAsStringAsync();
+            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            ViewBag.lstBook = lstBook;
+
+            string json = Request.Cookies["lstComboItem"];
+            List<ComboItem> myList = new List<ComboItem>();
+            if (json != null)
+            {
+                myList = JsonConvert.DeserializeObject<List<ComboItem>>(json);
+            }
+            // Kiểm tra xem sách đã có trong danh sách ComboItem chưa
+            var existingItem = myList.FirstOrDefault(x => x.ComboItemID == id);
+            if (existingItem == null)
+            {
+                return BadRequest("Xóa sp ko thành công");
+            }
+            else
+            {
+                if (myList.Remove(existingItem))
+                {
+                    string updatedJson = JsonConvert.SerializeObject(myList);
+                    Response.Cookies.Append("lstComboItem", updatedJson);
+                    return RedirectToAction("CreateCombo", "ComboManager", new { area = "Admin" });
+                }
+                else
+                {
+                    return BadRequest("Hiep sai r nhes");
+                }
+            }
+
         }
 
         [HttpPost]
@@ -366,5 +420,6 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return View(cb);
             }
         }
+
     }
 }
