@@ -1,0 +1,54 @@
+﻿@using SD85_WebBookOnline.Share.Models
+@model SD85_WebBookOnline.Share.Models.BookDetail
+
+@{
+    ViewData["Title"] = "BookDetailDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IEnumerable<Book> lstBook = ViewBag.lstBook as IEnumerable<Book>;
+    IEnumerable<Category> lstCategory = ViewBag.lstCategory as IEnumerable<Category>;
+    IEnumerable<Author> lstAuthor = ViewBag.lstAuthor as IEnumerable<Author>;
+    IEnumerable<Languge> lstLanguge = ViewBag.lstLanguge as IEnumerable<Languge>;   
+    //Book Book = ViewBag.Book as Book;
+    //Category Category = ViewBag.Category as Category;
+    //Author Author = ViewBag.Author as Author;
+    //Languge Languge = ViewBag.Languge as Languge;
+    BookDetail BookDetail = ViewBag.BookDetail as BookDetail;
+}
+
+<h1>BookDetailDetail</h1>
+
+<div>
+    <h4>BookDetail</h4>
+    <hr />
+    <dl class="row">
+        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BookID)
+        </dt>
+        <dd class = "col-sm-10">
+            @lstBook.FirstOrDefault(c=>c.BookID == BookDetail.BookID).BookName
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CategoriesID)
+        </dt>
+        <dd class = "col-sm-10">
+            @lstCategory.FirstOrDefault(c=>c.CategoryID == BookDetail.CategoriesID).Name
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AuthorID)
+        </dt>
+        <dd class = "col-sm-10">
+            @lstAuthor.FirstOrDefault(c=>c.AuthorID == BookDetail.AuthorID).AuthorName
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LagugeID)
+        </dt>
+        <dd class = "col-sm-10">
+            @lstLanguge.FirstOrDefault(c=>c.LangugeID == BookDetail.LagugeID).Name
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
