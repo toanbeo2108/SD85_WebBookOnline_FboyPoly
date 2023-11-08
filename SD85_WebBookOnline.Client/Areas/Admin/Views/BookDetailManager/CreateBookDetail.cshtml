@@ -1,0 +1,75 @@
+﻿@using SD85_WebBookOnline.Share.Models
+@model SD85_WebBookOnline.Share.Models.BookDetail
+
+@{
+    ViewData["Title"] = "CreateBookDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IEnumerable<Book> lstBook = ViewBag.lstBook as IEnumerable<Book>;
+    IEnumerable<Category> lstCategory = ViewBag.lstCategory as IEnumerable<Category>;
+    IEnumerable<Author> lstAuthor = ViewBag.lstAuthor as IEnumerable<Author>;
+    IEnumerable<Languge> lstLanguge = ViewBag.lstLanguge as IEnumerable<Languge>;
+}
+
+<h1>CreateBookDetail</h1>
+
+<h4>BookDetail</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateBookDetail">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="BookID" class="control-label"></label>
+                <select class="form-select" asp-for="BookID" aria-label="Default select example">
+                    <option selected>BookID</option>
+                    @foreach (Book item in lstBook)
+                    {
+                        <option value="@item.BookID">@item.BookName</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoriesID" class="control-label"></label>
+                <select class="form-select" asp-for="CategoriesID" aria-label="Default select example">
+                    <option selected>CategoriesID</option>
+                    @foreach (Category item in lstCategory)
+                    {
+                        <option value="@item.CategoryID">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="AuthorID" class="control-label"></label>
+                <select class="form-select" asp-for="AuthorID" aria-label="Default select example">
+                    <option selected>AuthorID</option>
+                    @foreach (Author item in lstAuthor)
+                    {
+                            <option value="@item.AuthorID">@item.AuthorName</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="LagugeID" class="control-label"></label>
+                <select class="form-select" asp-for="LagugeID" aria-label="Default select example">
+                    <option selected>LagugeID</option>
+                    @foreach (Languge item in lstLanguge)
+                    {
+                        <option value="@item.LangugeID">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

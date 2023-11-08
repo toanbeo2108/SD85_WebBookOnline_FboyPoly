@@ -24,17 +24,19 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await irespon.GetAll();
         }
         [HttpPost("[Action]")]
-        public async Task<bool> CreateCombo(Guid createbyID, Guid cartItemID, string comboName, decimal price,string image /*IFormFile imageFile,*/)
+
+        public async Task<bool> CreateCombo(Guid ComBoId,Guid createbyID, Guid cartItemID, string comboName,int quanTity, decimal price,string image /*IFormFile imageFile,*/)
         {
             Combo cb = new Combo();
-            cb.ComboID = Guid.NewGuid();
+            cb.ComboID = ComBoId;
             cb.CreatebyID = createbyID;
             cb.CartItemID = cartItemID;
             cb.ComboName = comboName;
+            cb.Quantity = quanTity;
             cb.Price = price;
             cb.Status = 1;
             cb.Image = image;
-            
+
             return await irespon.CreateItem(cb);
 
             // Xử lý tệp ảnh

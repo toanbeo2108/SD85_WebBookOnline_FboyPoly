@@ -23,7 +23,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await _irp.GetAll();
         }
         [HttpPost("Add-CartItem")]
-        public async Task<bool> AddCartItem(Guid? CartID, Guid? ComboID, Guid? BookID, string ItemName, decimal Price, string Quantity, decimal ToTal, int Status)
+        public async Task<bool> AddCartItem(Guid? CartID, Guid? ComboID, Guid? BookID,string? image, string ItemName, decimal Price, int Quantity, decimal ToTal, int Status)
         {
             CartItems c = new CartItems();
             c.CartItemID = Guid.NewGuid();
@@ -31,6 +31,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             c.ComboID = ComboID;
             c.BookID = BookID;
             c.ItemName = ItemName;
+            c.Image = image;
             c.Price = Price;
             c.Quantity = Quantity;
             c.ToTal = ToTal;
@@ -50,6 +51,7 @@ namespace SD85_WebBookOnline.Api.Controllers
                 c.ComboID = cart.ComboID;
                 c.BookID = cart.BookID;
                 c.ItemName = cart.ItemName;
+                c.Image = cart.Image;
                 c.Price = cart.Price;
                 c.Quantity = cart.Quantity;
                 c.ToTal = cart.ToTal;

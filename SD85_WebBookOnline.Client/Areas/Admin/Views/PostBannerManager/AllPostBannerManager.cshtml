@@ -1,126 +1,78 @@
-﻿@using SD85_WebBookOnline.Share.Models;
-@model IEnumerable<SD85_WebBookOnline.Share.Models.PostBanner>
+﻿@model IEnumerable<SD85_WebBookOnline.Share.Models.PostBanner>
 
 @{
-    IEnumerable<PostBanner> lstPostBanner = ViewBag.listPostBanner as IEnumerable<PostBanner>;
+    ViewData["Title"] = "AllPostBannerManager";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-<div class="row justify-content-center">
-    <div class="col-md-10">
-        <div class="card">
+<h1>AllPostBannerManager</h1>
 
-            <div class="card-header">
-                Bạn Muốn Thêm Mới
-                <a href="@Url.Action("CreatePostBanner", "PostBannerManager")" class="btn btn-success">Thêm Mới</a>
-            </div>
-            <div class="card-body">
-                <div class="card-header">
-                    Search
-                    @using (Html.BeginForm("AllPostBannerManager", "PostBannerManager", FormMethod.Get))
-                    {
-                        <input type="text" name="txtSearch" placeholder="Search!" />
-                        <button type="submit" class="btn btn-warning">Search</button>
-                    }
-                </div>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Danh Mục</th>
-                            <th>Hãng Sản Xuất</th>
-                            <th>Đang Sale</th>
-                            <th>Tên SP</th>
-                            <th>Giá Nhập</th>
-                            <th>Giá Bán</th>
-                            <th>Tổng Số Lượng</th>
-                            <th>Trang Thái</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{
-                            int i = 1;
-
-                        }
-                        @foreach (var item in lstPostBanner)
-                        {
-
-                            <tr>
-                                <td>@i</td>
-                                <td>@item.PostID</td>
-                                <td>@item.Images</td>
-                                <td>@item.PostDate</td>
-                                <td>@item.Title</td>
-                                <td>@item.Content</td>
-                                @if (item.Status == "1")
-                                {
-                                    <td>Đang Hoạt Động</td>
-                                }
-                                @if (item.Status != "1")
-                                {
-                                    <td>Ngưng Hoạt Động</td>
-                                }
-                                <td>
-                                    <a asp-action="PostBannerDetail" asp-route-id="@item.PostID" class="btn btn-info">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" /><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" /></svg>
-                                    </a>
-                                    <a asp-action="UpdatePostBanner" asp-route-id="@item.PostID" class="btn btn-warning">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" /></svg>
-                                    </a>
-                                </td>
-
-                            </tr>
-                            i++;
-                        }
-                    </tbody>
-
-                </table>
-                <div class="card-footer">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
-
-                            @{
-                                int position;
-                                int pageCurrent = ViewBag.pageCurrent;
-                                string txtSearch = ViewBag.txtSearch;
-                                float numSize = ViewBag.numSize;
-                                if (pageCurrent > 1)
-                                {
-                                    <li class="page-item">
-                                        <a class="page-link" href="@Url.Action("AllLanguageManager", "LanguageManager", new { txtSearch = (txtSearch != "" ? txtSearch : null), page = pageCurrent-1 })" tabindex="-1">Previous</a>
-                                    </li>
-                                }
-
-                                for (position = 1; position <= numSize; position++)
-                                {
-
-                                    if (position == pageCurrent)
-                                    {
-                                        <li class="page-item active"><a class="page-link" href="@Url.Action("AllLanguageManager", "LanguageManager", new { txtSearch = (txtSearch != "" ? txtSearch : null), page = position })">@position</a></li>
-                                    }
-
-                                    else
-                                    {
-                                        <li class="page-item"><a class="page-link" href="@Url.Action("AllLanguageManager", "LanguageManager", new { txtSearch = (txtSearch != "" ? txtSearch : null), page = position })">@position</a></li>
-                                    }
-
-                                }
-                                if (pageCurrent > 0 && pageCurrent < numSize)
-                                {
-                                    <li class="page-item">
-                                        <a class="page-link" href="@Url.Action("AllLangugeManager", "LanguageManager", new { txtSearch = (txtSearch != "" ? txtSearch : null), page = pageCurrent+1 })" tabindex="-1">Next</a>
-                                    </li>
-                                }
-
-                            }
-
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<p>
+    <a asp-action="CreatePostBanner" class="btn btn-primary">Create New</a>
+</p>
+<table class="table" id="tb_postbaner">
+    <thead>
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Images)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+        }
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @i
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Images)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                    <a asp-action="UpdatePostBanner" asp-route-id="@item.PostID" class="btn status delivered">Update</a>
+                    <a asp-action="PostBannerDetail" asp-route-id="@item.PostID" class="btn status tamkhoa"> Details</a>
+            </td>
+        </tr>
+        i++;
+}
+    </tbody>
+</table>
+@*Link datatable*@
+<link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Khởi tạo DataTable
+        var dataTable = $('#tb_postbaner').DataTable();
+    });
+</script>

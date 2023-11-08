@@ -6,102 +6,138 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     IEnumerable<Book> lstBook = ViewBag.lstBook as IEnumerable<Book>;
     IEnumerable<ComboItem> lstComboItem = ViewBag.ListComboItem as IEnumerable<ComboItem>;
+
 }
 
+<h2>Danh Sách Book</h2>
+<hr />
 <table class="table" id="page">
     <thead>
         <tr>
-
-            <th style="text-align : center;">
+            <th style="text-align: center;">
                 Tên Sách
             </th>
-
-            <th style="text-align : center;">
+            <th style="text-align: center;">
+                Giá đầu vào
+            </th>
+            <th style="text-align: center;">
+                Giá bán
+            </th>
+            <th style="text-align: center;">
+                Số Lượng
+            </th>
+            <th style="text-align: center;">
+                Thông Tin
+            </th>
+            <th style="text-align: center;">
+                Mô Tả
+            </th>
+            <th style="text-align: center;">
                 Ảnh đại diện
             </th>
-            <th style="text-align : center;">
-                Giá bán
-            </th>
             <th>
                 Action
             </th>
-
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in lstBook)
+        @if (ViewBag.lstBook != null)
         {
-            <tr>
-
-                <td style="text-align : center; margin-bottom : 20px">
-                    @item.BookName
-                </td>
-                <td style="text-align: center;">
-                    <img src="~/photoBooks/@item?.MainPhoto" alt="Combo Image" width="100" height="100" />
-                </td>
-                <td style="text-align : center; margin-bottom : 20px">
-                    @item.Price
-                </td>       
-                <td style="text-align : center; margin-bottom : 20px">
-                    <a asp-action="AddToCombo" asp-route-id="@item.BookID" class="btn status delivered">Thêm</a>
-@*                    <a asp-action="/ComboManager/DeleteToCombo" asp-route-id="@item.BookID" class="btn status tamkhoa"> Details</a>*@
-@*                    <form asp-action="DeleteBook" asp-route-id="@item?.BookID" method="post">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>*@
-                </td>
-            </tr>
+          
+            foreach (var item in lstBook)
+            {
+                <tr>
+                    <td style="text-align: center; margin-bottom: 20px">
+                        @item.BookName
+                    </td>
+                    <td style="text-align: center; margin-bottom: 20px">
+                        @item.EntryPrice
+                    </td>
+                    <td style="text-align: center; margin-bottom: 20px">
+                        @item.Price
+                    </td>
+                    <td style="text-align: center; margin-bottom: 20px">
+                        @item.TotalQuantity
+                    </td>
+                    <td style="text-align: center; margin-bottom: 20px">
+                        @item.Information
+                    </td>
+                    <td style="text-align: center; margin-bottom: 20px">
+                        @item.Description
+                    </td>
+                    <td style="text-align: center;">
+                        <img src="~/photoBooks/@item?.MainPhoto" alt="Combo Image" width="100" height="100" />
+                    </td>
+                    <td style="text-align: center; margin-bottom: 20px">
+                        <a asp-action="AddToCombo" asp-route-id="@item.BookID" class="btn status delivered">Thêm</a>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>
+
+<h2>Combo</h2>
 <hr />
 <table class="table" id="page">
     <thead>
         <tr>
-
-            <th style="text-align : center;">
-                Tên Sách
+            <th style="text-align: center;">
+                Tên sách
             </th>
-            <th style="text-align : center;">
-                Giá bán
+            <th style="text-align: center;">
+                Đơn giá
+            </th>
+            <th style="text-align: center;">
+                Số lượng
             </th>
             <th>
                 Action
             </th>
-
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in lstComboItem)
+        @if (ViewBag.ListComboItem != null)
         {
-            <tr>
-
-                <td style="text-align : center; margin-bottom : 20px">
-                    @item.ItemName
-                </td>
-               
-                <td style="text-align : center; margin-bottom : 20px">
-                    @item.Price
-                </td>
-                <td style="text-align : center; margin-bottom : 20px">
-                    <a asp-action="/ComboManager/DeleteToCombo" asp-route-id="@item.ComboItemID" class="btn status delivered">Xóa</a>
-                    @*                    <a asp-action="/ComboManager/DeleteToCombo" asp-route-id="@item.BookID" class="btn status tamkhoa"> Details</a>*@
-                    @*                    <form asp-action="DeleteBook" asp-route-id="@item?.BookID" method="post">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-danger">Delete</button>
-                </form>*@
-                </td>
-            </tr>
+            foreach (var item in lstComboItem)
+            {
+                <tr>
+                    <td style="text-align: center; margin-bottom: 20px">
+                        @item.ItemName
+                    </td>
+                    <td style="text-align: center; margin-bottom: 20px">
+                        @item.Price
+                    </td>
+                    <td>
+                        <div class="input-group quantity">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary btn-minus" style="background-color: green;">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="quantity form-control text-center" style="background-color: white;" value="@item.Quantity">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary btn-plus" style="background-color: green;">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="text-align: center; margin-bottom: 20px">
+                        <a asp-area="Admin" asp-controller="ComboManager" asp-action="DeleteToCombo" asp-route-id="@item.ComboItemID" class="btn status delivered">Xóa</a>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateCombo" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-         
+
             <div class="form-group">
                 <label asp-for="ComboName" class="control-label"></label>
                 <input asp-for="ComboName" class="form-control" />
@@ -124,7 +160,6 @@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary btn-lg" />
             </div>
-
         </form>
     </div>
 </div>
@@ -133,3 +168,20 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<script>
+    document.querySelectorAll('.btn-minus').forEach(function (button) {
+        button.addEventListener('click', function () {
+            let quantity = this.parentElement.nextElementSibling;
+            if (quantity.value > 1) {
+                quantity.value = parseInt(quantity.value) - 1;
+            }
+        });
+    });
+
+    document.querySelectorAll('.btn-plus').forEach(function (button) {
+        button.addEventListener('click', function () {
+            let quantity = this.parentElement.previousElementSibling;
+            quantity.value = parseInt(quantity.value) + 1;
+        });
+    });
+</script>

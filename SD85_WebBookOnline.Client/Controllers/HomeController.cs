@@ -19,6 +19,7 @@ namespace SD85_WebBookOnline.Client.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly HttpClient _httpClient;
         private readonly HttpClient _HttpClient;
+        public List<CartItems> CartItemss { get; set; } = new List<CartItems>();
         public HomeController(ILogger<HomeController> logger, HttpClient httpClient)
         {
             _logger = logger;
@@ -161,6 +162,7 @@ namespace SD85_WebBookOnline.Client.Controllers
             }
             else
             {
+                ViewBag.BookDetail = Book;
                 var urlImage = $"https://localhost:7079/api/Image/getAll_Image";
                 var responImage = await _httpClient.GetAsync(urlImage);
                 string apiDataImage = await responImage.Content.ReadAsStringAsync();
@@ -172,6 +174,91 @@ namespace SD85_WebBookOnline.Client.Controllers
                 }
                 return View(Book);
             }
+        }
+
+        public async Task<IActionResult> AddToCart(Guid id)
+        {
+            var urlBook = "https://localhost:7079/api/Book/get-all-book";
+            var httpClient = new HttpClient();
+            var responseBook = await httpClient.GetAsync(urlBook);
+            if (!responseBook.IsSuccessStatusCode)
+            {
+                return BadRequest("Lỗi khi tải danh sách sách.");
+            }
+            string apiDataBook = await responseBook.Content.ReadAsStringAsync();
+            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            ViewBag.lstBook = lstBook;
+            var book = lstBook.FirstOrDefault(x => x.BookID == id);
+
+            var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+            var responCombo = await _httpClient.GetAsync(urlCombo);
+            string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+            var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+            var combo = lstCombo.FirstOrDefault(x => x.ComboID == id);
+
+            string json = Request.Cookies["myCart"];
+            List<CartItems> myListCartItem = new List<CartItems>();
+            if(json != null)
+            {
+                myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
+            }
+            CartItems cartItems = new CartItems();
+            cartItems.CartItemID = Guid.NewGuid();
+            cartItems.CartID = null;
+            if(book != null)
+            {
+                cartItems.BookID = book.BookID;
+                cartItems.ComboID = null;
+                cartItems.ItemName = book.BookName;
+                cartItems.Image = book.MainPhoto;
+                cartItems.Price = book.Price;
+                cartItems.Quantity = 1;
+                cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                cartItems.Status = 1;
+            }
+            if(combo != null)
+            {
+                cartItems.BookID = null;
+                cartItems.ComboID = combo.ComboID;
+                cartItems.ItemName = combo.ComboName;
+                cartItems.Image = combo.Image;
+                cartItems.Price = combo.Price;
+                cartItems.Quantity = 1;
+                cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                cartItems.Status = 1;
+            }
+
+            myListCartItem.Add(cartItems);
+            string updateJson = JsonConvert.SerializeObject(myListCartItem);
+            Response.Cookies.Append("myCart", updateJson);
+            return RedirectToAction("MyCart", "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> MyCart()
+        {
+            var urlBook = "https://localhost:7079/api/Book/get-all-book";
+            var httpClient = new HttpClient();
+            var responseBook = await httpClient.GetAsync(urlBook);
+            if (!responseBook.IsSuccessStatusCode)
+            {
+                return BadRequest("Lỗi khi tải danh sách sách.");
+            }
+            string apiDataBook = await responseBook.Content.ReadAsStringAsync();
+            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            ViewBag.lstBook = lstBook;
+
+            string json = Request.Cookies["myCart"];
+            if(json != null)
+            {
+                List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
+                ViewBag.myCart = myListCartItem;
+            }
+            return View();
+        }
+        public IActionResult Checkout()
+        {
+           
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

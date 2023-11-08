@@ -24,43 +24,14 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> AllPostBannerManager(string txtSearch, int? page)
+        public async Task<IActionResult> AllPostBannerManager()
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var urlBook = $"https://localhost:7079/api/Postbanner/GetAll-PostBanner";
-            var httpClient = new HttpClient();
             var responBook = await _httpClient.GetAsync(urlBook);
             string apiDataBook = await responBook.Content.ReadAsStringAsync();
             var lstBook = JsonConvert.DeserializeObject<List<PostBanner>>(apiDataBook);
-            if (lstBook == null)
-            {
-                return BadRequest();
-            }
-
-            var data = (from s in lstBook select s);
-            if (!string.IsNullOrEmpty(txtSearch))
-            {
-                ViewBag.TxtSearch = txtSearch;
-                data = data.Where(s => s.Title.Contains(txtSearch)).ToList();
-            }
-
-            if (page > 0)
-            {
-                page = page;
-            }
-            else
-            {
-                page = 1;
-            }
-
-            int start = (int)(page - 1) * pageSize;
-            ViewBag.pageCurrent = page;
-            int totalPage = data.Count();
-            float totalNumberSize = (totalPage / (float)pageSize);
-            int numSize = (int)Math.Ceiling(totalNumberSize);
-            ViewBag.numSize = numSize;
-            ViewBag.listPostBanner = data.OrderByDescending(x => x.PostID).Skip(start).Take(pageSize);
             return View(lstBook);
 
         }
@@ -74,7 +45,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         {
             if (imageFile != null && imageFile.Length > 0)
             {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photos", imageFile.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photoBooks", imageFile.FileName);
                 var stream = new FileStream(path, FileMode.Create);
                 imageFile.CopyTo(stream);
                 bk.Images = imageFile.FileName;
@@ -84,21 +55,13 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             bk.PostID = Guid.NewGuid();
             //bk.CreateDate = DateTime.Now;
 
-            //if (imageFile != null && imageFile.Length > 0)
-            //{
-            //    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageFile.FileName);
-            //    var stream = new FileStream(path, FileMode.Create);
-            //    imageFile.CopyTo(stream);
-            //    bk.Images = imageFile.FileName;
-            //}
             var urlBook = $"https://localhost:7079/api/Postbanner/Create-postBaner?Images={bk.Images}&PostDate={bk.PostDate}&Title={bk.Title}&Content={bk.Content}&Status={bk.Status}";
             var httpClient = new HttpClient();
-
             var content = new StringContent(JsonConvert.SerializeObject(bk), Encoding.UTF8, "application/json");
-            var respon = await _httpClient.PostAsync(urlBook, content);
+            var respon = await httpClient.PostAsync(urlBook, content);
             if (respon.IsSuccessStatusCode)
             {
-                return RedirectToAction("AllPostBannerManager", "PostBannerManager", new { area = "Admin" });
+                return RedirectToAction("AllCategoryManager", "CategoryManager", new { area = "Admin" });
             }
             TempData["erro message"] = "thêm thất bại";
             return View();
