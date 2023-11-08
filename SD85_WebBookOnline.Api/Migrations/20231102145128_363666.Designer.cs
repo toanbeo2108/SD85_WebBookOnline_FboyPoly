@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SD85_WebBookOnline.Api.Data;
 
@@ -11,9 +12,10 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231102145128_363666")]
+    partial class _363666
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,19 +53,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-
-                            Id = "68afffd5-6195-4974-a4f9-c60d77293905",
-                            ConcurrencyStamp = "79969aac-f673-4d7b-8ac6-e18ea845048d",
-
+                            Id = "4edb232c-7f7f-4f54-989b-1b1e1e0eeb5e",
+                            ConcurrencyStamp = "55f78b9a-e715-4ea1-ac3a-e774c0b338bb",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-
-                            Id = "9d04231e-cead-40d8-9567-5a441710722a",
-                            ConcurrencyStamp = "ecf0d5ec-2d64-468c-b647-788c37fd10de",
-
+                            Id = "4f3d9c7e-0ee9-4ab6-ac0c-20bbefd9c588",
+                            ConcurrencyStamp = "04b6f6e5-9b30-4765-892c-cedc96923a48",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -437,12 +435,6 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<int>("TransactionStatus")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Volume")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("YearOfRelease")
                         .HasColumnType("int");
 
@@ -539,9 +531,6 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<Guid?>("ComboID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ItemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -549,8 +538,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<string>("Quantity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -612,9 +602,6 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
