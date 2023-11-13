@@ -5,6 +5,7 @@
     ViewData["Title"] = "deTail";
     Layout = "~/Views/Shared/_Layout.cshtml";
     Book book = ViewBag.BookDetail as Book;
+    int quantity = 1;
 }
 
 <div class="container-fluid bg-secondary mb-5">
@@ -67,14 +68,15 @@
                             <i class="fa fa-minus"></i>
                         </button>
                     </div>
-                    <input type="text" class="form-control bg-secondary text-center" value="1">
+                    <input type="text" class="form-control bg-secondary text-center" id="quantity" value="@quantity">
                     <div class="input-group-btn">
                         <button class="btn btn-primary btn-plus">
                             <i class="fa fa-plus"></i>
                         </button>
                     </div>
                 </div>
-                <a asp-action="AddToCart" asp-controller="Cart" asp-area="Customer" asp-route-id="@book.BookID" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</a>
+                <a id="addToCart" href="#" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</a>
+                @* <a asp-action="AddToCart" asp-controller="Cart" asp-area="Customer" asp-route-id="@book.BookID" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</a> *@
             </div>
             <div class="d-flex pt-2">
                 <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
@@ -187,3 +189,48 @@
     </div>
 </div>
 
+
+<script>
+    var btnPlus = document.querySelector('.btn-plus');
+    var btnMinus = document.querySelector('.btn-minus');
+    var input = document.querySelector('#quantity');
+
+    // Remove existing event listeners
+    btnPlus.removeEventListener('click', incrementQuantity);
+    btnMinus.removeEventListener('click', decrementQuantity);
+
+    // Define event handlers
+    function incrementQuantity() {
+        var quantity = parseInt(input.value);
+        quantity += 1;
+        input.value = quantity;
+    }
+
+    function decrementQuantity() {
+        var quantity = parseInt(input.value);
+        if (quantity > 1) {
+            quantity -= 1;
+            input.value = quantity;
+        }
+    }
+
+    // Attach event listeners
+    btnPlus.addEventListener('click', incrementQuantity);
+    btnMinus.addEventListener('click', decrementQuantity);
+
+    document.querySelector('#addToCart').addEventListener('click', function (event) {
+        event.preventDefault();
+        var quantity = document.querySelector('#quantity').value;
+        var url = '@Url.Action("AddToCart", "Cart", new { id = @book.BookID })' + '?quantity=' + quantity;
+        window.location.href = url;
+    });
+    document.querySelector('#quantity').addEventListener('input', function () {
+        let value = parseInt(this.value);
+        if (isNaN(value) || value <= 0) {
+            this.value = 1;
+        } else {
+            this.value = value;
+        }
+    });
+
+</script>
