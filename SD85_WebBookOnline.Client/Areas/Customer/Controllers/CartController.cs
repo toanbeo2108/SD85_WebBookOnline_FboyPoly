@@ -44,7 +44,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                 return View(Book);
             }
         }
-        public async Task<IActionResult> AddToCart(Guid id)
+        public async Task<IActionResult> AddToCart(Guid id, int quantity)
         {
             var urlBook = "https://localhost:7079/api/Book/get-all-book";
             var httpClient = new HttpClient();
@@ -70,36 +70,47 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             {
                 myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
             }
-            CartItems cartItems = new CartItems();
-            cartItems.CartItemID = Guid.NewGuid();
-            cartItems.CartID = null;
-            if (book != null)
+
+            var existingItem = myListCartItem.FirstOrDefault(x => x.BookID == book.BookID);
+            if (existingItem != null)
             {
-                cartItems.BookID = book.BookID;
-                cartItems.ComboID = null;
-                cartItems.ItemName = book.BookName;
-                cartItems.Image = book.MainPhoto;
-                cartItems.Price = book.Price;
-                cartItems.Quantity = 1;
-                cartItems.ToTal = cartItems.Price * cartItems.Quantity;
-                cartItems.Status = 1;
+                // Nếu sách đã có, tăng số lượng lên 1
+                existingItem.Quantity += quantity;
+                existingItem.ToTal = existingItem.Price * existingItem.Quantity;
             }
-            if (combo != null)
+            else
             {
-                cartItems.BookID = null;
-                cartItems.ComboID = combo.ComboID;
-                cartItems.ItemName = combo.ComboName;
-                cartItems.Image = combo.Image;
-                cartItems.Price = combo.Price;
-                cartItems.Quantity = 1;
-                cartItems.ToTal = cartItems.Price * cartItems.Quantity;
-                cartItems.Status = 1;
+                CartItems cartItems = new CartItems();
+                cartItems.CartItemID = Guid.NewGuid();
+                cartItems.CartID = null;
+                if (book != null)
+                {
+                    cartItems.BookID = book.BookID;
+                    cartItems.ComboID = null;
+                    cartItems.ItemName = book.BookName;
+                    cartItems.Image = book.MainPhoto;
+                    cartItems.Price = book.Price;
+                    cartItems.Quantity = quantity;
+                    cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                    cartItems.Status = 1;
+                }
+                if (combo != null)
+                {
+                    cartItems.BookID = null;
+                    cartItems.ComboID = combo.ComboID;
+                    cartItems.ItemName = combo.ComboName;
+                    cartItems.Image = combo.Image;
+                    cartItems.Price = combo.Price;
+                    cartItems.Quantity = quantity;
+                    cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                    cartItems.Status = 1;
+                }
+                myListCartItem.Add(cartItems);
             }
 
-            myListCartItem.Add(cartItems);
             string updateJson = JsonConvert.SerializeObject(myListCartItem);
             Response.Cookies.Append("myCart", updateJson);
-            return RedirectToAction("MyCart", "Cart",new {area = "Customer"});
+            return RedirectToAction("MyCart", "Cart");
         }
         [HttpGet]
         public async Task<IActionResult> MyCart()
@@ -121,10 +132,34 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                 List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
                 ViewBag.myCart = myListCartItem;
             }
+
             return View();
+        }
+        public async Task<IActionResult> DeleteToCart(Guid id)
+        {
+            string json = Request.Cookies["myCart"];
+            if (json != null)
+            {
+                List<CartItems> myList = JsonConvert.DeserializeObject<List<CartItems>>(json);
+
+                // Tìm CartItems có ID tương ứng
+                var item = myList.FirstOrDefault(x => x.BookID == id);
+                if (item != null)
+                {
+                    // Xóa mục khỏi danh sách
+                    myList.Remove(item);
+
+                    // Chuyển đổi danh sách CartItems thành chuỗi JSON và lưu lại vào cookie
+                    string updatedJson = JsonConvert.SerializeObject(myList);
+                    Response.Cookies.Append("myCart", updatedJson);
+                }
+            }
+
+            return RedirectToAction("MyCart", "Cart");
         }
         public IActionResult Checkout()
         {
+
             return View();
         }
 
