@@ -11,7 +11,7 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using SD85_WebBookOnline.Share.Models;
-
+using Microsoft.AspNetCore.Identity;
 namespace SD85_WebBookOnline.Client.Controllers
 {
     public class HomeController : Controller
@@ -93,7 +93,9 @@ namespace SD85_WebBookOnline.Client.Controllers
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 var check = User.Identity.IsAuthenticated;
-                
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                string jsonUserId = JsonConvert.SerializeObject(userId);
+                Response.Cookies.Append("UserId", jsonUserId);
                 return RedirectToAction("Index", "Home");
 
 

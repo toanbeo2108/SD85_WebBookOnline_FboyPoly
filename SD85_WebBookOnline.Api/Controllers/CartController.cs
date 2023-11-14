@@ -23,12 +23,13 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await _irespon.GetAll();
         }
         [HttpPost("[Action]")]
-        public async Task<bool> CreateCart(Guid? voucherID, decimal priceBeforeVoucher, decimal total)
+        public async Task<bool> CreateCart(Guid CartId,Guid? voucherID,string? UserId, decimal priceBeforeVoucher, decimal total)
         {
             
             Cart cr = new Cart();
-            cr.CartId = Guid.NewGuid();
+            cr.CartId = CartId;
             cr.VoucherID = voucherID;
+            cr.UserID = UserId;
             cr.PriceBeforeVoucher = priceBeforeVoucher;
             cr.Total = total;
             cr.Status = 1;
