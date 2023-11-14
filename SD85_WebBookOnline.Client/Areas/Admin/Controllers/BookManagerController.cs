@@ -159,7 +159,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             if (imageFile != null && imageFile.Length > 0)
             {
                 // Xác định đường dẫn lưu trữ hình ảnh mới
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photos", imageFile.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photoBooks", imageFile.FileName);
 
                 // Lưu tệp hình ảnh mới
                 using (var stream = new FileStream(path, FileMode.Create))

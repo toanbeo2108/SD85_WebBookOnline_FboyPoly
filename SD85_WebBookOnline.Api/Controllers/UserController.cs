@@ -20,7 +20,7 @@ namespace SD85_WebBookOnline.Api.Controllers
         {   
             _userManager = userManager;
         }
-
+   
         [HttpGet]
         [Route("GetAllUser")]
         [Authorize(Roles = "Admin")]
