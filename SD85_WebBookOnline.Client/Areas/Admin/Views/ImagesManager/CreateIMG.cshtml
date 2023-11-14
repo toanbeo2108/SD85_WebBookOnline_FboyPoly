@@ -1,0 +1,45 @@
+﻿@model SD85_WebBookOnline.Share.Models.Images
+
+@{
+    ViewData["Title"] = "CreateIMG";
+     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>CreateIMG</h1>
+
+<h4>Images</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateIMG">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="BookID" class="control-label"></label>
+                <input asp-for="BookID" class="form-control" />
+                <span asp-validation-for="BookID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageName" class="control-label"></label>
+                <input asp-for="ImageName" class="form-control" />
+                <span asp-validation-for="ImageName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

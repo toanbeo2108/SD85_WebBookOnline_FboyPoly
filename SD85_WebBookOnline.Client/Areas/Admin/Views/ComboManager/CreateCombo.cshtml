@@ -86,7 +86,10 @@
                 Tên sách
             </th>
             <th style="text-align: center;">
-                Giá bán
+                Đơn giá
+            </th>
+            <th style="text-align: center;">
+                Số lượng
             </th>
             <th>
                 Action
@@ -96,7 +99,6 @@
     <tbody>
         @if (ViewBag.ListComboItem != null)
         {
-           
             foreach (var item in lstComboItem)
             {
                 <tr>
@@ -106,8 +108,23 @@
                     <td style="text-align: center; margin-bottom: 20px">
                         @item.Price
                     </td>
+                    <td>
+                        <div class="input-group quantity">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary btn-minus" style="background-color: green;">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="quantity form-control text-center" style="background-color: white;" value="@item.Quantity">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary btn-plus" style="background-color: green;">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
                     <td style="text-align: center; margin-bottom: 20px">
-                        <a asp-action="DeleteToCombo" asp-route-id="@item.ComboItemID" class="btn status delivered">Xóa</a>
+                        <a asp-area="Admin" asp-controller="ComboManager" asp-action="DeleteToCombo" asp-route-id="@item.ComboItemID" class="btn status delivered">Xóa</a>
                     </td>
                 </tr>
             }
@@ -150,3 +167,22 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    document.querySelectorAll('.btn-minus').forEach(function (button) {
+        button.addEventListener('click', function () {
+            let quantity = this.parentElement.nextElementSibling;
+            if (quantity.value > 1) {
+                quantity.value = parseInt(quantity.value) - 1;
+            }
+        });
+    });
+
+    document.querySelectorAll('.btn-plus').forEach(function (button) {
+        button.addEventListener('click', function () {
+            let quantity = this.parentElement.previousElementSibling;
+            quantity.value = parseInt(quantity.value) + 1;
+        });
+    });
+</script>
+

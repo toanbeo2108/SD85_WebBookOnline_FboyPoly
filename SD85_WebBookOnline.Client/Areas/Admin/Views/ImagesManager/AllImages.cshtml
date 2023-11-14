@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SD85_WebBookOnline.Share.Models.Images>
+ 
+@{
+    ViewData["Title"] = "AllImages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var lst = ViewBag.b as SD85_WebBookOnline.Share.Models.Book;
+}
+
+<h1>AllImages</h1>
+
+<p>
+    <a asp-action="CreateIMG">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ImagesID)
+            </th>            
+            <th>
+                @Html.DisplayNameFor(model => model.BookID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImagesID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+             <td style="text-align : center; margin-bottom : 20px">
+                            <a asp-action="Delete" asp-route-id="@item.ImagesID" class="btn status delivered">delete</a>
+                            <a asp-action="UpdateIMG" asp-route-id="@item.ImagesID" class="btn status tamkhoa"> update</a>
+                            <a asp-action="ImagesDetail" asp-route-id="@item.ImagesID" class="btn status tamkhoa"> detail</a>
+                        </td>
+        </tr>
+}
+    </tbody>
+</table>
