@@ -139,8 +139,8 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 
 
         //[HttpPost]
-        public async Task<IActionResult> Checkout()
-        {
+        //public async Task<IActionResult> Checkout()
+        //{
             //var urlBook = "https://localhost:7079/api/Book/get-all-book";
             //var httpClient = new HttpClient();
             //var responseBook = await httpClient.GetAsync(urlBook);
