@@ -299,32 +299,32 @@ namespace SD85_WebBookOnline.Client.Controllers
 
             return RedirectToAction("MyCart", "Home");
         }
+        [HttpGet]
+        public async Task<IActionResult> Shop()
+        {
+            // Đọc cookie
+            var urlBook = $"https://localhost:7079/api/Book/get-all-book";
+            var responBook = await _httpClient.GetAsync(urlBook);
+            string apiDataBook = await responBook.Content.ReadAsStringAsync();
+            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            if (lstBook == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var lstBookOk = lstBook.Where(x => x.Status == 1).ToList();
+                if (lstBookOk == null)
+                {
+                    return NotFound();
+                }
+                var lstSelect = lstBookOk.Take(18).ToList();
+                ViewBag.lstSelect = lstSelect;
+               
+            }
 
-        //public IActionResult UpdateQuantityInCookie(Guid id, int quantity)
-        //{
-        //    // Đọc cookie
-        //    string json = Request.Cookies["myCart"];
-        //    if (json != null)
-        //    {
-        //        // Chuyển đổi cookie thành danh sách ComboItem
-        //        List<CartItems> myList = JsonConvert.DeserializeObject<List<CartItems>>(json);
-
-        //        // Tìm ComboItem có ID tương ứng
-        //        var item = myList.FirstOrDefault(x => x.CartItemID == id);
-        //        if (item != null)
-        //        {
-        //            // Cập nhật số lượng
-        //            item.Quantity = quantity;
-        //            item.ToTal = item.Price * item.Quantity;
-
-        //            // Chuyển đổi danh sách ComboItem thành chuỗi JSON và lưu lại vào cookiex
-        //            string updatedJson = JsonConvert.SerializeObject(myList);
-        //            Response.Cookies.Append("myCart", updatedJson);
-        //        }
-        //    }
-
-        //    return Ok();
-        //}
+            return Ok();
+        }
         [HttpPost]
 
         public IActionResult Checkout()
