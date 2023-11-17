@@ -131,6 +131,19 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             {
                 List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
                 ViewBag.myCart = myListCartItem;
+                decimal subtotal = 0;
+                foreach (var item in myListCartItem)
+                {
+                    subtotal += item.ToTal;
+                }
+                if (subtotal == 0)
+                {
+                    ViewBag.Subtotal = 0;
+                }
+                else
+                {
+                    ViewBag.Subtotal = subtotal;
+                }
             }
 
             return View();

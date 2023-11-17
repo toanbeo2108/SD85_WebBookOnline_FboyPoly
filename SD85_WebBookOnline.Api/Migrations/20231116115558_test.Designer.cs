@@ -12,8 +12,8 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231104174124_updateDB")]
-    partial class updateDB
+    [Migration("20231116115558_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,15 +53,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f24ea11f-6e7c-4b31-8e6c-45f95f715766",
-                            ConcurrencyStamp = "341de6ee-91e9-4b4d-bdda-bbd8aea764fe",
+                            Id = "25aec393-cf22-4900-9498-c299a473328d",
+                            ConcurrencyStamp = "c7fb80e9-abf4-4b7b-bbc0-fab1816a9bb4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "9d41b08f-1cae-407f-9557-240413c91125",
-                            ConcurrencyStamp = "342f0de6-a234-482d-aad1-2abffe598fc7",
+                            Id = "d32fac0d-ede8-480f-8c17-db244472d5d6",
+                            ConcurrencyStamp = "b49715ca-a0f4-4f38-9ff9-779cc717f890",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -507,7 +507,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UserID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid?>("VoucherID")
@@ -515,7 +515,7 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.HasKey("CartId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserID");
 
                     b.HasIndex("VoucherID");
 
@@ -537,6 +537,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<Guid?>("ComboID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ItemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -544,9 +547,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Quantity")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -608,6 +610,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -1084,9 +1089,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Cart", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                    b.HasOne("SD85_WebBookOnline.Share.Models.User", "User")
+                        .WithMany("Cart")
+                        .HasForeignKey("UserID");
 
                     b.HasOne("SD85_WebBookOnline.Share.Models.Voucher", "Voucher")
                         .WithMany("Cart")
@@ -1241,6 +1246,8 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.User", b =>
                 {
+                    b.Navigation("Cart");
+
                     b.Navigation("DeliveryAddress");
                 });
 #pragma warning restore 612, 618

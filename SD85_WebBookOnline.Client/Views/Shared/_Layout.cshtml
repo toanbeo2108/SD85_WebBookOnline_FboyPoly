@@ -469,8 +469,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
-
+                            <a asp-action="Logout" asp-controller="Home">
                                 <span class="icon"><ion-icon name="arrow-forward-circle-outline"></ion-icon></span>
                                 <span class="title">LogOut</span>
                             </a>
@@ -630,7 +629,7 @@
                                 <i class="fas fa-heart text-primary"></i>
                                 <span class="badge">0</span>
                             </a>
-                            <a href="" class="btn border">
+                            <a asp-action="MyCart" asp-controller="Cart" asp-area="Customer" class="btn border">
                                 <i class="fas fa-shopping-cart text-primary"></i>
                                 <span class="badge">0</span>
                             </a>
@@ -905,9 +904,6 @@
     </div>
     <div></div>
     </nav>*@
-
-
-
             <script src="~/lib/jquery/dist/jquery.min.js"></script>
             <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
             <script src="~/js/site.js" asp-append-version="true"></script>

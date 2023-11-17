@@ -19,6 +19,7 @@ namespace SD85_WebBookOnline.Share.Models
 
         // Set Quan hệ
         public virtual IEnumerable<DeliveryAddress>? DeliveryAddress { get; set;}
+        public virtual IEnumerable<Cart>? Cart { get; set; }
 
     }
 }
