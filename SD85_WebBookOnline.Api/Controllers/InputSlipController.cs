@@ -24,7 +24,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await _irespon.GetAll();
         }
         [HttpPost("[Action]")]
-        public async Task<bool> CreateInputSlip(Guid? idNhanVienNhap, Guid? idSachNhap, int soLuong, DateTime ngayNhap)
+        public async Task<bool> CreateInputSlip(Guid? idNhanVienNhap, Guid? idSachNhap, int soLuong, DateTime ngayNhap,decimal giaNhap)
         {
             //var lstauthor = await _irespon.GetAll();
             //var insp = lstauthor.FirstOrDefault(x => x.AuthorName == authorName);
@@ -33,12 +33,12 @@ namespace SD85_WebBookOnline.Api.Controllers
             //    return false;
             //}
             InputSlip insp = new InputSlip();
-            insp.InputSlipID = new Guid();
+            insp.InputSlipID = Guid.NewGuid();
             insp.IdNhanVienNhap = idNhanVienNhap;
             insp.IdSachNhap = idSachNhap;
             insp.SoLuong = soLuong;
             insp.NgayNhap = ngayNhap;
-
+            insp.GiaNhap = giaNhap;
             return await _irespon.CreateItem(insp);
         }
 
