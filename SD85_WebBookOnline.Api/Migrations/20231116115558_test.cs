@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SD85_WebBookOnline.Api.Migrations
 {
-    public partial class _363666 : Migration
+    public partial class test : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -98,6 +98,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     CreatebyID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CartItemID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ComboName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -354,7 +355,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TransactionStatus = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Volume = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -414,17 +417,17 @@ namespace SD85_WebBookOnline.Api.Migrations
                 {
                     CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     VoucherID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PriceBeforeVoucher = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cart", x => x.CartId);
                     table.ForeignKey(
-                        name: "FK_Cart_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Cart_AspNetUsers_UserID",
+                        column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -590,8 +593,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                     ComboID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     BookID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ItemName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Quantity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
                     ToTal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -618,12 +622,12 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "4edb232c-7f7f-4f54-989b-1b1e1e0eeb5e", "55f78b9a-e715-4ea1-ac3a-e774c0b338bb", "Admin", "ADMIN" });
+                values: new object[] { "25aec393-cf22-4900-9498-c299a473328d", "c7fb80e9-abf4-4b7b-bbc0-fab1816a9bb4", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "4f3d9c7e-0ee9-4ab6-ac0c-20bbefd9c588", "04b6f6e5-9b30-4765-892c-cedc96923a48", "User", "USER" });
+                values: new object[] { "d32fac0d-ede8-480f-8c17-db244472d5d6", "b49715ca-a0f4-4f38-9ff9-779cc717f890", "User", "USER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -725,9 +729,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                 column: "LangugeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cart_UserId",
+                name: "IX_Cart_UserID",
                 table: "Cart",
-                column: "UserId");
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cart_VoucherID",

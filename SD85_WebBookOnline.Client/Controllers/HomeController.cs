@@ -75,9 +75,7 @@ namespace SD85_WebBookOnline.Client.Controllers
             if (response.IsSuccessStatusCode)
             {
                 string token = await response.Content.ReadAsStringAsync();
-
                 Response.Cookies.Append("Token", token);
-
                 // Tạo một đối tượng HttpRequestMessage.
                 HttpRequestMessage request = new HttpRequestMessage();
 
@@ -93,12 +91,20 @@ namespace SD85_WebBookOnline.Client.Controllers
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 var check = User.Identity.IsAuthenticated;
+
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 string jsonUserId = JsonConvert.SerializeObject(userId);
                 Response.Cookies.Append("UserId", jsonUserId);
                 return RedirectToAction("Index", "Home");
 
+                //// Lấy UserID
+                //var url = $"https://localhost:7079/api/user/GetUserId/{loginUser.Username}";
+                //var respon = await _httpClient.GetAsync(url);
+                //string api = await respon.Content.ReadAsStringAsync();
+                //var UserId = JsonConvert.DeserializeObject<string>(api);
+                //Response.Cookies.Append("UserID", UserId);
 
+                return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -229,6 +235,7 @@ namespace SD85_WebBookOnline.Client.Controllers
                 }
                 myListCartItem.Add(cartItems);
             }
+            
 
             string updateJson = JsonConvert.SerializeObject(myListCartItem);
             Response.Cookies.Append("myCart", updateJson);
@@ -253,6 +260,19 @@ namespace SD85_WebBookOnline.Client.Controllers
             {
                 List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
                 ViewBag.myCart = myListCartItem;
+                decimal subtotal = 0;
+                foreach (var item in myListCartItem)
+                {
+                    subtotal += item.ToTal;
+                }
+                if (subtotal == 0)
+                {
+                    ViewBag.Subtotal = 0;
+                }
+                else
+                {
+                    ViewBag.Subtotal = subtotal;
+                }
             }
             
             return View();
