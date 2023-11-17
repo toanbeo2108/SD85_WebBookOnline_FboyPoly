@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using SD85_WebBookOnline.Client.Controllers;
 using SD85_WebBookOnline.Share.Models;
+using System.Text;
 
 namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 {
@@ -148,6 +149,68 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 
             return View();
         }
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> Checkout()
+        //{
+            //var urlBook = "https://localhost:7079/api/Book/get-all-book";
+            //var httpClient = new HttpClient();
+            //var responseBook = await httpClient.GetAsync(urlBook);
+            //if (!responseBook.IsSuccessStatusCode)
+            //{
+            //    return BadRequest("Lỗi khi tải danh sách sách.");
+            //}
+            //string apiDataBook = await responseBook.Content.ReadAsStringAsync();
+            //var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            //decimal allPrice = 0;
+            //string json = Request.Cookies["myCart"];
+            //if (json != null)
+            //{
+            //    List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
+            //    foreach (var item in myListCartItem)
+            //    {
+            //        allPrice = allPrice + item.ToTal;
+            //    }
+            //}
+           
+            //string UserId = Request.Cookies["UserId"];
+            //if(UserId != null)
+            //{
+            //    Cart cart = new Cart();
+            //    cart.CartId = Guid.NewGuid();
+            //    cart.UserID = UserId;
+            //    cart.VoucherID = null;
+            //    cart.PriceBeforeVoucher = allPrice;
+            //    cart.Total = allPrice;
+            //    cart.Status = 1;
+            //    string urlCreateCart = $"https://localhost:7079/api/Cart/CreateCart?CartId={cart.CartId}&UserId={cart.UserID}&priceBeforeVoucher={cart.PriceBeforeVoucher}&total={cart.Total}";
+            //    var content = new StringContent(JsonConvert.SerializeObject(cart), Encoding.UTF8, "application/json");
+            //    var respon = await _httpClient.PostAsync(urlCreateCart, content);
+            //    if (respon.IsSuccessStatusCode)
+            //    {
+            //        string jsonitem = Request.Cookies["myCart"];
+            //        if (json != null)
+            //        {
+            //            List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(jsonitem);
+            //            foreach (var item in myListCartItem)
+            //            {
+            //                string urlcartItem = $"https://localhost:7079/api/CartItem/Add-CartItem?CartID={cart.CartId}&BookID={item.BookID}&image={item.Image}&ItemName={item.ItemName}&Price={item.Price}&Quantity={item.Quantity}&ToTal={item.ToTal}&Status={1}";
+            //                var contentCIT = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+            //                var responCIT = await _httpClient.PostAsync(urlcartItem, contentCIT);
+            //                if(responCIT.IsSuccessStatusCode)
+            //                {
+            //                    return View();
+            //                }
+            //                return BadRequest();
+            //            }
+            //        }
+            //        return View();
+            //    }
+            //    return BadRequest();
+            //}
+            
+
         public async Task<IActionResult> DeleteToCart(Guid id)
         {
             string json = Request.Cookies["myCart"];
@@ -172,6 +235,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
         }
         public IActionResult Checkout()
         {
+
 
             return View();
         }

@@ -20,7 +20,7 @@ namespace SD85_WebBookOnline.Api.Controllers
         {   
             _userManager = userManager;
         }
-
+   
         [HttpGet]
         [Route("GetUserId/{username}")]
         public async Task<string> GetUserId(string username)

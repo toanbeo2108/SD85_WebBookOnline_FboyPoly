@@ -38,13 +38,16 @@
                                     </div>
                                 </div>
                             </td>
+
                             <td class="align-middle itemTotal">$@item.ToTal</td>
                             <td class="align-middle">
                                 <a asp-controller="Home" asp-action="DeleteToCart" asp-route-id="@item.BookID">
                                     <button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button>
                                 </a>
                             </td>
+
                         </tr>
+                        total = total + item.ToTal;
                     }
                 </tbody>
             </table>
@@ -54,7 +57,9 @@
                 <div class="input-group">
                     <input type="text" class="form-control p-4" placeholder="Voucher Code">
                     <div class="input-group-append">
-                        <button class="btn btn-primary">Apply Voucher</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal">
+                            Apply Voucher
+                        </button>
                     </div>
                 </div>
             </form>
@@ -70,6 +75,7 @@
                     <div class="d-flex justify-content-between">
                         <h6 class="font-weight-medium">Shipping</h6>
                         <h6 class="font-weight-medium shipping">$10</h6>
+
                     </div>
                 </div>
                 <div class="card-footer border-secondary bg-transparent">
@@ -150,3 +156,4 @@
     }
 
 </script>
+
