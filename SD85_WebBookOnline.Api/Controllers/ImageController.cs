@@ -21,6 +21,7 @@ namespace SD85_WebBookOnline.Api.Controllers
         [HttpGet("getAll_Image")]
         public async Task<IEnumerable<Images>> gettAll()
         {
+           
             return await _irp.GetAll();
         }
         [HttpPost("add-image")]

@@ -8,6 +8,9 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 {
     public class BookDetailManagerController : Controller
     {
+        string _mess = "";
+        bool _stt = false;
+        object _data = null;
         private HttpClient _httpClient;
         public BookDetailManagerController()
         {
@@ -50,13 +53,15 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             ViewBag.lstLanguge = lstLanguge;
 
 
-            var token = Request.Cookies["Token"];
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
             var urlBookDetail = $"https://localhost:7079/api/BookDetail/GetAllBookDetail";
-            var httpClient = new HttpClient();
             var responBookDetail = await _httpClient.GetAsync(urlBookDetail);
+            var httpClient = new HttpClient();
+           
             string apiDataBookDetail = await responBookDetail.Content.ReadAsStringAsync();
             var lstBookDetail = JsonConvert.DeserializeObject<List<BookDetail>>(apiDataBookDetail);
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             ViewBag.lstBookDetail = lstBookDetail;
             return View(lstBookDetail);
         }
@@ -88,32 +93,32 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             ViewBag.lstLanguge = lstLanguge;
             return View();
         }
-        [HttpPost]
+        [HttpPost,Route("add-bookDetail")]
         public async Task<IActionResult> CreateBookDetail(BookDetail bk)
         {
-            var urlBook = $"https://localhost:7079/api/Book/get-all-book";
-            var responBook = await _httpClient.GetAsync(urlBook);
-            string apiDataBook = await responBook.Content.ReadAsStringAsync();
-            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
-            ViewBag.lstBook = lstBook;
+            //var urlBook = $"https://localhost:7079/api/Book/get-all-book";
+            //var responBook = await _httpClient.GetAsync(urlBook);
+            //string apiDataBook = await responBook.Content.ReadAsStringAsync();
+            //var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            //ViewBag.lstBook = lstBook;
 
-            var urlCategory = $"https://localhost:7079/api/Category/GetAllCategory";
-            var responCategory = await _httpClient.GetAsync(urlCategory);
-            string apiDataCategory = await responCategory.Content.ReadAsStringAsync();
-            var lstCategory = JsonConvert.DeserializeObject<List<Category>>(apiDataCategory);
-            ViewBag.lstCategory = lstCategory;
+            //var urlCategory = $"https://localhost:7079/api/Category/GetAllCategory";
+            //var responCategory = await _httpClient.GetAsync(urlCategory);
+            //string apiDataCategory = await responCategory.Content.ReadAsStringAsync();
+            //var lstCategory = JsonConvert.DeserializeObject<List<Category>>(apiDataCategory);
+            //ViewBag.lstCategory = lstCategory;
 
-            var urlAuthor = $"https://localhost:7079/api/Author/GetAllAuthor";
-            var responAuthor = await _httpClient.GetAsync(urlAuthor);
-            string apiAuthor = await responAuthor.Content.ReadAsStringAsync();
-            var lstAuthor = JsonConvert.DeserializeObject<List<Author>>(apiAuthor);
-            ViewBag.lstAuthor = lstAuthor;
+            //var urlAuthor = $"https://localhost:7079/api/Author/GetAllAuthor";
+            //var responAuthor = await _httpClient.GetAsync(urlAuthor);
+            //string apiAuthor = await responAuthor.Content.ReadAsStringAsync();
+            //var lstAuthor = JsonConvert.DeserializeObject<List<Author>>(apiAuthor);
+            //ViewBag.lstAuthor = lstAuthor;
 
-            var urlLanguge = $"https://localhost:7079/api/Languge/GetAllLanguge";
-            var responLanguge = await _httpClient.GetAsync(urlLanguge);
-            string apiDataLanguge = await responLanguge.Content.ReadAsStringAsync();
-            var lstLanguge = JsonConvert.DeserializeObject<List<Languge>>(apiDataLanguge);
-            ViewBag.lstLanguge = lstLanguge;
+            //var urlLanguge = $"https://localhost:7079/api/Languge/GetAllLanguge";
+            //var responLanguge = await _httpClient.GetAsync(urlLanguge);
+            //string apiDataLanguge = await responLanguge.Content.ReadAsStringAsync();
+            //var lstLanguge = JsonConvert.DeserializeObject<List<Languge>>(apiDataLanguge);
+            //ViewBag.lstLanguge = lstLanguge;
 
 
             var token = Request.Cookies["Token"];
@@ -124,12 +129,29 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(bk), Encoding.UTF8, "application/json");
             var respon = await _httpClient.PostAsync(urlBookDetail, content);
-            if (respon.IsSuccessStatusCode)
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return RedirectToAction("AllBookDetailManager", "BookDetailManager", new { area = "Admin" });
+                _stt = true;
+                _mess = "Thêm thành công!";
             }
-            TempData["erro message"] = "thêm thất bại";
-            return View();
+            else
+            {
+                _stt=false;
+                _mess = "Thêm thất bại ";
+            }
+            //if (respon.IsSuccessStatusCode)
+            //{
+            //    return RedirectToAction("AllBookDetailManager", "BookDetailManager", new { area = "Admin" });
+            //}
+            //TempData["erro message"] = "thêm thất bại";
+            //return View();
+            return Json(new
+            {
+
+                status = _stt,
+                message =_mess
+            });
+            
         }
         [HttpGet]
         public async Task<IActionResult> BookDetailDetail(Guid id)

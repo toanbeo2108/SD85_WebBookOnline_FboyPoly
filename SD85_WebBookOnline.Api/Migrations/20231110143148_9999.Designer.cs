@@ -12,8 +12,8 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231104174124_updateDB")]
-    partial class updateDB
+    [Migration("20231110143148_9999")]
+    partial class _9999
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,15 +53,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f24ea11f-6e7c-4b31-8e6c-45f95f715766",
-                            ConcurrencyStamp = "341de6ee-91e9-4b4d-bdda-bbd8aea764fe",
+                            Id = "281e3920-518f-42f7-a942-5df5dfa114df",
+                            ConcurrencyStamp = "003498e9-fdfb-4f6f-a490-897465e74690",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "9d41b08f-1cae-407f-9557-240413c91125",
-                            ConcurrencyStamp = "342f0de6-a234-482d-aad1-2abffe598fc7",
+                            Id = "5c89b84b-755f-4001-b632-f28b7ae770d6",
+                            ConcurrencyStamp = "fdc36dd7-d03e-4177-97ff-42b402da6f0e",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -537,6 +537,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<Guid?>("ComboID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ItemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -544,9 +547,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Quantity")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -608,6 +610,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");

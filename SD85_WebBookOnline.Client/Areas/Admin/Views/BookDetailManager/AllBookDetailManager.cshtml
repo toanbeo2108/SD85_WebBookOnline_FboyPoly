@@ -13,8 +13,14 @@
 
 <h1>AllBookDetailManager</h1>
 
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/BookDetail.js"></script>
 <p>
-    <a asp-action="CreateBookDetail" class="btn btn-primary">Create New</a>
+    <button type="button" class="btn btn-primary" id="btn_add">Thêm mới</button>
 </p>
 <table class="table" id="tb_bookdetail">
     <thead>
@@ -25,17 +31,17 @@
             </th>
             <th style="text-align : center;">
                         Tên Sách
-                    </th>
-
-                    <th style="text-align : center;">
-                        Thể Loại
-                    </th>
-                    <th style="text-align : center;">
-                        Tác Giả
-                    </th>
-                    <th style="text-align : center;">
-                        Ngôn ngữ
-                    </th>
+             </th>
+             
+             <th style="text-align : center;">
+                 Thể Loại
+             </th>
+             <th style="text-align : center;">
+                 Tác Giả
+             </th>
+             <th style="text-align : center;">
+                 Ngôn ngữ
+             </th>
             <th></th>
         </tr>
     </thead>
@@ -43,32 +49,113 @@
         @{
             int i = 1;
         }
-@foreach (var item in lstBookDetail) {
+@foreach (var item in Model) {
         <tr>
             <td>
                 @i
             </td>
             <td>
                 @lstBook.FirstOrDefault(c=>c.BookID == item.BookID).BookName
+               
             </td>
             <td>
-                @lstCategory.FirstOrDefault(c=>c.CategoryID == item.CategoriesID).Name
+                @*@lstCategory.FirstOrDefault(d=>d.CategoryID == item.CategoriesID).Name*@
+               @item.CategoriesID
             </td>
             <td>
-                @lstAuthor.FirstOrDefault(c=>c.AuthorID == item.AuthorID).AuthorName
+                @*@lstAuthor.FirstOrDefault(s=>s.AuthorID == item.AuthorID).AuthorName*@
+               @item.AuthorID
             </td>
             <td>
-                @lstLanguge.FirstOrDefault(c=>c.LangugeID == item.LagugeID).Name
+               @* @lstLanguge.FirstOrDefault(f=>f.LangugeID == item.LagugeID).Name*@
+                @item.Languge
             </td>
             <td>
-                    <a asp-action="UpdateBookDetail" asp-route-id="@item.BookDetailID" class="btn status delivered">Update</a>
-                    <a asp-action="BookDetailDetail" asp-route-id="@item.BookDetailID" class="btn status tamkhoa"> Details</a>
-            </td>
+                    <button class="btn btn-primary" id="btn_chitiet" data-id="@item.BookDetailID">Chi Tiết</button>                   
+                    <button class="btn btn-primary" id="btn_xoa" data-id="@item.BookDetailID">Chi Tiết</button>                   
+                   
         </tr>
             i++;
 }
     </tbody>
 </table>
+
+
+
+
+
+<div class="modal fade" id="pp_Modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            <div class="mb-3">
+            <input type="text" style="display:none" id="btn_bookdetailID">
+          </div>
+          <div class="mb-3">
+            <label for="cb_bookname" class="form-label">Book Name</label>
+             <select id="cb_bookname" class="form-select">
+                 
+                  @foreach (var item in lstBook)
+                    {
+                
+                <option value="@item.BookID">@item.BookName</option>
+                    }
+            </select>
+          </div>
+           <div class="mb-3">
+            <label for="cb_category" class="form-label">Category</label>
+             <select id="cb_category" class="form-select">
+                 
+                  @foreach (var item in lstCategory)
+                    {
+                
+                <option value="@item.CategoryID">@item.Name</option>
+                    }
+            </select>
+          </div>
+           <div class="mb-3">
+            <label for="cb_author" class="form-label">Author</label>
+             <select id="cb_author" class="form-select" >
+                 
+                  @foreach (var item in lstAuthor)
+                    {
+                
+                <option value="@item.AuthorID">@item.AuthorName</option>
+                    }
+            </select>
+          </div>
+           <div class="mb-3">
+            <label for="cb_languge" class="form-label">Languge</label>
+             <select id="cb_languge" class="form-select">
+                 
+                  @foreach (var item in lstLanguge)
+                    {
+                
+                <option value="@item.LangugeID">@item.Name</option>
+                    }
+            </select>
+          </div>
+          
+      </div>
+      <div class="modal-footer">
+       <button type="button" class="btn btn-primary" id="btn_luu">Lưu</button> 
+       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 @*Link datatable*@
 <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -77,3 +164,4 @@
         // Khởi tạo DataTable
         var dataTable = $('#tb_bookdetail').DataTable();
     });
+</script>

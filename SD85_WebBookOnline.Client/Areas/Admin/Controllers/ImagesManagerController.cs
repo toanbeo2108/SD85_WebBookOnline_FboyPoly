@@ -13,10 +13,12 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
     public class ImagesManagerController : Controller
     {
         HttpClient _httpClient;
+        
         public ImagesManagerController()
         {
             _httpClient = new HttpClient();
         }
+       
         public IActionResult Index()
         {
             return View();
@@ -24,6 +26,12 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> AllImages()
         {
+            var urlBook = $"https://localhost:7079/api/Book/get-all-book";
+            var responBook = await _httpClient.GetAsync(urlBook);
+            string apiDataBook = await responBook.Content.ReadAsStringAsync();
+            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            ViewBag.lstBook = lstBook;
+
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var url = $"https://localhost:7079/api/Image/getAll_Image";
@@ -31,54 +39,128 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var respon = await _httpClient.GetAsync(url);
             string apiData = await respon.Content.ReadAsStringAsync();
             var lst = JsonConvert.DeserializeObject<List<Images>>(apiData);
-           
+            //var ls = lst.Select(c => new
+            //{
+            //    a = c.Book.BookName,
+            //    b = c.Status,
+
+            //});
+
+            //string qr = string.Format("...");
+
             return View(lst);
         }
         [HttpGet]
-        public IActionResult CreateIMG()
+        public async Task<IActionResult> CreateIMG()
         {
+           
             return View();
         }
-        [HttpPost]
+        [HttpPost,Route("themm-image")]
         public async Task<IActionResult> CreateIMG(Images img)
         {
+            string _mess = "";
+            bool _stt = false;
+
+
+           
+
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
             img.ImagesID = Guid.NewGuid();
-            //bk.CreateDate = DateTime.Now;
+            
             var url = $"https://localhost:7079/api/Image/add-image?BookID={img.BookID}&ImageName={img.ImageName}&Status={img.Status}";
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(img), Encoding.UTF8, "application/json");
             var respon = await httpClient.PostAsync(url, content);
-            if (respon.IsSuccessStatusCode)
+            //if (respon.IsSuccessStatusCode)
+            //{
+
+            //    return RedirectToAction("AllImages", "ImagesManager", new { area = "Admin" });
+
+            //}
+
+            //TempData["erro message"] = "thêm thất bại";
+            //return View();
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return RedirectToAction("AllImages", "ImagesManager", new { area = "Admin" });
+               
+                _stt = true;
+                _mess = "them thanh cong!";
+                
             }
-            TempData["erro message"] = "thêm thất bại";
-            return View();
+            else 
+            {
+                _stt = false;
+                _mess = "them that bai!";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess
+            });
+
+
         }
-        [HttpGet]
+        [HttpGet, Route("detail-image/{id}")]
         public async Task<IActionResult> ImagesDetail(Guid id)
         {
+            string _mess = "";
+            bool _stt = false;
+            object _data = null;
+
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var url = $"https://localhost:7079/api/Image/getAll_Image";
             var respon = await _httpClient.GetAsync(url);
             string apiData = await respon.Content.ReadAsStringAsync();
-            var lst = JsonConvert.DeserializeObject<List<Images>>(apiData);
-            var IMGs = lst.FirstOrDefault(x => x.ImagesID == id);
-            if (IMGs == null)
+            
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return BadRequest();
+                var lst = JsonConvert.DeserializeObject<List<Images>>(apiData);
+                var img = lst.FirstOrDefault(c => c.ImagesID == id);
+                if (img == null)
+                {
+                    _stt = false;
+                    _mess = "k tìm thấy";
+                }
+                else
+                {
+                    _stt = true;
+                    _mess = "";
+                    _data =  img ;
+                }
+                   
+                                   
             }
             else
             {
-                return View(IMGs);
+                _stt= false;
+                _mess = "không tìm thấy";
             }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess,
+                data = _data
+            }) ;
+            //string apiData = await respon.Content.ReadAsStringAsync();
+            //var lst = JsonConvert.DeserializeObject<List<Images>>(apiData);
+            //var IMGs = lst.FirstOrDefault(x => x.ImagesID == id);
+            //if (IMGs == null)
+            //{
+            //    return BadRequest();
+            //}
+            //else
+            //{
+            //    return View(IMGs);
+            //}
         }
         [HttpGet]
         public async Task<IActionResult> UpdateIMG(Guid id)
         {
+
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var url = $"https://localhost:7079/api/Image/getAll_Image";
@@ -95,33 +177,75 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return View(IMGs);
             }
         }
-        [HttpPost]
+        [HttpPost,Route("update-img/{id}")]
          public async Task<IActionResult> UpdateIMG(Guid id, Images img)
         {
+            string _mess = "";
+            bool _stt = false;
+           
             var url = $"https://localhost:7079/api/Image/Update-image/{id}";
             var content = new StringContent(JsonConvert.SerializeObject(img), Encoding.UTF8, "application/json");
-            var respon = await _httpClient.PutAsync(url, content);
-            if (!respon.IsSuccessStatusCode)
-            {
-                return BadRequest();
-            }
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            return RedirectToAction("AllImages", "ImagesManager", new { area = "Admin" });
+            var respon = await _httpClient.PutAsync(url, content);
+            
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                
+                _stt = true;
+                _mess = "cập nhật thành công !";
+            }
+            else
+            {
+                _stt = false;
+                _mess = "thất bại!";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess
+            });
+            
+            //if (!respon.IsSuccessStatusCode)
+            //{
+            //    return BadRequest();
+            //}
+           
+            //return RedirectToAction("AllImages", "ImagesManager", new { area = "Admin" });
 
         }
-        [HttpGet]
+        [HttpGet, Route("delete-image/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
+            string _mess = "";
+            bool _stt = true;
+            object _data = null;
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var url = $"https://localhost:7079/api/Image/delete-image/{id}";
             var respon = await _httpClient.DeleteAsync(url);
-            if (!respon.IsSuccessStatusCode)
+            //if (!respon.IsSuccessStatusCode)
+            //{
+            //    return BadRequest();
+            //}
+            //return RedirectToAction("AllImages", "ImagesManager", new { area = "Admin" });
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return BadRequest();
+                _stt = true;
+                _mess = "xóa thành công";
             }
-            return RedirectToAction("AllImages", "ImagesManager", new { area = "Admin" });
-        }   
+            else
+            {
+                _stt = false;
+                _mess = "xóa thất bại";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess,
+            });
+
+        }
+        
     }
-}
+} 

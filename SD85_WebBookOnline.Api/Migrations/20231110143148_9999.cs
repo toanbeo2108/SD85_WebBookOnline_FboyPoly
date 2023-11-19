@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SD85_WebBookOnline.Api.Migrations
 {
-    public partial class _363666 : Migration
+    public partial class _9999 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -98,6 +98,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     CreatebyID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CartItemID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ComboName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -354,7 +355,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TransactionStatus = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Volume = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -590,8 +593,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                     ComboID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     BookID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ItemName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Quantity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
                     ToTal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -618,12 +622,12 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "4edb232c-7f7f-4f54-989b-1b1e1e0eeb5e", "55f78b9a-e715-4ea1-ac3a-e774c0b338bb", "Admin", "ADMIN" });
+                values: new object[] { "281e3920-518f-42f7-a942-5df5dfa114df", "003498e9-fdfb-4f6f-a490-897465e74690", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "4f3d9c7e-0ee9-4ab6-ac0c-20bbefd9c588", "04b6f6e5-9b30-4765-892c-cedc96923a48", "User", "USER" });
+                values: new object[] { "5c89b84b-755f-4001-b632-f28b7ae770d6", "fdc36dd7-d03e-4177-97ff-42b402da6f0e", "User", "USER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
