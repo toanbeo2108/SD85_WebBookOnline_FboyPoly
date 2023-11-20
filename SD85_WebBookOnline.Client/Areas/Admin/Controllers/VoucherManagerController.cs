@@ -10,6 +10,9 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 {
     public class VoucherManagerController : Controller
     {
+        string _mess;
+        bool _stt;
+        object _data = null;
         private  HttpClient _httpClient;
         public VoucherManagerController()
         {
@@ -35,7 +38,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         {
             return View();
         }
-        [HttpPost]
+        [HttpPost,Route("Add-Voucher")]
         public async Task<IActionResult> CreateVoucher(Voucher vc)
         {
             var token = Request.Cookies["Token"];
@@ -46,14 +49,32 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8,"application/json");
             var respon = await httpClient.PostAsync(urlVoucher, content);
-            if (respon.IsSuccessStatusCode)
+            //if (respon.IsSuccessStatusCode)
+            //{
+            //   return RedirectToAction("AllVoucherManager", "VoucherManager",new {area = "Admin"});
+            //}
+            //TempData["Erro Message"] = "Thêm Thất Bại";
+            //return View();
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-               return RedirectToAction("AllVoucherManager", "VoucherManager",new {area = "Admin"});
+
+                _stt = true;
+                _mess = "them thanh cong!";
+
             }
-            TempData["Erro Message"] = "Thêm Thất Bại";
-            return View();
+            else
+            {
+                _stt = false;
+                _mess = "them that bai!";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess
+            });
+
         }
-        [HttpGet]
+        [HttpGet,Route("Voucher-Detail/{id}")]
         public async Task<IActionResult> VoucherDetail(Guid id)
         {
             var token = Request.Cookies["Token"];
@@ -63,14 +84,41 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             string apiDataVoucher = await responVoucher.Content.ReadAsStringAsync();
             var lstVoucher = JsonConvert.DeserializeObject<List<Voucher>>(apiDataVoucher);
             var voucher = lstVoucher.FirstOrDefault(x => x.VoucherID == id);
-            if(voucher == null)
+            //if(voucher == null)
+            //{
+            //    return BadRequest();
+            //}
+            //else
+            //{
+            //    return View(voucher);   
+            //}
+            if (responVoucher.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return BadRequest();
+                if (voucher== null)
+                {
+                    _stt = false;
+                    _mess = "Không tìn thấy";
+                }
+                else
+                {
+                    _stt = true;
+                    _mess = "";
+                    _data = voucher;
+                }
+               
+
             }
             else
             {
-                return View(voucher);   
+                _stt = false;
+                _mess = responVoucher.ReasonPhrase + "";
             }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess,
+                data=_data
+            });
         }
         [HttpGet]
         public async Task<IActionResult> UpdateVoucher(Guid id)
@@ -91,33 +139,66 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return View(voucher);
             }
         }
-        [HttpPost]
+        [HttpPost,Route("Update-Voucher/{id}")]
         public async Task<IActionResult> UpdateVoucher(Guid id,Voucher vc)
         {
             var urlVoucher = $"https://localhost:7079/api/Voucher/UpdateVoucher/{id}";
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8, "application/json");
             var respon =  await _httpClient.PutAsync(urlVoucher, content);
-            if (!respon.IsSuccessStatusCode)
-            {
-                return BadRequest();
-            }
+            //if (!respon.IsSuccessStatusCode)
+            //{
+            //    return BadRequest();
+            //}
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            return RedirectToAction("AllVoucherManager", "VoucherAdmin", new { area = "Admin" });
+            //return RedirectToAction("AllVoucherManager", "VoucherAdmin", new { area = "Admin" });
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
+            {
 
+                _stt = true;
+                _mess = "Cập nhật thanh cong!";
+
+            }
+            else
+            {
+                _stt = false;
+                _mess = "Cập nhật that bai!";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess
+            });
         }
-        [HttpGet]
+        [HttpGet,Route("Xoa_Voucher/{id}")]
         public async Task<IActionResult> DeleteVoucher(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var urlVoucher = $"https://localhost:7079/api/Voucher/DeleteVoucher/{id}";
             var respon =  await _httpClient.DeleteAsync(urlVoucher);
-            if (!respon.IsSuccessStatusCode)
+            //if (!respon.IsSuccessStatusCode)
+            //{
+            //    return BadRequest();
+            //}
+            //return RedirectToAction("AllVoucherManager", "VoucherAdmin", new { area = "Admin" });
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return BadRequest();
+
+                _stt = true;
+                _mess = "Xóa thanh cong!";
+
             }
-            return RedirectToAction("AllVoucherManager", "VoucherAdmin", new { area = "Admin" });
+            else
+            {
+                _stt = false;
+                _mess = "Xóa that bai!";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess
+            });
         }
 
 

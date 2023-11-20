@@ -20,7 +20,63 @@
         $('#ft_kethuc_den').val('');
         $('#ft_trangthai').val('');
     })
-  
+
+
+    $('body').on('click', '#btn_xoa', function () {
+        let id = $(this).attr('data-id')
+        $.get('/Xoa_Voucher/' + id, function (re) {
+            alert(re.message);
+            window.location.reload();
+        })
+
+    })
+    $('body').on('click', '#btn_chitiet', function () {
+        let id = $(this).attr('data-id')
+        $.get('/Voucher-Detail/' + id, function (re) {
+            if (re.status) {
+                setdata(re.data);
+                $('#pp_modal').modal('show');
+            }
+            else {
+                alert(re.message)
+            }
+        })
+
+    })
+    $('body').on('click', '#btn_addnew', function () {
+        setdata('');
+        $('#pp_modal').modal('show');
+
+    })
+    $('body').on('click', '#btn_save', function () {
+        let id = $('#btn_id').val();
+        if ($('#btn_id').val() == null || $('#btn_id').val() == undefined || $('#btn_id').val() == '')
+        {
+            $.post('/Add-Voucher', { vc: getdata() }, function (re) {
+                if (re.status) {
+                    alert(re.message);
+                    $('#pp_modal').modal('hide');
+                    window.location.reload();
+                }
+                else {
+                    alert(re.message);
+                }
+            })
+        }
+        else {
+            $.post('/Update-Voucher/'+id, { vc: getdata() }, function (re) {
+                if (re.status) {
+                    alert(re.message);
+                    $('#pp_modal').modal('hide');
+                    window.location.reload();
+                }
+                else {
+                    alert(re.message);
+                }
+            })
+        }
+    })
+
 });
 
 function getBindFormFilter() {
@@ -112,4 +168,41 @@ function InitPage() {
 
     })
 
+}
+
+function getdata() {
+
+    return {
+        VoucherID: $('#btn_id').val(),
+        Name: $('#btn_Name').val(),
+        Description: $('#btn_Description').val(),
+        StartDate: $('#btn_StartDate').val(),
+        EndDate: $('#btn_EndDate').val(),
+        DiscountCondition: $('#btn_DiscountCondition').val(),
+        DiscountAmount: $('#btn_DiscountAmount').val(),
+        Status: $('#btn_Status').val()
+    }
+
+}
+function setdata(data) {
+    if (data == null || data == '' || data == undefined) {
+        $('#btn_id').val('');
+        $('#btn_Name').val('');
+        $('#btn_Description').val('');
+        $('#btn_StartDate').val('');
+        $('#btn_EndDate').val('');
+        $('#btn_DiscountCondition').val('');
+        $('#btn_DiscountAmount').val('');
+        $('#btn_Status').val('');
+    }
+    else {
+        $('#btn_id').val(data.voucherID);
+        $('#btn_Name').val(data.name);
+        $('#btn_Description').val(data.description);
+        $('#btn_StartDate').val(data.startDate);
+        $('#btn_EndDate').val(data.endDate);
+        $('#btn_DiscountCondition').val(data.discountCondition);
+        $('#btn_DiscountAmount').val(data.discountAmount);
+        $('#btn_Status').val(data.status);
+    }
 }
