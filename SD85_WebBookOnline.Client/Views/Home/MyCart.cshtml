@@ -1,6 +1,7 @@
 ﻿@using SD85_WebBookOnline.Share.Models
 @{
     List<CartItems> myCart = ViewBag.myCart as List<CartItems>;
+    decimal subtotal = ViewBag.Subtotal;
 }
 <div class="container-fluid pt-5">
     <div class="row px-xl-5">
@@ -16,30 +17,38 @@
                     </tr>
                 </thead>
                 <tbody class="align-middle">
-                    @foreach(var item in myCart)
+                    @if(myCart != null)
                     {
-                        <tr>
-                            <td class="align-middle"><img src="~/photoBooks/@item.Image" alt="" style="width: 50px;"> @item.ItemName</td>
-                            <td class="align-middle">$@item.Price</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
+                        @foreach (var item in myCart)
+                        {
+                            <tr>
+                                <td class="align-middle"><img src="~/photoBooks/@item.Image" alt="" style="width: 50px;"> @item.ItemName</td>
+                                <td class="align-middle price">$@item.Price</td>
+                                <td class="align-middle">
+                                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-minus">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm bg-secondary text-center quantity" value="@item.Quantity">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-plus">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center"  value="@item.Quantity">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">$@item.ToTal</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                        </tr>
+                                </td>
+                                <td class="align-middle itemTotal">$@item.ToTal</td>
+                                <td class="align-middle">
+                                    <a asp-controller="Home" asp-action="DeleteToCart" asp-route-id="@item.BookID">
+                                        <button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
                     }
+                    
                 </tbody>
             </table>
         </div>
@@ -59,17 +68,17 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3 pt-1">
                         <h6 class="font-weight-medium">Subtotal</h6>
-                        <h6 class="font-weight-medium">$150</h6>
+                        <h6 class="font-weight-medium subtotal">$@subtotal</h6>
                     </div>
                     <div class="d-flex justify-content-between">
                         <h6 class="font-weight-medium">Shipping</h6>
-                        <h6 class="font-weight-medium">$10</h6>
+                        <h6 class="font-weight-medium shipping">$10</h6>
                     </div>
                 </div>
                 <div class="card-footer border-secondary bg-transparent">
                     <div class="d-flex justify-content-between mt-2">
                         <h5 class="font-weight-bold">Total</h5>
-                        <h5 class="font-weight-bold">$160</h5>
+                        <h5 class="font-weight-bold finalTotal">$@(subtotal +10)</h5>
                     </div>
                     <a asp-action="Checkout" asp-controller="Home" class="btn btn-block btn-primary my-3 py-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Proceed To Checkout</a>
                 </div>
@@ -96,3 +105,69 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+<script>
+    document.querySelectorAll('.btn-minus').forEach(function (button) {
+        button.addEventListener('click', function () {
+            let quantityInput = this.parentElement.nextElementSibling;
+            let quantity = parseInt(quantityInput.value);
+            if (quantity > 1) {
+                quantity -= 1;
+                quantityInput.value = quantity;
+                updateTotal(this.parentElement.parentElement.parentElement.parentElement);
+            }
+            updateSubtotal();
+        });
+    });
+
+    document.querySelectorAll('.btn-plus').forEach(function (button) {
+        button.addEventListener('click', function () {
+            let quantityInput = this.parentElement.previousElementSibling;
+            let quantity = parseInt(quantityInput.value);
+            quantity += 1;
+            quantityInput.value = quantity;
+            updateTotal(this.parentElement.parentElement.parentElement.parentElement);
+            updateSubtotal();
+        });
+    });
+
+    document.querySelectorAll('.quantity input').forEach(function (input) {
+        input.addEventListener('change', function () {
+            updateTotal(this.parentElement.parentElement.parentElement.parentElement);
+            updateSubtotal();
+        });
+        input.addEventListener('input', function () {
+            let value = parseInt(this.value);
+            if (isNaN(value) || value <= 0) {
+                this.value = 1;
+            } else {
+                this.value = value;
+            }
+        });
+
+    });
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('tr').forEach(function (row) {
+            updateTotal(row);
+        });
+        updateSubtotal();
+    });
+
+    function updateTotal(row) {
+        let price = parseFloat(row.querySelector('.price').innerText.replace('$', ''));
+        let quantity = parseInt(row.querySelector('.quantity input').value);
+        let totalCell = row.querySelector('.itemTotal');
+        totalCell.innerText = '$' + (price * quantity).toFixed(2);
+    }
+    function updateSubtotal() {
+        let subtotal = 0;
+        document.querySelectorAll('.itemTotal').forEach(function (totalCell) {
+            subtotal += parseFloat(totalCell.innerText.replace('$', ''));
+        });
+        let shipping = parseFloat(document.querySelector('.shipping').innerText.replace('$', ''));
+        let finalTotal = subtotal + shipping;
+        document.querySelector('.subtotal').innerText = '$' + subtotal.toFixed(2);
+        document.querySelector('.finalTotal').innerText = '$' + finalTotal.toFixed(2);
+    }
+
+</script>

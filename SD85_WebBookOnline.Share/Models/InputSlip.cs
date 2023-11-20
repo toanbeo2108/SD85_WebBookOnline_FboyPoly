@@ -12,12 +12,12 @@ namespace SD85_WebBookOnline.Share.Models
         public Guid InputSlipID { get; set; }
         public Guid? IdNhanVienNhap { get; set; }
         public Guid? IdSachNhap { get; set; }
-        public int SoLuong { get; set; }
-        public decimal GiaNhap { get; set; }
-        public DateTime NgayNhap { get; set; }
+        public int? SoLuong { get; set; }
+        public decimal? GiaNhap { get; set; }
+        public DateTime? NgayNhap { get; set; }
 
-        public virtual Book Book { get; set; }
-        public virtual User User { get; set; }
+        public virtual Book? Book { get; set; }
+        public virtual User? User { get; set; }
 
 
     }

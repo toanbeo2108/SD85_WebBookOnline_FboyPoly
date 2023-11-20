@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SD85_WebBookOnline.Api.Data;
 
@@ -11,9 +12,10 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231116115558_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +53,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3b36fdb8-ddb5-4f92-9e34-258242a102e4",
-                            ConcurrencyStamp = "b6ced455-23b4-4706-b941-929269864423",
+                            Id = "25aec393-cf22-4900-9498-c299a473328d",
+                            ConcurrencyStamp = "c7fb80e9-abf4-4b7b-bbc0-fab1816a9bb4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "45673d6e-6d71-4a9e-9936-b1e685ab0732",
-                            ConcurrencyStamp = "1dfb944d-da54-4d78-afbf-3cac6165ee9a",
+                            Id = "d32fac0d-ede8-480f-8c17-db244472d5d6",
+                            ConcurrencyStamp = "b49715ca-a0f4-4f38-9ff9-779cc717f890",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -781,10 +783,10 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BookID")
+                    b.Property<Guid>("BookID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal?>("GiaNhap")
+                    b.Property<decimal>("GiaNhap")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid?>("IdNhanVienNhap")
@@ -793,10 +795,10 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<Guid?>("IdSachNhap")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("NgayNhap")
+                    b.Property<DateTime>("NgayNhap")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("SoLuong")
+                    b.Property<int>("SoLuong")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -1088,7 +1090,7 @@ namespace SD85_WebBookOnline.Api.Migrations
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Cart", b =>
                 {
                     b.HasOne("SD85_WebBookOnline.Share.Models.User", "User")
-                        .WithMany("Carts")
+                        .WithMany("Cart")
                         .HasForeignKey("UserID");
 
                     b.HasOne("SD85_WebBookOnline.Share.Models.Voucher", "Voucher")
@@ -1158,7 +1160,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                 {
                     b.HasOne("SD85_WebBookOnline.Share.Models.Book", "Book")
                         .WithMany("InputSlip")
-                        .HasForeignKey("BookID");
+                        .HasForeignKey("BookID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SD85_WebBookOnline.Share.Models.User", "User")
                         .WithMany()
@@ -1242,7 +1246,7 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.User", b =>
                 {
-                    b.Navigation("Carts");
+                    b.Navigation("Cart");
 
                     b.Navigation("DeliveryAddress");
                 });

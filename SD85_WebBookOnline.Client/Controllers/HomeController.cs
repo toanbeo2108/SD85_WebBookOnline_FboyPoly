@@ -11,7 +11,7 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using SD85_WebBookOnline.Share.Models;
-
+using Microsoft.AspNetCore.Identity;
 namespace SD85_WebBookOnline.Client.Controllers
 {
     public class HomeController : Controller
@@ -50,18 +50,6 @@ namespace SD85_WebBookOnline.Client.Controllers
                 ViewBag.lstTopquantitySold = lstselectTopquantitysold;
             }
             
-
-            //var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
-            //var httpClient = new HttpClient();
-            //var responCombo = await _HttpClient.GetAsync(urlCombo);
-            //string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
-            //var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
-            //if(lstCombo == null)
-            //{
-            //    return NotFound() ;
-            //}
-            //var lstselectcombotop = lstCombo.OrderByDescending(x => x.Price).Take(6).ToList();
-            //ViewBag.lstComboTop = lstselectcombotop;
             return View();
         }
 
@@ -87,9 +75,7 @@ namespace SD85_WebBookOnline.Client.Controllers
             if (response.IsSuccessStatusCode)
             {
                 string token = await response.Content.ReadAsStringAsync();
-
                 Response.Cookies.Append("Token", token);
-
                 // Tạo một đối tượng HttpRequestMessage.
                 HttpRequestMessage request = new HttpRequestMessage();
 
@@ -105,10 +91,20 @@ namespace SD85_WebBookOnline.Client.Controllers
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 var check = User.Identity.IsAuthenticated;
-                
+
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                string jsonUserId = JsonConvert.SerializeObject(userId);
+                Response.Cookies.Append("UserId", jsonUserId);
                 return RedirectToAction("Index", "Home");
 
+                //// Lấy UserID
+                //var url = $"https://localhost:7079/api/user/GetUserId/{loginUser.Username}";
+                //var respon = await _httpClient.GetAsync(url);
+                //string api = await respon.Content.ReadAsStringAsync();
+                //var UserId = JsonConvert.DeserializeObject<string>(api);
+                //Response.Cookies.Append("UserID", UserId);
 
+                return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -176,7 +172,7 @@ namespace SD85_WebBookOnline.Client.Controllers
             }
         }
 
-        public async Task<IActionResult> AddToCart(Guid id)
+        public async Task<IActionResult> AddToCart(Guid id, int quantity)
         {
             var urlBook = "https://localhost:7079/api/Book/get-all-book";
             var httpClient = new HttpClient();
@@ -202,33 +198,45 @@ namespace SD85_WebBookOnline.Client.Controllers
             {
                 myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
             }
-            CartItems cartItems = new CartItems();
-            cartItems.CartItemID = Guid.NewGuid();
-            cartItems.CartID = null;
-            if(book != null)
-            {
-                cartItems.BookID = book.BookID;
-                cartItems.ComboID = null;
-                cartItems.ItemName = book.BookName;
-                cartItems.Image = book.MainPhoto;
-                cartItems.Price = book.Price;
-                cartItems.Quantity = 1;
-                cartItems.ToTal = cartItems.Price * cartItems.Quantity;
-                cartItems.Status = 1;
-            }
-            if(combo != null)
-            {
-                cartItems.BookID = null;
-                cartItems.ComboID = combo.ComboID;
-                cartItems.ItemName = combo.ComboName;
-                cartItems.Image = combo.Image;
-                cartItems.Price = combo.Price;
-                cartItems.Quantity = 1;
-                cartItems.ToTal = cartItems.Price * cartItems.Quantity;
-                cartItems.Status = 1;
-            }
 
-            myListCartItem.Add(cartItems);
+            var existingItem = myListCartItem.FirstOrDefault(x => x.BookID == book.BookID);
+            if (existingItem != null)
+            {
+                // Nếu sách đã có, tăng số lượng lên 1
+                existingItem.Quantity += quantity;
+                existingItem.ToTal = existingItem.Price * existingItem.Quantity;
+            }
+            else
+            {
+                CartItems cartItems = new CartItems();
+                cartItems.CartItemID = Guid.NewGuid();
+                cartItems.CartID = null;
+                if (book != null)
+                {
+                    cartItems.BookID = book.BookID;
+                    cartItems.ComboID = null;
+                    cartItems.ItemName = book.BookName;
+                    cartItems.Image = book.MainPhoto;
+                    cartItems.Price = book.Price;
+                    cartItems.Quantity = quantity;
+                    cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                    cartItems.Status = 1;
+                }
+                if (combo != null)
+                {
+                    cartItems.BookID = null;
+                    cartItems.ComboID = combo.ComboID;
+                    cartItems.ItemName = combo.ComboName;
+                    cartItems.Image = combo.Image;
+                    cartItems.Price = combo.Price;
+                    cartItems.Quantity = quantity;
+                    cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                    cartItems.Status = 1;
+                }
+                myListCartItem.Add(cartItems);
+            }
+            
+
             string updateJson = JsonConvert.SerializeObject(myListCartItem);
             Response.Cookies.Append("myCart", updateJson);
             return RedirectToAction("MyCart", "Home");
@@ -252,9 +260,73 @@ namespace SD85_WebBookOnline.Client.Controllers
             {
                 List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
                 ViewBag.myCart = myListCartItem;
+                decimal subtotal = 0;
+                foreach (var item in myListCartItem)
+                {
+                    subtotal += item.ToTal;
+                }
+                if (subtotal == 0)
+                {
+                    ViewBag.Subtotal = 0;
+                }
+                else
+                {
+                    ViewBag.Subtotal = subtotal;
+                }
             }
+            
             return View();
         }
+        public async Task<IActionResult> DeleteToCart(Guid id)
+        {
+            string json = Request.Cookies["myCart"];
+            if (json != null)
+            {
+                List<CartItems> myList = JsonConvert.DeserializeObject<List<CartItems>>(json);
+
+                // Tìm CartItems có ID tương ứng
+                var item = myList.FirstOrDefault(x => x.BookID == id);
+                if (item != null)
+                {
+                    // Xóa mục khỏi danh sách
+                    myList.Remove(item);
+
+                    // Chuyển đổi danh sách CartItems thành chuỗi JSON và lưu lại vào cookie
+                    string updatedJson = JsonConvert.SerializeObject(myList);
+                    Response.Cookies.Append("myCart", updatedJson);
+                }
+            }
+
+            return RedirectToAction("MyCart", "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Shop()
+        {
+            // Đọc cookie
+            var urlBook = $"https://localhost:7079/api/Book/get-all-book";
+            var responBook = await _httpClient.GetAsync(urlBook);
+            string apiDataBook = await responBook.Content.ReadAsStringAsync();
+            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            if (lstBook == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var lstBookOk = lstBook.Where(x => x.Status == 1).ToList();
+                if (lstBookOk == null)
+                {
+                    return NotFound();
+                }
+                var lstSelect = lstBookOk.Take(18).ToList();
+                ViewBag.lstSelect = lstSelect;
+               
+            }
+
+            return Ok();
+        }
+        [HttpPost]
+
         public IActionResult Checkout()
         {
            
