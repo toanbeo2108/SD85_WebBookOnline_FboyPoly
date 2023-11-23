@@ -273,7 +273,7 @@ namespace SD85_WebBookOnline.Client.Controllers
                 {
                     ViewBag.Subtotal = subtotal;
                 }
-            }
+            }ViewBag.Subtotal = 0;
             
             return View();
         }

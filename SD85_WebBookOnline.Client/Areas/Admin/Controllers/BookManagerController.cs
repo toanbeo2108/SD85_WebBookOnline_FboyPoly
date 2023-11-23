@@ -80,7 +80,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             ViewBag.lstForm = lstForm;
             return View();
         }
-        [HttpPost,Route("Add-Book")]
+        [HttpPost, Route("Add-Book")]
         public async Task<IActionResult> CreateBook(Book bk, IFormFile imageFile)
         {
             var urlAllBook = $"https://localhost:7079/api/Book/get-all-book";
@@ -88,12 +88,12 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             string apiDataAllBook = await responAllBook.Content.ReadAsStringAsync();
             var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataAllBook);
 
-            if(lstBook == null)
+            if (lstBook == null)
             {
                 return NotFound("Hiện Tại Không có sách trên Gian Hàng");
             }
             var book = lstBook.FirstOrDefault(x => x.BookName.ToLower() == bk.BookName.ToLower());
-            if(book == null)
+            if (book == null)
             {
                 var urlManufacturer = $"https://localhost:7079/api/Manufacturer/GetAllManufacturer";
                 var responManufacturer = await _httpClient.GetAsync(urlManufacturer);
@@ -116,31 +116,47 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 ViewBag.lstForm = lstForm;
 
 
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photoBooks", imageFile.FileName);
+                    var stream = new FileStream(path, FileMode.Create);
+                    imageFile.CopyTo(stream);
+                    bk.MainPhoto = imageFile.FileName;
+                }
+                var token = Request.Cookies["Token"];
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                bk.BookID = Guid.NewGuid();
+                //bk.CreateDate = DateTime.Now;
 
-            var content = new StringContent(JsonConvert.SerializeObject(bk), Encoding.UTF8, "application/json");
-            var respon = await _httpClient.PostAsync(urlBook, content);
-            //if (respon.IsSuccessStatusCode)
-            //{
-            //    return RedirectToAction("AllBookManager", "BookManager", new { area = "Admin" });
-            //}
-            //TempData["erro message"] = "thêm thất bại";
-            //return View();
-            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                _stt = true;
-                _mess = "Thêm thành công !";
-            }
-            else
-            {
-                _stt = false;
-                _mess = "Thêm thất bại";
-            }
-            return Json(new
-            {
-                status = _stt,
-                message = _mess,
-            });
 
+                var urlBook = $"https://localhost:7079/api/Book/add-book?bookid={bk.BookID}&ManufacturerID={bk.ManufacturerID}&FormID={bk.FormID}&CouponID={bk.CouponID}&BookName={bk.BookName}&TotalQuantity={bk.TotalQuantity}&MainPhoto={bk.MainPhoto}&QuantitySold={bk.QuantitySold}&QuantityExists={bk.QuantityExists}&EntryPrice={bk.EntryPrice}&Price={bk.Price}&Information={bk.Information}&Description={bk.Description}&ISBN={bk.ISBN}&YearOfRelease={bk.YearOfRelease}&weight={bk.Weight}&volume={bk.Volume}&TransactionStatus={bk.TransactionStatus}&Status={bk.Status}";
+                var httpClient = new HttpClient();
+
+                var content = new StringContent(JsonConvert.SerializeObject(bk), Encoding.UTF8, "application/json");
+                var respon = await _httpClient.PostAsync(urlBook, content);
+                if (respon.IsSuccessStatusCode)
+                {
+                    InputSlip ip = new InputSlip();
+                    ip.InputSlipID = Guid.NewGuid();
+                    ip.IdNhanVienNhap = null;
+                    ip.IdSachNhap = bk.BookID;
+                    ip.NgayNhap = DateTime.Now;
+                    ip.SoLuong = bk.TotalQuantity;
+                    ip.GiaNhap = bk.EntryPrice;
+                    var urlInputSlip = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";
+                    var contentIP = new StringContent(JsonConvert.SerializeObject(ip), Encoding.UTF8, "application/json");
+                    var responIP = await _httpClient.PostAsync(urlInputSlip, contentIP);
+                    if (responIP.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("AllBookManager", "BookManager", new { area = "Admin" });
+                    }
+                    return BadRequest("Bạn đã thêm sách thành công nhưng Phiếu Nhập không thể khởi tạo !");
+                }
+                TempData["erro message"] = "thêm thất bại";
+                return View(TempData);
+            }
+            return View(TempData);
+            
         }
         [HttpGet,Route("detail-book/{id}")]
         public async Task<IActionResult> BookDetail(Guid id)
