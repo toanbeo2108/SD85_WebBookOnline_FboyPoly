@@ -9,6 +9,9 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
     public class CategoryManagerController : Controller
     {
         private HttpClient _httpClient;
+        bool _stt = false;
+        string _mess = "";
+        object _data = null;
         public CategoryManagerController()
         {
             _httpClient = new HttpClient();
@@ -38,7 +41,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         {
             return View();
         }
-        [HttpPost]
+        [HttpPost,Route("add-category")]
         public async Task<IActionResult> CreateCategory(Category bk)
         {
             var token = Request.Cookies["Token"];
@@ -49,14 +52,30 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(bk), Encoding.UTF8, "application/json");
             var respon = await httpClient.PostAsync(urlBook, content);
-            if (respon.IsSuccessStatusCode)
+            //if (respon.IsSuccessStatusCode)
+            //{
+            //    return RedirectToAction("AllCategoryManager", "CategoryManager", new { area = "Admin" });
+            //}
+            //TempData["erro message"] = "thêm thất bại";
+            //return View();
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return RedirectToAction("AllCategoryManager", "CategoryManager", new { area = "Admin" });
+                _stt = true;
+                _mess = "Thêm thành công !";
+                
             }
-            TempData["erro message"] = "thêm thất bại";
-            return View();
+            else
+            {
+                _stt = false;
+                _mess = "Thêm thất bại";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess,
+            });
         }
-        [HttpGet]
+        [HttpGet,Route("detail-category/{id}")]
         public async Task<IActionResult> CategoryDetail(Guid id)
         {
             var token = Request.Cookies["Token"];
@@ -65,15 +84,32 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var responBook = await _httpClient.GetAsync(urlBook);
             string apiDataBook = await responBook.Content.ReadAsStringAsync();
             var lstBook = JsonConvert.DeserializeObject<List<Category>>(apiDataBook);
-            var Book = lstBook.FirstOrDefault(x => x.CategoryID == id);
-            if (Book == null)
+            var cart = lstBook.FirstOrDefault(x => x.CategoryID == id);
+            //if (Book == null)
+            //{
+            //    return BadRequest();
+            //}
+            //else
+            //{
+            //    return View(Book);
+            //}
+            if (responBook.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return BadRequest();
+                _stt = true;
+                _mess = "";
+                _data = cart;
             }
             else
             {
-                return View(Book);
+                _stt = false;
+                _mess = "Không tìm thấy thông tin";
             }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess,
+                data = _data
+            });
         }
         [HttpGet]
         public async Task<IActionResult> UpdateCategory(Guid id)
@@ -94,20 +130,34 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return View(Book);
             }
         }
-        [HttpPost]
-        public async Task<IActionResult> UpdateCategory(Guid id, Form vc)
+        [HttpPost, Route("update-categorys/{id}")]
+        public async Task<IActionResult> UpdateCategory(Guid id, Category vc)
         {
             var urlBook = $"https://localhost:7079/api/Category/UpdateCategory/{id}";
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8, "application/json");
-            var respon = await _httpClient.PutAsync(urlBook, content);
-            if (!respon.IsSuccessStatusCode)
-            {
-                return BadRequest();
-            }
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            return RedirectToAction("AllFormManager", "FormManager", new { area = "Admin" });
-
+            var respon = await _httpClient.PutAsync(urlBook, content);
+            //if (!respon.IsSuccessStatusCode)
+            //{
+            //    return BadRequest();
+            //}
+            //return RedirectToAction("AllFormManager", "FormManager", new { area = "Admin" });
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                _stt = true;
+                _mess = "Cập nhật thành công !";
+            }
+            else
+            {
+                _stt = false;
+                _mess = "Cập nhật thất bại";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess,
+            });
         }
     }
 }

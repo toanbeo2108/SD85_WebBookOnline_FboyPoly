@@ -12,6 +12,9 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 {
     public class BookManagerController : Controller
     {
+        bool _stt = false;
+        string _mess = "";
+        object _data = null;
         private HttpClient _httpClient;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
@@ -28,6 +31,24 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> AllBookManager()
         {
+            var urlManufacturer = $"https://localhost:7079/api/Manufacturer/GetAllManufacturer";
+            var responManufacturer = await _httpClient.GetAsync(urlManufacturer);
+            string apiDataManufacturer = await responManufacturer.Content.ReadAsStringAsync();
+            var lstManufacturer = JsonConvert.DeserializeObject<List<Manufacturer>>(apiDataManufacturer);
+            ViewBag.lstManufacturer = lstManufacturer;
+
+            var urlCoupon = $"https://localhost:7079/api/Coupon/GetAllCoupon";
+            var responCoupon = await _httpClient.GetAsync(urlCoupon);
+            string apiDataCoupon = await responCoupon.Content.ReadAsStringAsync();
+            var lstCoupon = JsonConvert.DeserializeObject<List<Coupon>>(apiDataCoupon);
+            ViewBag.lstCoupon = lstCoupon;
+
+            var urlForm = $"https://localhost:7079/api/Form/GetAllForm";
+            var responForm = await _httpClient.GetAsync(urlForm);
+            string apiDataForm = await responForm.Content.ReadAsStringAsync();
+            var lstForm = JsonConvert.DeserializeObject<List<Form>>(apiDataForm);
+            ViewBag.lstForm = lstForm;
+
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var urlBook = $"https://localhost:7079/api/Book/get-all-book";
@@ -59,7 +80,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             ViewBag.lstForm = lstForm;
             return View();
         }
-        [HttpPost]
+        [HttpPost, Route("Add-Book")]
         public async Task<IActionResult> CreateBook(Book bk, IFormFile imageFile)
         {
             var urlAllBook = $"https://localhost:7079/api/Book/get-all-book";
@@ -67,12 +88,12 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             string apiDataAllBook = await responAllBook.Content.ReadAsStringAsync();
             var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataAllBook);
 
-            if(lstBook == null)
+            if (lstBook == null)
             {
                 return NotFound("Hiện Tại Không có sách trên Gian Hàng");
             }
             var book = lstBook.FirstOrDefault(x => x.BookName.ToLower() == bk.BookName.ToLower());
-            if(book == null)
+            if (book == null)
             {
                 var urlManufacturer = $"https://localhost:7079/api/Manufacturer/GetAllManufacturer";
                 var responManufacturer = await _httpClient.GetAsync(urlManufacturer);
@@ -134,9 +155,10 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 TempData["erro message"] = "thêm thất bại";
                 return View(TempData);
             }
-            return View("Sản Phẩm Đã tồn tại trong gian hàng, hãy vào update số lượng lên :>");
+            return View(TempData);
+            
         }
-        [HttpGet]
+        [HttpGet,Route("detail-book/{id}")]
         public async Task<IActionResult> BookDetail(Guid id)
         {
             var token = Request.Cookies["Token"];
@@ -146,14 +168,40 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             string apiDataBook = await responBook.Content.ReadAsStringAsync();
             var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
             var Book = lstBook.FirstOrDefault(x => x.BookID == id);
-            if (Book == null)
+            if (responBook.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return BadRequest();
+                if (Book == null)
+                {
+                    _stt = false;
+                    _mess = "Không tìm thấy!";
+                }
+                else
+                {
+                    _stt = true;
+                    _mess = "";
+                    _data = Book;
+                }
             }
             else
             {
-                return View(Book);
+                _stt = false;
+                _mess = "Lỗi";
             }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess,
+                data = _data
+            });
+            //if (Book == null)
+            //{
+            //    return BadRequest();
+            //}
+            //else
+            //{
+            //    return View(Book);
+            //}
+           
         }
         [HttpGet]
         public async Task<IActionResult> UpdateBook(Guid id)
@@ -174,7 +222,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return View(Book);
             }
         }
-        [HttpPost]
+        [HttpPost,Route("update-Book/{id}")]
         public async Task<IActionResult> UpdateBook(Guid id, Book vc, IFormFile imageFile)
         {
             var urlBook = $"https://localhost:7079/api/Book/updat-Book/{id}";
@@ -199,27 +247,62 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             }
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8, "application/json");
             var respon = await _httpClient.PutAsync(urlBook, content);
-            if (!respon.IsSuccessStatusCode)
+            //if (!respon.IsSuccessStatusCode)
+            //{
+            //    return BadRequest();
+            //}
+            //var token = Request.Cookies["Token"];
+            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            //return RedirectToAction("AllBookManager", "BookManager", new { area = "Admin" });
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return BadRequest();
-            }
-            var token = Request.Cookies["Token"];
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            return RedirectToAction("AllBookManager", "BookManager", new { area = "Admin" });
 
+                _stt = true;
+                _mess = "cập nhật thành công !";
+            }
+            else
+            {
+                _stt = false;
+                _mess = "thất bại!";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess
+            });
         }
     
 
-        [HttpPost]
+        [HttpPost,Route("Dell-Book/{id}")]
         public async Task<IActionResult> DeleteBook(Guid id)
         {
-            if (await TryDeleteBook(id))
-            {
-                return RedirectToAction("AllBookManager", "BookManager", new { area = "Admin" });
-            }
+            //if (await TryDeleteBook(id))
+            //{
+            //    return RedirectToAction("AllBookManager", "BookManager", new { area = "Admin" });
+            //}
 
-            TempData["ErrorMessage"] = "Xóa Combo không thành công"; // Thêm thông báo lỗi
-            return RedirectToAction("AllBookManager", "BookManager", new { area = "Admin" });
+            //TempData["ErrorMessage"] = "Xóa Combo không thành công"; // Thêm thông báo lỗi
+            //return RedirectToAction("AllBookManager", "BookManager", new { area = "Admin" });
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var urlBook = $"https://localhost:7079/api/Book/delete-book/{id}";
+
+            var respon = await _httpClient.DeleteAsync(urlBook);
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                _stt = true;
+                _mess = "xóa thành công";
+            }
+            else
+            {
+                _stt = false;
+                _mess = "xóa thất bại";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess,
+            });
         }
 
         private async Task<bool> TryDeleteBook(Guid id)

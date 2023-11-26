@@ -9,6 +9,9 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
     public class LanguageManagerController : Controller
     {
         private HttpClient _httpClient;
+        string _mess = "";
+        bool _stt = false;
+        object _data = null;
         public LanguageManagerController()
         {
             _httpClient = new HttpClient();
@@ -64,7 +67,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         {
             return View();
         }
-        [HttpPost]
+        [HttpPost,Route("add-Language")]
         public async Task<IActionResult> CreateLanguage(Languge bk)
         {
             var token = Request.Cookies["Token"];
@@ -75,14 +78,30 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(bk), Encoding.UTF8, "application/json");
             var respon = await httpClient.PostAsync(urlBook, content);
-            if (respon.IsSuccessStatusCode)
+            //if (respon.IsSuccessStatusCode)
+            //{
+            //    return RedirectToAction("AllLanguageManager", "LanguageManager", new { area = "Admin" });
+            //}
+            //TempData["erro message"] = "thêm thất bại";
+            //return View();
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return RedirectToAction("AllLanguageManager", "LanguageManager", new { area = "Admin" });
+                _stt = true;
+                _mess = "Thêm thành công !";
+
             }
-            TempData["erro message"] = "thêm thất bại";
-            return View();
+            else
+            {
+                _stt = false;
+                _mess = "Thêm thất bại";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess,
+            });
         }
-        [HttpGet]
+        [HttpGet,Route("detail-Language/{id}")]
         public async Task<IActionResult> LanguageDetail(Guid id)
         {
             var token = Request.Cookies["Token"];
@@ -92,14 +111,31 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             string apiDataBook = await responBook.Content.ReadAsStringAsync();
             var lstBook = JsonConvert.DeserializeObject<List<Languge>>(apiDataBook);
             var Book = lstBook.FirstOrDefault(x => x.LangugeID == id);
-            if (Book == null)
+            //if (Book == null)
+            //{
+            //    return BadRequest();
+            //}
+            //else
+            //{
+            //    return View(Book);
+            //}
+            if (responBook.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return BadRequest();
+                _stt = true;
+                _mess = "";
+                _data = Book;
             }
             else
             {
-                return View(Book);
+                _stt = false;
+                _mess = "Không tìm thấy thông tin";
             }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess,
+                data = _data
+            });
         }
         [HttpGet]
         public async Task<IActionResult> UpdateLanguage(Guid id)
@@ -120,19 +156,35 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return View(Book);
             }
         }
-        [HttpPost]
+        [HttpPost,Route("update-Languge/{id}")]
         public async Task<IActionResult> UpdateLanguage(Guid id, Languge vc)
         {
             var urlBook = $"https://localhost:7079/api/Languge/UpdateLaguge/{id}";
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8, "application/json");
             var respon = await _httpClient.PutAsync(urlBook, content);
-            if (!respon.IsSuccessStatusCode)
-            {
-                return BadRequest();
-            }
-            var token = Request.Cookies["Token"];
+            //if (!respon.IsSuccessStatusCode)
+                //{
+                //    return BadRequest();
+                //}
+                var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            return RedirectToAction("AllLangugeManager", "LangugeManager", new { area = "Admin" });
+            //return RedirectToAction("AllLangugeManager", "LangugeManager", new { area = "Admin" });
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                _stt = true;
+                _mess = "Cập nhật thành công !";
+
+            }
+            else
+            {
+                _stt = false;
+                _mess = "Cập nhật thất bại";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess,
+            });
 
         }
     }
