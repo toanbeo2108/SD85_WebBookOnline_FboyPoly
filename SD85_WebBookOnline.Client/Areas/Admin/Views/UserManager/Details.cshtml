@@ -10,7 +10,13 @@
             <div class="col-lg-4">
                 <div class="card mb-4">
                     <div class="card-body text-center">
-                        <img src="~/images/@Model.Avatar" alt="avatar" class="rounded-circle img-fluid" style="width: 150px; height:150px; object-fit: cover">
+                        @if (Model.Avatar == null)
+                        {
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfHKr4J28Bd2GLN_c-P4FtX99NIFVS6rTurA&usqp=CAU" alt="avatar" class="rounded-circle img-fluid" style="width: 150px; height:150px; object-fit: cover">
+                        }else
+                        {
+                            <img src="~/images/@Model.Avatar" alt="avatar" class="rounded-circle img-fluid" style="width: 150px; height:150px; object-fit: cover">
+                        }
                         <h5 class="my-3">@Model.UserName</h5>
                         <p class="text-muted mb-1">Full Stack Developer</p>
                         <p class="text-muted mb-4">Boy Cầu Giấy, sấy nát trái tym iem <3</p>

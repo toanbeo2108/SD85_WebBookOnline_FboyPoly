@@ -15,84 +15,75 @@ namespace SD85_WebBookOnline.Client.Controllers
             _httpClient = new HttpClient();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllUser()
-        {
-            var token = Request.Cookies["Token"];
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var url = $"https://localhost:7079/api/user/GetAllUser";
-            var httpClient = new HttpClient();
-            var response = await _httpClient.GetAsync(url);
-            string apiDataUser = await response.Content.ReadAsStringAsync();
-            var ListUser = JsonConvert.DeserializeObject<List<User>>(apiDataUser);
-            return View(ListUser);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> Account()
+        //{
+        //    // Lấy UserID
+        //    string UserId = Request.Cookies["UserID"];
 
-        [HttpGet]
-        public async Task<IActionResult> Details(string id)
-        {
-            var token = Request.Cookies["Token"];
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var url = $"https://localhost:7079/api/user/GetUsersById?id=" + id;
-            var httpClient = new HttpClient();
-            var response = await _httpClient.GetAsync(url);
-            string apiDataUser = await response.Content.ReadAsStringAsync();
-            var User = JsonConvert.DeserializeObject<User>(apiDataUser);
-            return View(User);
-        }
-        // Mở form
-        [HttpGet]
-        public async Task<IActionResult> Update(string id)
-        {
-            var token = Request.Cookies["Token"];
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var url = $"https://localhost:7079/api/user/GetUsersById?id=" + id;
-            var httpClient = new HttpClient();
-            var response = await _httpClient.GetAsync(url);
-            string apiDataUser = await response.Content.ReadAsStringAsync();
-            var User = JsonConvert.DeserializeObject<User>(apiDataUser);
-            return View(User);
-        }
+        //    var token = Request.Cookies["Token"];
+        //    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        [HttpPost]
-        public async Task<IActionResult> Update(User user, IFormFile imageFile)
-        {
-            var token = Request.Cookies["Token"];
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        //    var url = $"https://localhost:7079/api/user/GetUsersById?id=" + UserId;
+        //    var httpClient = new HttpClient();
+        //    var response = await _httpClient.GetAsync(url);
+        //    string apiDataUser = await response.Content.ReadAsStringAsync();
+        //    var User = JsonConvert.DeserializeObject<User>(apiDataUser);
+        //    return View();
+        //}
+        //// Mở form
+        //[HttpGet]
+        //public async Task<IActionResult> Update(string id)
+        //{
+        //    var token = Request.Cookies["Token"];
+        //    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        //    var url = $"https://localhost:7079/api/user/GetUsersById?id=" + id;
+        //    var httpClient = new HttpClient();
+        //    var response = await _httpClient.GetAsync(url);
+        //    string apiDataUser = await response.Content.ReadAsStringAsync();
+        //    var User = JsonConvert.DeserializeObject<User>(apiDataUser);
+        //    return View(User);
+        //}
 
-            string apiURL = $"https://localhost:7079/api/user/UpdateUser";
+        //[HttpPost]
+        //public async Task<IActionResult> Update(User user, IFormFile imageFile)
+        //{
+        //    var token = Request.Cookies["Token"];
+        //    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            if (imageFile != null && imageFile.Length > 0)
-            {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageFile.FileName);
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    await imageFile.CopyToAsync(stream);
-                }
-                user.Avatar = imageFile.FileName;
-            }
-            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync(apiURL, content);
+        //    string apiURL = $"https://localhost:7079/api/user/UpdateUser";
 
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("GetAllUser");
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
+        //    if (imageFile != null && imageFile.Length > 0)
+        //    {
+        //        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageFile.FileName);
+        //        using (var stream = new FileStream(path, FileMode.Create))
+        //        {
+        //            await imageFile.CopyToAsync(stream);
+        //        }
+        //        user.Avatar = imageFile.FileName;
+        //    }
+        //    var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+        //    var response = await _httpClient.PutAsync(apiURL, content);
+
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        return RedirectToAction("GetAllUser");
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
 
 
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var token = Request.Cookies["Token"];
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            return View();
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> Index()
+        //{
+        //    var token = Request.Cookies["Token"];
+        //    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        //    return View();
+        //}
 
 
     }

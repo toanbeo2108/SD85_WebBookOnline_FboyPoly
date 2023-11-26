@@ -25,34 +25,37 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             return await ires.GetAll();
         }
+        [HttpGet("GetBookByID/{id}")]
+        public async Task<Book> GetBookById(Guid id)
+        {
+            return await ires.GetByID(id);
+        }
         [HttpPost("add-book")]
         public async Task<bool> addbook(Guid bookid,Guid? ManufacturerID,Guid? FormID, Guid? CouponID, string BookName, int TotalQuantity, string MainPhoto, int QuantitySold, int QuantityExists, decimal EntryPrice,decimal Price, string Information, string Description, string ISBN, int YearOfRelease, DateTime? DeleteDate, int TransactionStatus, int Status, decimal weight, decimal volume)
         {
-
-                Book b = new Book();
-                b.BookID = bookid;
-                b.ManufacturerID = ManufacturerID;
-                b.FormID = FormID;
-                b.CouponID = CouponID;
-                b.BookName = BookName;
-                b.TotalQuantity = TotalQuantity;
-                b.MainPhoto = MainPhoto;
-                b.QuantitySold = QuantitySold;
-                b.QuantityExists = QuantityExists;
-                b.EntryPrice = EntryPrice;
-                b.Price = Price;
-                b.Information = Information;
-                b.Description = Description;
-                b.ISBN = ISBN;
-                b.YearOfRelease = YearOfRelease;
-                b.CreateDate = DateTime.Now;
-                b.DeleteDate = DeleteDate;
-                b.Weight = weight;
-                b.Volume = volume;
-                b.TransactionStatus = TransactionStatus;
-                b.Status = Status;
-                return await ires.CreateItem(b);
-
+            Book b = new Book();
+            b.BookID = bookid;
+            b.ManufacturerID = ManufacturerID;
+            b.FormID = FormID;
+            b.CouponID = CouponID;
+            b.BookName = BookName;
+            b.TotalQuantity = TotalQuantity;
+            b.MainPhoto = MainPhoto;
+            b.QuantitySold = QuantitySold;
+            b.QuantityExists = QuantityExists;
+            b.EntryPrice = EntryPrice;
+            b.Price = Price;
+            b.Information = Information;
+            b.Description = Description;
+            b.ISBN = ISBN;
+            b.YearOfRelease = YearOfRelease;
+            b.CreateDate = DateTime.Now;
+            b.DeleteDate = DeleteDate;
+            b.Weight = weight;
+            b.Volume = volume;
+            b.TransactionStatus = TransactionStatus;
+            b.Status = Status;
+            return await ires.CreateItem(b);
         }
         [HttpDelete("delete-book/{id}")]
         public async Task<bool> deleteBook(Guid id)

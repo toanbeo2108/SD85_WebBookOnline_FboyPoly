@@ -49,8 +49,12 @@ namespace SD85_WebBookOnline.Responsitories
 		{
 			return await dbset.ToListAsync();
 		}
+        public async Task<T> GetByID(Guid id)
+        {
+            return await dbset.FindAsync(id);
+        }
 
-		public async Task<bool> UpdateItem(T item)
+        public async Task<bool> UpdateItem(T item)
 		{
 			try
 			{

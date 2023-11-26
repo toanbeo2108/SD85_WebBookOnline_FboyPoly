@@ -4,12 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SD85_WebBookOnline.Api.Data;
-using SD85_WebBookOnline.Api.IResponsitories;
 using SD85_WebBookOnline.Api.IServices.Services;
 using SD85_WebBookOnline.Api.IServices;
 using System;
 using System.Text;
 using SD85_WebBookOnline.Share.Models;
+using SD85_WebBookOnline.Api.IResponsitories;
+using SD85_WebBookOnline.Api.Responsitories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add DI
 builder.Services.AddScoped<IRegisterServices, RegisterServices>();
 builder.Services.AddScoped<ILoginServices, LoginServices>();
+builder.Services.AddScoped<ICartServices, CartServies>();
 
 // Add Identity
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>()

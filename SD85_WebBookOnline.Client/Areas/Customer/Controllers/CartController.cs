@@ -2,7 +2,10 @@
 using Newtonsoft.Json;
 using SD85_WebBookOnline.Client.Controllers;
 using SD85_WebBookOnline.Share.Models;
+using System.Globalization;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Web.Helpers;
 
 namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 {
@@ -47,7 +50,8 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
         }
         public async Task<IActionResult> AddToCart(Guid id, int quantity)
         {
-            var urlBook = "https://localhost:7079/api/Book/get-all-book";
+            // lấy list book
+            var urlBook = "https://localhost:7079/api/Book/GetBookByID/"+id;
             var httpClient = new HttpClient();
             var responseBook = await httpClient.GetAsync(urlBook);
             if (!responseBook.IsSuccessStatusCode)
@@ -55,189 +59,273 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                 return BadRequest("Lỗi khi tải danh sách sách.");
             }
             string apiDataBook = await responseBook.Content.ReadAsStringAsync();
-            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
-            ViewBag.lstBook = lstBook;
-            var book = lstBook.FirstOrDefault(x => x.BookID == id);
+            var book = JsonConvert.DeserializeObject<Book>(apiDataBook);
 
+            // lấy list sách
             var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
             var responCombo = await _httpClient.GetAsync(urlCombo);
             string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
             var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
             var combo = lstCombo.FirstOrDefault(x => x.ComboID == id);
 
-            string json = Request.Cookies["myCart"];
-            List<CartItems> myListCartItem = new List<CartItems>();
-            if (json != null)
+            // Lấy danh sách giỏ hàng của người dùng chưa thanh toán
+            string UserId = Request.Cookies["UserID"];
+            var urlCart = $"https://localhost:7079/api/Cart/GetCartByIdUser/{UserId}?status=1";
+            var responCart = await _httpClient.GetAsync(urlCart);
+            string apiDataCart = await responCart.Content.ReadAsStringAsync();
+            var ListCart = JsonConvert.DeserializeObject<List<Cart>>(apiDataCart);
+            // Kiểm tra xem nếu không có giỏ hàng nào thì sẽ tạo 1 giỏ hàng rỗng cho người dùng:
+            if (ListCart.Count() == 0)
             {
-                myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
+                Cart cart = new Cart();
+                cart.CartId = Guid.NewGuid();
+                cart.VoucherID = null;
+                cart.UserID = UserId;
+                cart.PriceBeforeVoucher = 0;
+                cart.Total = 0;
+                cart.Status = 1;
+                var urlCreateCart = $"https://localhost:7079/api/Cart/CreateCart?CartId={cart.CartId}&voucherID={cart.VoucherID}&UserId={cart.UserID}&priceBeforeVoucher={cart.PriceBeforeVoucher}&total={cart.Total}";
+                var contentCreateCart = new StringContent(JsonConvert.SerializeObject(cart), Encoding.UTF8, "application/json");
+                var responCreateCart = await _httpClient.PostAsync(urlCreateCart, contentCreateCart);
+                if (!responCreateCart.IsSuccessStatusCode)
+                {
+                    return BadRequest("Lỗi tạo 1 giỏ hàng mới cho khách hàng");
+                }
             }
 
-            var existingItem = myListCartItem.FirstOrDefault(x => x.BookID == book.BookID);
-            if (existingItem != null)
+            // Lấy được danh sách CartItems dựa theo những Cart chưa thanh toán kia :
+            foreach (var Cart in ListCart)
             {
-                // Nếu sách đã có, tăng số lượng lên 1
-                existingItem.Quantity += quantity;
-                existingItem.ToTal = existingItem.Price * existingItem.Quantity;
-            }
-            else
-            {
-                CartItems cartItems = new CartItems();
-                cartItems.CartItemID = Guid.NewGuid();
-                cartItems.CartID = null;
-                if (book != null)
-                {
-                    cartItems.BookID = book.BookID;
-                    cartItems.ComboID = null;
-                    cartItems.ItemName = book.BookName;
-                    cartItems.Image = book.MainPhoto;
-                    cartItems.Price = book.Price;
-                    cartItems.Quantity = quantity;
-                    cartItems.ToTal = cartItems.Price * cartItems.Quantity;
-                    cartItems.Status = 1;
-                }
-                if (combo != null)
-                {
-                    cartItems.BookID = null;
-                    cartItems.ComboID = combo.ComboID;
-                    cartItems.ItemName = combo.ComboName;
-                    cartItems.Image = combo.Image;
-                    cartItems.Price = combo.Price;
-                    cartItems.Quantity = quantity;
-                    cartItems.ToTal = cartItems.Price * cartItems.Quantity;
-                    cartItems.Status = 1;
-                }
-                myListCartItem.Add(cartItems);
-            }
+                var urlCartItems = $"https://localhost:7079/api/CartItem/GetCartItemByCartID/{Cart.CartId}";
+                var responCartItems = await _httpClient.GetAsync(urlCartItems);
+                string apiDataCartItems = await responCartItems.Content.ReadAsStringAsync();
+                var ListCartItems = JsonConvert.DeserializeObject<List<CartItems>>(apiDataCartItems);
 
-            string updateJson = JsonConvert.SerializeObject(myListCartItem);
-            Response.Cookies.Append("myCart", updateJson);
-            return RedirectToAction("MyCart", "Cart");
+                // Kiểm tra xem sản phẩm tồn tại trong giỏ hàng chưa
+                CartItems existingItem = ListCartItems.FirstOrDefault(x => x.BookID == book.BookID);
+                if (existingItem != null)
+                {
+                    // Nếu sách đã có, tăng số lượng lên 
+                    existingItem.Quantity += quantity;
+                    existingItem.ToTal = existingItem.Price * existingItem.Quantity;
+
+                    // Cập nhật lại trong database
+                    var urlUpdateCartItems = $"https://localhost:7079/api/CartItem/Update-CartItem/{existingItem.CartItemID}";
+                    var contentUpdateCartItems = new StringContent(JsonConvert.SerializeObject(existingItem), Encoding.UTF8, "application/json");
+                    var responeUpdateCartItems = await _httpClient.PutAsync(urlUpdateCartItems, contentUpdateCartItems);
+                    if (!responeUpdateCartItems.IsSuccessStatusCode)
+                    {
+                        return BadRequest("Lỗi ko thể cập nhật lại số lượng sản phẩm");
+                    }
+                }
+                else
+                {
+                    CartItems cartItems = new CartItems();
+                    cartItems.CartItemID = Guid.NewGuid();
+                    cartItems.CartID = null;
+                    if (book != null)
+                    {
+                        cartItems.BookID = book.BookID;
+                        cartItems.ComboID = null;
+                        cartItems.ItemName = book.BookName;
+                        cartItems.Image = book.MainPhoto;
+                        cartItems.Price = book.Price;
+                        cartItems.Quantity = quantity;
+                        cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                        cartItems.Status = 1;
+                    }
+                    if (combo != null)
+                    {
+                        cartItems.BookID = null;
+                        cartItems.ComboID = combo.ComboID;
+                        cartItems.ItemName = combo.ComboName;
+                        cartItems.Image = combo.Image;
+                        cartItems.Price = combo.Price;
+                        cartItems.Quantity = quantity;
+                        cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                        cartItems.Status = 1;
+                    }
+                    // Dùng API thêm vào database
+                    var urlCreateCartItems = $"https://localhost:7079/api/CartItem/Add-CartItem?CartID={Cart.CartId}&BookID={cartItems.BookID}&image={cartItems.Image}&ItemName={cartItems.ItemName}&Price={cartItems.Price}&Quantity={cartItems.Quantity}&ToTal={cartItems.ToTal}&Status={cartItems.Status}";
+                    var contentCreateCartItems = new StringContent(JsonConvert.SerializeObject(cartItems), Encoding.UTF8, "application/json");
+                    var responCreateCartItems = await _httpClient.PostAsync(urlCreateCartItems, contentCreateCartItems);
+                    if (!responCreateCartItems.IsSuccessStatusCode)
+                    {
+                        return BadRequest("Lỗi thêm vào chi tiết giỏ hàng ( CartItems )");
+                    }
+                }
+
+            }
+            return RedirectToAction("MyCart", "Cart", new { area = "Customer" });
+
         }
         [HttpGet]
         public async Task<IActionResult> MyCart()
         {
-            var urlBook = "https://localhost:7079/api/Book/get-all-book";
-            var httpClient = new HttpClient();
-            var responseBook = await httpClient.GetAsync(urlBook);
-            if (!responseBook.IsSuccessStatusCode)
+            string UserId = Request.Cookies["UserID"];
+            if (UserId == null)
             {
-                return BadRequest("Lỗi khi tải danh sách sách.");
+                return BadRequest("Lỗi không tìm đc UserID");
             }
-            string apiDataBook = await responseBook.Content.ReadAsStringAsync();
-            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
-            ViewBag.lstBook = lstBook;
-
-            string json = Request.Cookies["myCart"];
-            if (json != null)
+            else if(UserId != null)
             {
-                List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
-                ViewBag.myCart = myListCartItem;
-                decimal subtotal = 0;
-                foreach (var item in myListCartItem)
+                // Lấy tất cả giỏ hàng của khách hàng có trạng thái == 1 ( chưa thanh toán )
+                var urlCart = $"https://localhost:7079/api/Cart/GetCartByIdUser/{UserId}?status=1";
+                var responCart = await _httpClient.GetAsync(urlCart);
+                string apiDataCart = await responCart.Content.ReadAsStringAsync();
+                var ListCart = JsonConvert.DeserializeObject<List<Cart>>(apiDataCart);
+
+                // Dùng vòng lặp để lấy được các CartItem dựa vào CartID
+                foreach (var Cart in ListCart)
                 {
-                    subtotal += item.ToTal;
-                }
-                if (subtotal == 0)
-                {
-                    ViewBag.Subtotal = 0;
-                }
-                else
-                {
-                    ViewBag.Subtotal = subtotal;
+                    var urlCartItems = $"https://localhost:7079/api/CartItem/GetCartItemByCartID/{Cart.CartId}";
+                    var responCartItems = await _httpClient.GetAsync(urlCartItems);
+                    string apiDataCartItems = await responCartItems.Content.ReadAsStringAsync();
+                    List<CartItems> ListCartItems = JsonConvert.DeserializeObject<List<CartItems>>(apiDataCartItems);
+
+                    ViewBag.myCartItems = ListCartItems;
+                    decimal subtotal = 0;
+                    foreach (var item in ListCartItems)
+                    {
+                        subtotal += item.ToTal;
+                    }
+                    if (subtotal == 0)
+                    {
+                        ViewBag.Subtotal = 0;
+                    }
+                    else
+                    {
+                        ViewBag.Subtotal = subtotal;
+                    }
+
                 }
             }
-
             return View();
         }
-
-
-        //[HttpPost]
-        //public async Task<IActionResult> Checkout()
-        //{
-            //var urlBook = "https://localhost:7079/api/Book/get-all-book";
-            //var httpClient = new HttpClient();
-            //var responseBook = await httpClient.GetAsync(urlBook);
-            //if (!responseBook.IsSuccessStatusCode)
-            //{
-            //    return BadRequest("Lỗi khi tải danh sách sách.");
-            //}
-            //string apiDataBook = await responseBook.Content.ReadAsStringAsync();
-            //var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
-            //decimal allPrice = 0;
-            //string json = Request.Cookies["myCart"];
-            //if (json != null)
-            //{
-            //    List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
-            //    foreach (var item in myListCartItem)
-            //    {
-            //        allPrice = allPrice + item.ToTal;
-            //    }
-            //}
-           
-            //string UserId = Request.Cookies["UserId"];
-            //if(UserId != null)
-            //{
-            //    Cart cart = new Cart();
-            //    cart.CartId = Guid.NewGuid();
-            //    cart.UserID = UserId;
-            //    cart.VoucherID = null;
-            //    cart.PriceBeforeVoucher = allPrice;
-            //    cart.Total = allPrice;
-            //    cart.Status = 1;
-            //    string urlCreateCart = $"https://localhost:7079/api/Cart/CreateCart?CartId={cart.CartId}&UserId={cart.UserID}&priceBeforeVoucher={cart.PriceBeforeVoucher}&total={cart.Total}";
-            //    var content = new StringContent(JsonConvert.SerializeObject(cart), Encoding.UTF8, "application/json");
-            //    var respon = await _httpClient.PostAsync(urlCreateCart, content);
-            //    if (respon.IsSuccessStatusCode)
-            //    {
-            //        string jsonitem = Request.Cookies["myCart"];
-            //        if (json != null)
-            //        {
-            //            List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(jsonitem);
-            //            foreach (var item in myListCartItem)
-            //            {
-            //                string urlcartItem = $"https://localhost:7079/api/CartItem/Add-CartItem?CartID={cart.CartId}&BookID={item.BookID}&image={item.Image}&ItemName={item.ItemName}&Price={item.Price}&Quantity={item.Quantity}&ToTal={item.ToTal}&Status={1}";
-            //                var contentCIT = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
-            //                var responCIT = await _httpClient.PostAsync(urlcartItem, contentCIT);
-            //                if(responCIT.IsSuccessStatusCode)
-            //                {
-            //                    return View();
-            //                }
-            //                return BadRequest();
-            //            }
-            //        }
-            //        return View();
-            //    }
-            //    return BadRequest();
-            //}
-            
 
         public async Task<IActionResult> DeleteToCart(Guid id)
         {
-            string json = Request.Cookies["myCart"];
-            if (json != null)
+            // Lấy CartItem bằng ID :
+            var urlCartItems = $"https://localhost:7079/api/CartItem/GetAll-CartItem";
+            var responCartItems = await _httpClient.GetAsync(urlCartItems);
+            string apiDataCartItems = await responCartItems.Content.ReadAsStringAsync();
+            List<CartItems> ListCartItems = JsonConvert.DeserializeObject<List<CartItems>>(apiDataCartItems);
+            CartItems CartItemDelete = ListCartItems.FirstOrDefault(p => p.BookID == id);
+
+            // Gọi API Xóa CartItem :
+            var url = $"https://localhost:7079/api/CartItem/Delete-CartItem/{CartItemDelete.CartItemID}";
+            var responCreateCartItems = await _httpClient.DeleteAsync(url);
+
+            return RedirectToAction("MyCart", "Cart", new { area = "Customer" });
+        }
+
+        [HttpGet] // Mở Form
+        public async Task<IActionResult> Checkout()
+        {
+            string UserId = Request.Cookies["UserID"];
+            if (UserId == null)
             {
-                List<CartItems> myList = JsonConvert.DeserializeObject<List<CartItems>>(json);
+                return BadRequest("Lỗi không tìm đc UserID");
+            }
+            else if (UserId != null)
+            {
+                // Lấy tất cả giỏ hàng của khách hàng có trạng thái == 1 ( chưa thanh toán )
+                var urlCart = $"https://localhost:7079/api/Cart/GetCartByIdUser/{UserId}?status=1";
+                var responCart = await _httpClient.GetAsync(urlCart);
+                string apiDataCart = await responCart.Content.ReadAsStringAsync();
+                var ListCart = JsonConvert.DeserializeObject<List<Cart>>(apiDataCart);
 
-                // Tìm CartItems có ID tương ứng
-                var item = myList.FirstOrDefault(x => x.BookID == id);
-                if (item != null)
+                // Dùng vòng lặp để lấy được các CartItem dựa vào CartID
+                foreach (var Cart in ListCart)
                 {
-                    // Xóa mục khỏi danh sách
-                    myList.Remove(item);
+                    var urlCartItems = $"https://localhost:7079/api/CartItem/GetCartItemByCartID/{Cart.CartId}";
+                    var responCartItems = await _httpClient.GetAsync(urlCartItems);
+                    string apiDataCartItems = await responCartItems.Content.ReadAsStringAsync();
+                    List<CartItems> ListCartItems = JsonConvert.DeserializeObject<List<CartItems>>(apiDataCartItems);
 
-                    // Chuyển đổi danh sách CartItems thành chuỗi JSON và lưu lại vào cookie
-                    string updatedJson = JsonConvert.SerializeObject(myList);
-                    Response.Cookies.Append("myCart", updatedJson);
+                    ViewBag.myCartItems = ListCartItems;
+                    decimal subtotal = 0;
+                    foreach (var item in ListCartItems)
+                    {
+                        subtotal += item.ToTal;
+                    }
+                    if (subtotal == 0)
+                    {
+                        ViewBag.Subtotal = 0;
+                    }
+                    else
+                    {
+                        ViewBag.Subtotal = subtotal;
+                    }
+
                 }
             }
-
-            return RedirectToAction("MyCart", "Cart");
-        }
-        public IActionResult Checkout()
-        {
-
-
             return View();
+        }
+
+        [HttpPost] // Gửi
+        public async Task<IActionResult> Checkout_SaveBill(string? UserPhone, string? AddressUser, decimal? Total, int? PaymentMethod)
+        {
+            // Authorize
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Tạo 1 Bill :
+            Bill newBill = new Bill();
+            newBill.BillID = Guid.NewGuid();
+            newBill.UserID = Request.Cookies["UserID"];
+            newBill.UserPhone = UserPhone;
+            newBill.AddressUser = AddressUser;
+            newBill.Total = Total;
+            newBill.Shipmoney = 10;
+            newBill.PaymentMethod = PaymentMethod;
+            newBill.Status = 1;
+
+            // Lưu Bill vào cơ sở dữ liệu :
+            var urlBill = $"https://localhost:7079/api/Bill/CreateBill?voucherID={null}&priceBeforeVoucher={null}&shipmoney={newBill.Shipmoney}&userPhone={newBill.UserPhone}&addressUser={newBill.AddressUser}&orderDate={null}&deliveryDate={null}&total={newBill.Total}&paymentMethod={newBill.PaymentMethod}&status={newBill.Status}";
+            var content = new StringContent(JsonConvert.SerializeObject(newBill), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(urlBill, content);
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Thêm Thất Bại";
+                return View();
+            }
+            else
+            {
+                // Nếu tạo thành công bill thì sẽ tạo các BillIItems
+                var urlCartItems = $"https://localhost:7079/api/CartItem/GetAll-CartItem";
+                var responCartItems = await _httpClient.GetAsync(urlCartItems);
+                string apiDataCartItems = await responCartItems.Content.ReadAsStringAsync();
+                List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(apiDataCartItems);
+
+                foreach (var item in myListCartItem)
+                {
+                    // Tạo các BillItems từ các CartItem đã lưu :
+                    BillItems billItems = new BillItems();
+                    billItems.BillItemID = Guid.NewGuid();
+                    billItems.BillID = newBill.BillID;
+                    billItems.BookID = item.BookID;
+                    billItems.ItemName = item.ItemName;
+                    billItems.Price = item.Price;
+                    billItems.Quantity = item.Quantity;
+                    billItems.ToTal = billItems.Quantity * billItems.Price;
+                    billItems.Status = 1;
+
+                    // Sau khi tạo xong thì lưu nó vô database
+                    var urlSaveBillItems = $"https://localhost:7079/api/BillItem/CreateBillItem?bookid={billItems.BookID}&billid={billItems.BillID}&itemname={billItems.ItemName}&price={billItems.Price}&quantity={billItems.Quantity}&total={billItems.ToTal}";
+                    var contentBillItem = new StringContent(JsonConvert.SerializeObject(billItems), Encoding.UTF8, "application/json");
+                    var responseCBIT = await _httpClient.PostAsync(urlSaveBillItems, contentBillItem);
+                    if (!responseCBIT.IsSuccessStatusCode)
+                    {
+                        return BadRequest("Thêm không thành công");
+                    }
+                    else
+                    {
+                        return RedirectToAction("My cart");
+                    }
+                }
+            }
+            return RedirectToAction("My cart");
         }
 
     }
