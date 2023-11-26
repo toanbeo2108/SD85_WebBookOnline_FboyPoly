@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SD85_WebBookOnline.Api.Data;
 using SD85_WebBookOnline.Api.IResponsitories;
 using SD85_WebBookOnline.Responsitories;
@@ -21,6 +22,11 @@ namespace SD85_WebBookOnline.Api.Controllers
         public async Task<IEnumerable<CartItems>> GetAllCartItem()
         {
             return await _irp.GetAll();
+        }
+        [HttpGet("[Action]/{CartID}")]
+        public async Task<List<CartItems>> GetCartItemByCartID(Guid CartID)
+        {
+            return await _context.CartItems.Where(p => p.CartID == CartID).ToListAsync();
         }
         [HttpPost("Add-CartItem")]
         public async Task<bool> AddCartItem(Guid? CartID, Guid? ComboID, Guid? BookID,string? image, string ItemName, decimal Price, int Quantity, decimal ToTal, int Status)

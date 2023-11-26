@@ -35,7 +35,7 @@ namespace SD85_WebBookOnline.Api.Controllers
 
         [HttpGet]
         [Route("GetAllUser")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IEnumerable<User>> getUser()
         {
             return await _userManager.Users.ToListAsync();
@@ -50,7 +50,7 @@ namespace SD85_WebBookOnline.Api.Controllers
 
         [HttpGet]
         [Route("GetUsersById")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<User> getUserById(string id)
         {
             return await _userManager.FindByIdAsync(id);
@@ -58,7 +58,7 @@ namespace SD85_WebBookOnline.Api.Controllers
 
         [HttpPut]
         [Route("UpdateUser")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<User> UpdateUser(User model)
         {
             // Tìm người dùng theo ID
@@ -100,9 +100,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             {
                 return false;
             }
-
             var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-
             if (!result.Succeeded)
             {
                 return false;

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SD85_WebBookOnline.Api.Migrations
 {
-    public partial class uaua : Migration
+    public partial class test : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -384,24 +384,24 @@ namespace SD85_WebBookOnline.Api.Migrations
                 columns: table => new
                 {
                     BillID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     VoucherID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    PriceBeforeVoucher = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Shipmoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    UserPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AddressUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaymentMethod = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    PriceBeforeVoucher = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Shipmoney = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    UserPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddressUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PaymentMethod = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bill", x => x.BillID);
                     table.ForeignKey(
-                        name: "FK_Bill_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Bill_AspNetUsers_UserID",
+                        column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -621,12 +621,12 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "3b36fdb8-ddb5-4f92-9e34-258242a102e4", "b6ced455-23b4-4706-b941-929269864423", "Admin", "ADMIN" });
+                values: new object[] { "31ef03e1-c22e-4fef-a56c-397dd4ca53d8", "68ede0f7-a76f-4dde-be58-4b92fa318e39", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "45673d6e-6d71-4a9e-9936-b1e685ab0732", "1dfb944d-da54-4d78-afbf-3cac6165ee9a", "User", "USER" });
+                values: new object[] { "c0f7921a-b408-4ac9-80dd-556dfcef995e", "8a456dcd-810e-4f02-ba27-cd3c72391e9c", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -668,9 +668,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bill_UserId",
+                name: "IX_Bill_UserID",
                 table: "Bill",
-                column: "UserId");
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bill_VoucherID",

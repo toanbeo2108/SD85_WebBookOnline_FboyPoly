@@ -51,15 +51,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3b36fdb8-ddb5-4f92-9e34-258242a102e4",
-                            ConcurrencyStamp = "b6ced455-23b4-4706-b941-929269864423",
+                            Id = "c0f7921a-b408-4ac9-80dd-556dfcef995e",
+                            ConcurrencyStamp = "8a456dcd-810e-4f02-ba27-cd3c72391e9c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "45673d6e-6d71-4a9e-9936-b1e685ab0732",
-                            ConcurrencyStamp = "1dfb944d-da54-4d78-afbf-3cac6165ee9a",
+                            Id = "31ef03e1-c22e-4fef-a56c-397dd4ca53d8",
+                            ConcurrencyStamp = "68ede0f7-a76f-4dde-be58-4b92fa318e39",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -288,35 +288,33 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AddressUser")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DeliveryDate")
+                    b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("OrderDate")
+                    b.Property<DateTime?>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PaymentMethod")
+                    b.Property<int?>("PaymentMethod")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PriceBeforeVoucher")
+                    b.Property<decimal?>("PriceBeforeVoucher")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Shipmoney")
+                    b.Property<decimal?>("Shipmoney")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Total")
+                    b.Property<decimal?>("Total")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UserID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserPhone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("VoucherID")
@@ -324,7 +322,7 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.HasKey("BillID");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserID");
 
                     b.HasIndex("VoucherID");
 
@@ -1003,9 +1001,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Bill", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                    b.HasOne("SD85_WebBookOnline.Share.Models.User", "User")
+                        .WithMany("Bills")
+                        .HasForeignKey("UserID");
 
                     b.HasOne("SD85_WebBookOnline.Share.Models.Voucher", "Voucher")
                         .WithMany("Bill")
@@ -1088,7 +1086,7 @@ namespace SD85_WebBookOnline.Api.Migrations
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Cart", b =>
                 {
                     b.HasOne("SD85_WebBookOnline.Share.Models.User", "User")
-                        .WithMany("Carts")
+                        .WithMany("Cart")
                         .HasForeignKey("UserID");
 
                     b.HasOne("SD85_WebBookOnline.Share.Models.Voucher", "Voucher")
@@ -1242,7 +1240,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.User", b =>
                 {
-                    b.Navigation("Carts");
+                    b.Navigation("Bills");
+
+                    b.Navigation("Cart");
 
                     b.Navigation("DeliveryAddress");
                 });

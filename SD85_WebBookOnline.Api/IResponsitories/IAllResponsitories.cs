@@ -8,7 +8,8 @@ namespace SD85_WebBookOnline.Api.IResponsitories
 	public interface IAllResponsitories<T>
 	{
 		Task<IEnumerable<T>> GetAll();
-		Task<bool> CreateItem(T item);
+        Task<T> GetByID(Guid id);
+        Task<bool> CreateItem(T item);
 		Task<bool> DeleteItem(T item);
 		Task<bool> UpdateItem(T item);
 	}

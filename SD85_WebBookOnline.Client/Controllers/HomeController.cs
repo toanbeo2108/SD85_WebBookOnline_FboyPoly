@@ -92,17 +92,20 @@ namespace SD85_WebBookOnline.Client.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 var check = User.Identity.IsAuthenticated;
 
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                string jsonUserId = JsonConvert.SerializeObject(userId);
-                Response.Cookies.Append("UserId", jsonUserId);
-                return RedirectToAction("Index", "Home");
-
-                //// Lấy UserID
-                //var url = $"https://localhost:7079/api/user/GetUserId/{loginUser.Username}";
-                //var respon = await _httpClient.GetAsync(url);
-                //string api = await respon.Content.ReadAsStringAsync();
-                //var UserId = JsonConvert.DeserializeObject<string>(api);
-                //Response.Cookies.Append("UserID", UserId);
+                // Lấy UserID
+                var url = $"https://localhost:7079/api/user/GetUserId/{loginUser.Username}";
+                var respon = await _httpClient.GetAsync(url);
+                if (respon.IsSuccessStatusCode)
+                {
+                    var api = await respon.Content.ReadAsStringAsync();
+                    var UserId = api; // Gán trực tiếp chuỗi nhận được từ API cho UserId
+                    Response.Cookies.Append("UserID", UserId);
+                }
+                else
+                {
+                    // Xử lý lỗi nếu có
+                    _logger.LogError($"Error calling API. Status code: {respon.StatusCode}");
+                }
 
                 return RedirectToAction("Index", "Home");
             }
@@ -202,7 +205,7 @@ namespace SD85_WebBookOnline.Client.Controllers
             var existingItem = myListCartItem.FirstOrDefault(x => x.BookID == book.BookID);
             if (existingItem != null)
             {
-                // Nếu sách đã có, tăng số lượng lên 1
+                // Nếu sách đã có, tăng số lượng lên
                 existingItem.Quantity += quantity;
                 existingItem.ToTal = existingItem.Price * existingItem.Quantity;
             }

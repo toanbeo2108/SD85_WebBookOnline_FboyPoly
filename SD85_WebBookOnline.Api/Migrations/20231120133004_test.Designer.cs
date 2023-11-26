@@ -12,7 +12,7 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231116115558_test")]
+    [Migration("20231120133004_test")]
     partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,15 +53,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "25aec393-cf22-4900-9498-c299a473328d",
-                            ConcurrencyStamp = "c7fb80e9-abf4-4b7b-bbc0-fab1816a9bb4",
+                            Id = "c0f7921a-b408-4ac9-80dd-556dfcef995e",
+                            ConcurrencyStamp = "8a456dcd-810e-4f02-ba27-cd3c72391e9c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "d32fac0d-ede8-480f-8c17-db244472d5d6",
-                            ConcurrencyStamp = "b49715ca-a0f4-4f38-9ff9-779cc717f890",
+                            Id = "31ef03e1-c22e-4fef-a56c-397dd4ca53d8",
+                            ConcurrencyStamp = "68ede0f7-a76f-4dde-be58-4b92fa318e39",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -290,35 +290,33 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AddressUser")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DeliveryDate")
+                    b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("OrderDate")
+                    b.Property<DateTime?>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PaymentMethod")
+                    b.Property<int?>("PaymentMethod")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PriceBeforeVoucher")
+                    b.Property<decimal?>("PriceBeforeVoucher")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Shipmoney")
+                    b.Property<decimal?>("Shipmoney")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Total")
+                    b.Property<decimal?>("Total")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UserID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserPhone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("VoucherID")
@@ -326,7 +324,7 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.HasKey("BillID");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserID");
 
                     b.HasIndex("VoucherID");
 
@@ -783,10 +781,10 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BookID")
+                    b.Property<Guid?>("BookID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("GiaNhap")
+                    b.Property<decimal?>("GiaNhap")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid?>("IdNhanVienNhap")
@@ -795,10 +793,10 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<Guid?>("IdSachNhap")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("NgayNhap")
+                    b.Property<DateTime?>("NgayNhap")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SoLuong")
+                    b.Property<int?>("SoLuong")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -1005,9 +1003,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Bill", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                    b.HasOne("SD85_WebBookOnline.Share.Models.User", "User")
+                        .WithMany("Bills")
+                        .HasForeignKey("UserID");
 
                     b.HasOne("SD85_WebBookOnline.Share.Models.Voucher", "Voucher")
                         .WithMany("Bill")
@@ -1160,9 +1158,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                 {
                     b.HasOne("SD85_WebBookOnline.Share.Models.Book", "Book")
                         .WithMany("InputSlip")
-                        .HasForeignKey("BookID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BookID");
 
                     b.HasOne("SD85_WebBookOnline.Share.Models.User", "User")
                         .WithMany()
@@ -1246,6 +1242,8 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.User", b =>
                 {
+                    b.Navigation("Bills");
+
                     b.Navigation("Cart");
 
                     b.Navigation("DeliveryAddress");
