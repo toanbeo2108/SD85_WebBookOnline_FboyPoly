@@ -139,12 +139,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 _stt=false;
                 _mess = "Thêm thất bại ";
             }
-            //if (respon.IsSuccessStatusCode)
-            //{
-            //    return RedirectToAction("AllBookDetailManager", "BookDetailManager", new { area = "Admin" });
-            //}
-            //TempData["erro message"] = "thêm thất bại";
-            //return View();
+           
             return Json(new
             {
 
@@ -153,7 +148,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             });
             
         }
-        [HttpGet]
+        [HttpGet,Route("detail-bookdetail/{id}")]
         public async Task<IActionResult> BookDetailDetail(Guid id)
         {
             var urlBook = $"https://localhost:7079/api/Book/get-all-book";
@@ -189,17 +184,32 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var urlBookDetail = $"https://localhost:7079/api/BookDetail/GetAllBookDetail";
             var responBookDetail = await _httpClient.GetAsync(urlBookDetail);
             string apiDataBookDetail = await responBookDetail.Content.ReadAsStringAsync();
-            var lstBookDetail = JsonConvert.DeserializeObject<List<BookDetail>>(apiDataBookDetail);
-            var BookDetail = lstBookDetail.FirstOrDefault(x => x.BookDetailID == id);
-            ViewBag.BookDetail = BookDetail;
-            if (BookDetail == null)
+           
+            if (responBookDetail.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return BadRequest();
+                var lstBookDetail = JsonConvert.DeserializeObject<List<BookDetail>>(apiDataBookDetail);
+                var BookDetail = lstBookDetail.FirstOrDefault(x => x.BookDetailID == id);
+                ViewBag.BookDetail = BookDetail;
+                if (BookDetail == null)
+                {
+                    _stt = false;
+
+                    _mess = "Không tìm thấy thông tin";
+                }
+                else
+                {
+                    _stt = true;
+                    _data = BookDetail;
+                    _mess = "";
+                
+                }
             }
-            else
+            return Json(new
             {
-                return View(BookDetail);
-            }
+                status = _stt,
+                message = _mess,
+                data = _data,
+            });
         }
         [HttpGet]
         public async Task<IActionResult> UpdateBookDetail(Guid id)
@@ -246,7 +256,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             }
         }
         
-        [HttpPost]
+        [HttpPost,Route("UpdateBookDetail/{id}")]
         public async Task<IActionResult> UpdateBookDetail(Guid id, BookDetail vc)
         {
             var urlBook = $"https://localhost:7079/api/Book/get-all-book";
@@ -276,13 +286,23 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var urlBookDetail = $"https://localhost:7079/api/BookDetail/UpdateBookDetail/{id}";
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8, "application/json");
             var respon = await _httpClient.PutAsync(urlBookDetail, content);
-            if (!respon.IsSuccessStatusCode)
+            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return BadRequest();
+                _stt = true;
+                _mess = "Cập nhật thành công!";
             }
-            var token = Request.Cookies["Token"];
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            return RedirectToAction("AllBookDetailManager", "BookDetailManager", new { area = "Admin" });
+            else
+            {
+                _stt = false;
+                _mess = "Cập nhật thất bại ";
+            }
+
+            return Json(new
+            {
+
+                status = _stt,
+                message = _mess
+            });
 
         }
     }

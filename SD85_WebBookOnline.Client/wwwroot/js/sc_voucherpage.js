@@ -176,8 +176,8 @@ function getdata() {
         VoucherID: $('#btn_id').val(),
         Name: $('#btn_Name').val(),
         Description: $('#btn_Description').val(),
-        StartDate: $('#btn_StartDate').val(),
-        EndDate: $('#btn_EndDate').val(),
+        StartDate: moment($('#btn_StartDate').val()).format('YYYY-MM-DD'),
+        EndDate: moment($('#btn_EndDate').val()).format('YYYY-MM-DD'),
         DiscountCondition: $('#btn_DiscountCondition').val(),
         DiscountAmount: $('#btn_DiscountAmount').val(),
         Status: $('#btn_Status').val()
@@ -189,8 +189,8 @@ function setdata(data) {
         $('#btn_id').val('');
         $('#btn_Name').val('');
         $('#btn_Description').val('');
-        $('#btn_StartDate').val('');
-        $('#btn_EndDate').val('');
+        $('#btn_StartDate').val(moment().format('YYYY-MM-DD')); 
+        $('#btn_EndDate').val(moment().format('YYYY-MM-DD'));
         $('#btn_DiscountCondition').val('');
         $('#btn_DiscountAmount').val('');
         $('#btn_Status').val('');
@@ -199,8 +199,8 @@ function setdata(data) {
         $('#btn_id').val(data.voucherID);
         $('#btn_Name').val(data.name);
         $('#btn_Description').val(data.description);
-        $('#btn_StartDate').val(data.startDate);
-        $('#btn_EndDate').val(data.endDate);
+        $('#btn_StartDate').val(moment(data.startDate).format('YYYY-MM-DD')); 
+        $('#btn_EndDate').val(moment(data.endDate).format('YYYY-MM-DD'));
         $('#btn_DiscountCondition').val(data.discountCondition);
         $('#btn_DiscountAmount').val(data.discountAmount);
         $('#btn_Status').val(data.status);
