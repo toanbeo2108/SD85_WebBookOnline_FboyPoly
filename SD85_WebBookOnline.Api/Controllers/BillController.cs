@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SD85_WebBookOnline.Api.Data;
 using SD85_WebBookOnline.Api.IResponsitories;
 using SD85_WebBookOnline.Responsitories;
@@ -21,12 +22,36 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             return await irespon.GetAll();
         }
+        [HttpGet("[Action]")]
+        public async Task<List<Bill>> GetAllBillByUserID(string UserID)
+        {
+            return await context.Bill.Where(p => p.UserID == UserID).ToListAsync();
+        }
         [HttpPost("[Action]")]
-        public async Task<bool> CreateBill(Guid? voucherID, decimal priceBeforeVoucher, decimal shipmoney, string userPhone, string addressUser, DateTime orderDate, DateTime deliveryDate, decimal total, int paymentMethod, int status)
+        public async Task<bool> CreateBill(Guid? voucherID,string UserID, decimal priceBeforeVoucher, decimal shipmoney, string userPhone, string addressUser, DateTime orderDate, DateTime deliveryDate, decimal total, int paymentMethod, int status)
         {
             Bill b = new Bill();
             b.BillID = Guid.NewGuid();
             b.VoucherID = voucherID;
+            b.UserID = UserID;
+            b.PriceBeforeVoucher = priceBeforeVoucher;
+            b.Shipmoney = shipmoney;
+            b.UserPhone = userPhone;
+            b.AddressUser = addressUser;
+            b.OrderDate = orderDate;
+            b.DeliveryDate = deliveryDate;
+            b.Total = total;
+            b.PaymentMethod = paymentMethod;
+            b.Status = 1;
+            return await irespon.CreateItem(b);
+        }
+        [HttpPost("[Action]")]
+        public async Task<bool> CreateBillWithManualBillId(Guid BillID,Guid? voucherID, string UserID, decimal priceBeforeVoucher, decimal shipmoney, string userPhone, string addressUser, DateTime orderDate, DateTime deliveryDate, decimal total, int paymentMethod, int status)
+        {
+            Bill b = new Bill();
+            b.BillID = BillID;
+            b.VoucherID = voucherID;
+            b.UserID = UserID;
             b.PriceBeforeVoucher = priceBeforeVoucher;
             b.Shipmoney = shipmoney;
             b.UserPhone = userPhone;

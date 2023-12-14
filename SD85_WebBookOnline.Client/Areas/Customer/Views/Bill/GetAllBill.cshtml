@@ -1,0 +1,130 @@
+﻿@model IEnumerable<SD85_WebBookOnline.Share.Models.Bill>
+@{
+    ViewData["Title"] = "GetAllBill";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<h1>GetAllBill</h1>
+
+<table id="tble_ajax" class="table" enctype="multipart/form-data">
+    <thead>
+        <tr>
+            <th>
+                UserID
+            </th>
+            <th>
+                Giá trc khi giảm
+            </th>
+            <th>
+                Giá ship
+            </th>
+            <th>
+                Số điện thoại
+            </th>
+            <th>
+                Địa chỉ người nhận
+            </th>
+            <th>
+                Ngày đặt hàng
+            </th>
+            <th>
+                Ngày nhận hàng
+            </th>
+            <th>
+                Tổng tiền
+            </th>
+            <th>
+                Phương thức thanh toán
+            </th>
+            <th>
+                Trạng thái
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var items in Model)
+        {
+            <tr>
+                <td>
+                    @items.UserID
+                </td>
+                <td>
+                    @items.PriceBeforeVoucher
+                </td>
+                <td>
+                    @items.Shipmoney
+                </td>
+                <td>
+                    @items.UserPhone
+                </td>
+                <td>
+                    @items.AddressUser
+                </td>
+                <td>
+                    @items.OrderDate
+                </td>
+                <td>
+                    @items.DeliveryDate
+                </td>
+                <td>
+                    @items.Total
+                </td>
+                <td>
+                    @items.PaymentMethod
+                </td>
+                <td>
+                    @items.Status
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*Link datatable*@
+<link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    // Hàm định dạng cho chi tiết hàng - sửa đổi theo nhu cầu của bạn
+    function format(d) {
+        // `d` là đối tượng dữ liệu gốc cho hàng
+        return (
+            '<dl>' +
+            '<dt>Bill ID:</dt>' +
+            '<dd>' + d.BillID + '</dd>' +
+            '<dt>Bill Items:</dt>' +
+            '<dd id="bill-items-' + d.BillID + '">Loading...</dd>' +
+            '</dl>'
+        );
+    }
+
+    var table = $('#tble_ajax').DataTable({
+        // Cấu hình khác của DataTable
+    });
+
+    // Thêm trình nghe sự kiện để mở và đóng chi tiết
+    $('#tble_ajax tbody').on('click', 'td.dt-control', function () {
+        var tr = $(this).closest('tr');
+        var row = table.row(tr);
+
+        if (row.child.isShown()) {
+            // Hàng này đã mở - đóng nó
+            row.child.hide();
+        } else {
+            // Mở hàng này
+            row.child(format(row.data())).show();
+
+            // Gửi yêu cầu GET đến API để lấy thông tin chi tiết của BillItem
+            var billId = row.data().BillID;
+            var urlBillItems = 'https://localhost:7079/api/BillItem/GetAllBillItemByBillID/' + billId;
+            $.get(urlBillItems, function (data) {
+                // Hiển thị thông tin chi tiết của BillItem
+                $('#bill-items-' + billId).html(JSON.stringify(data));
+            });
+        }
+    });
+    $(document).ready(function () {
+        // Khởi tạo DataTable
+        var dataTable = $('#tble_ajax').DataTable();
+    });
+</script>

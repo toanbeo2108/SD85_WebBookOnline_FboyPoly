@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SD85_WebBookOnline.Api.Data;
 using SD85_WebBookOnline.Api.IResponsitories;
 using SD85_WebBookOnline.Responsitories;
@@ -22,15 +23,15 @@ namespace SD85_WebBookOnline.Api.Controllers
 		{
 			return await irespon.GetAll();	
 		}
-		[HttpPost("[Action]")]
+        [HttpGet("[Action]/BillID")]
+        public async Task<IEnumerable<BillItems>> GetAllBillItemByBillID(Guid BillID)
+        {
+            return await context.BillItems.Where(p => p.BillID == BillID).ToListAsync();
+        }
+        [HttpPost("[Action]")]
 		public async Task<bool> CreateBillItem(Guid? bookid, Guid? comboid, Guid? billid, string itemname,decimal price, int quantity,decimal total)
 		{
 			var lstbillItem = await irespon.GetAll();
-			var ChucVuCheck = lstbillItem.FirstOrDefault(x => x.ItemName == itemname);
-			if (ChucVuCheck != null)
-			{
-				return false;
-			}
 			BillItems bt = new BillItems();
 			bt.BillItemID = Guid.NewGuid();
 			bt.BillID = billid;
@@ -41,6 +42,9 @@ namespace SD85_WebBookOnline.Api.Controllers
 			bt.Quantity = quantity;
 			bt.ToTal = total;
 			bt.Status = 1;
+			//context.BillItems.Add(bt);
+			//await context.SaveChangesAsync();
+
 			return await irespon.CreateItem(bt);
 		}
 		[HttpPut("[Action]/{id}")]

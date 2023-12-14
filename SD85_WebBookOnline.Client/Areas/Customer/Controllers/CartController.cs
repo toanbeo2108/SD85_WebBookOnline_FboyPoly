@@ -91,6 +91,41 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                 {
                     return BadRequest("Lỗi tạo 1 giỏ hàng mới cho khách hàng");
                 }
+
+                // Tạo xong giỏ hàng thì tạo cartitem mới để thêm vào giỏ hàng mới
+                CartItems cartItems = new CartItems();
+                cartItems.CartItemID = Guid.NewGuid();
+                cartItems.CartID = null;
+                if (book != null)
+                {
+                    cartItems.BookID = book.BookID;
+                    cartItems.ComboID = null;
+                    cartItems.ItemName = book.BookName;
+                    cartItems.Image = book.MainPhoto;
+                    cartItems.Price = book.Price;
+                    cartItems.Quantity = quantity;
+                    cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                    cartItems.Status = 1;
+                }
+                if (combo != null)
+                {
+                    cartItems.BookID = null;
+                    cartItems.ComboID = combo.ComboID;
+                    cartItems.ItemName = combo.ComboName;
+                    cartItems.Image = combo.Image;
+                    cartItems.Price = combo.Price;
+                    cartItems.Quantity = quantity;
+                    cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                    cartItems.Status = 1;
+                }
+                // Dùng API thêm vào database
+                var urlCreateCartItems = $"https://localhost:7079/api/CartItem/Add-CartItem?CartID={cart.CartId}&BookID={cartItems.BookID}&image={cartItems.Image}&ItemName={cartItems.ItemName}&Price={cartItems.Price}&Quantity={cartItems.Quantity}&ToTal={cartItems.ToTal}&Status={cartItems.Status}";
+                var contentCreateCartItems = new StringContent(JsonConvert.SerializeObject(cartItems), Encoding.UTF8, "application/json");
+                var responCreateCartItems = await _httpClient.PostAsync(urlCreateCartItems, contentCreateCartItems);
+                if (!responCreateCartItems.IsSuccessStatusCode)
+                {
+                    return BadRequest("Lỗi thêm vào chi tiết giỏ hàng ( CartItems )");
+                }
             }
 
             // Lấy được danh sách CartItems dựa theo những Cart chưa thanh toán kia :
@@ -264,69 +299,76 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
         }
 
         [HttpPost] // Gửi
-        public async Task<IActionResult> Checkout_SaveBill(string? UserPhone, string? AddressUser, decimal? Total, int? PaymentMethod)
+        public async Task<IActionResult> Checkout_saveBill(string? UserPhone, string? City, string? District, string? Ward,decimal? Total, int? PaymentMethod)
         {
             // Authorize
+            var UserId = Request.Cookies["UserID"];
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
+            var newBillId = Guid.NewGuid();
             // Tạo 1 Bill :
             Bill newBill = new Bill();
-            newBill.BillID = Guid.NewGuid();
-            newBill.UserID = Request.Cookies["UserID"];
+            newBill.BillID = newBillId;
+            newBill.UserID = UserId;
             newBill.UserPhone = UserPhone;
-            newBill.AddressUser = AddressUser;
+            newBill.AddressUser = City + " " + District + " " + Ward;
             newBill.Total = Total;
             newBill.Shipmoney = 10;
             newBill.PaymentMethod = PaymentMethod;
             newBill.Status = 1;
 
             // Lưu Bill vào cơ sở dữ liệu :
-            var urlBill = $"https://localhost:7079/api/Bill/CreateBill?voucherID={null}&priceBeforeVoucher={null}&shipmoney={newBill.Shipmoney}&userPhone={newBill.UserPhone}&addressUser={newBill.AddressUser}&orderDate={null}&deliveryDate={null}&total={newBill.Total}&paymentMethod={newBill.PaymentMethod}&status={newBill.Status}";
+            var urlBill = $"https://localhost:7079/api/Bill/CreateBillWithManualBillId?priceBeforeVoucher={newBill.Total}&BillID={newBill.BillID}&UserID={newBill.UserID}&shipmoney={newBill.Shipmoney}&userPhone={newBill.UserPhone}&addressUser={newBill.AddressUser}&orderDate={DateTime.Today}&deliveryDate={DateTime.Today.AddDays(5)}&total={newBill.Total}&paymentMethod={newBill.PaymentMethod}&status={newBill.Status}";
             var content = new StringContent(JsonConvert.SerializeObject(newBill), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(urlBill, content);
             if (!response.IsSuccessStatusCode)
             {
-                TempData["ErrorMessage"] = "Thêm Thất Bại";
+                TempData["ErrorMessage"] = "Thêm bill mới thất Bại";
                 return View();
             }
             else
             {
                 // Nếu tạo thành công bill thì sẽ tạo các BillIItems
-                var urlCartItems = $"https://localhost:7079/api/CartItem/GetAll-CartItem";
-                var responCartItems = await _httpClient.GetAsync(urlCartItems);
-                string apiDataCartItems = await responCartItems.Content.ReadAsStringAsync();
-                List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(apiDataCartItems);
 
-                foreach (var item in myListCartItem)
+                // Lấy tất cả CartItems của User
+                var urlCart = $"https://localhost:7079/api/Cart/GetCartByIdUser/{UserId}?status=1";
+                var responCart = await _httpClient.GetAsync(urlCart);
+                string apiDataCart = await responCart.Content.ReadAsStringAsync();
+                var ListCart = JsonConvert.DeserializeObject<List<Cart>>(apiDataCart);
+
+                foreach (var Cart in ListCart)
                 {
-                    // Tạo các BillItems từ các CartItem đã lưu :
-                    BillItems billItems = new BillItems();
-                    billItems.BillItemID = Guid.NewGuid();
-                    billItems.BillID = newBill.BillID;
-                    billItems.BookID = item.BookID;
-                    billItems.ItemName = item.ItemName;
-                    billItems.Price = item.Price;
-                    billItems.Quantity = item.Quantity;
-                    billItems.ToTal = billItems.Quantity * billItems.Price;
-                    billItems.Status = 1;
+                    var urlCartItems = $"https://localhost:7079/api/CartItem/GetCartItemByCartID/{Cart.CartId}";
+                    var responCartItems = await _httpClient.GetAsync(urlCartItems);
+                    string apiDataCartItems = await responCartItems.Content.ReadAsStringAsync();
+                    List<CartItems> ListCartItems = JsonConvert.DeserializeObject<List<CartItems>>(apiDataCartItems);
 
-                    // Sau khi tạo xong thì lưu nó vô database
-                    var urlSaveBillItems = $"https://localhost:7079/api/BillItem/CreateBillItem?bookid={billItems.BookID}&billid={billItems.BillID}&itemname={billItems.ItemName}&price={billItems.Price}&quantity={billItems.Quantity}&total={billItems.ToTal}";
-                    var contentBillItem = new StringContent(JsonConvert.SerializeObject(billItems), Encoding.UTF8, "application/json");
-                    var responseCBIT = await _httpClient.PostAsync(urlSaveBillItems, contentBillItem);
-                    if (!responseCBIT.IsSuccessStatusCode)
+                    foreach (var item in ListCartItems)
                     {
-                        return BadRequest("Thêm không thành công");
-                    }
-                    else
-                    {
-                        return RedirectToAction("My cart");
+                        // Tạo các BillItems từ các CartItem đã lưu :
+                        BillItems billItems = new BillItems();
+                        billItems.BillItemID = Guid.NewGuid();
+                        billItems.BillID = newBillId;
+                        billItems.BookID = item.BookID;
+                        billItems.ItemName = item.ItemName;
+                        billItems.Price = item.Price;
+                        billItems.Quantity = item.Quantity;
+                        billItems.ToTal = billItems.Quantity * billItems.Price;
+                        billItems.Status = 1;
+
+                        // Sau khi tạo xong thì lưu nó vô database
+                        var urlSaveBillItems = $"https://localhost:7079/api/BillItem/CreateBillItem?bookid={billItems.BookID}&billid={billItems.BillID}&itemname={billItems.ItemName}&price={billItems.Price}&quantity={billItems.Quantity}&total={billItems.ToTal}";
+                        var contentBillItem = new StringContent(JsonConvert.SerializeObject(billItems), Encoding.UTF8, "application/json");
+                        var responseCBIT = await _httpClient.PostAsync(urlSaveBillItems, contentBillItem);
+                        if (!responseCBIT.IsSuccessStatusCode)
+                        {
+                            return BadRequest("Thêm không thành công");
+                        }
                     }
                 }
+                return RedirectToAction("GetAllBill", "Bill");
             }
-            return RedirectToAction("My cart");
+            
         }
-
     }
 }
