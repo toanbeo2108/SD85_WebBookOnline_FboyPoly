@@ -21,7 +21,6 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var url = $"https://localhost:7079/api/user/GetAllUser";
-            var httpClient = new HttpClient();
             var response = await _httpClient.GetAsync(url);
             string apiDataUser = await response.Content.ReadAsStringAsync();
             var ListUser = JsonConvert.DeserializeObject<List<User>>(apiDataUser);
