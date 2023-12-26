@@ -299,19 +299,27 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
         }
 
         [HttpPost] // Gửi
-        public async Task<IActionResult> Checkout_saveBill(string? UserPhone, string? City, string? District, string? Ward,decimal? Total, int? PaymentMethod)
+        public async Task<IActionResult> Checkout_saveBill(string? UserPhone, string? City, string? District, string? Ward, string? Street, decimal? Total, int? PaymentMethod)
         {
             // Authorize
             var UserId = Request.Cookies["UserID"];
-            var token = Request.Cookies["Token"];
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var newBillId = Guid.NewGuid();
+            //var token = Request.Cookies["Token"];
+            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var UrlLocation = "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
+            var responseLocation = await _httpClient.GetAsync(UrlLocation);
+            var jsonLocation = await responseLocation.Content.ReadAsStringAsync();
+            List<SD85_WebBookOnline.Share.ViewModels.Location.City> dataLocation = JsonConvert.DeserializeObject<List<SD85_WebBookOnline.Share.ViewModels.Location.City>>(jsonLocation);
+            var city = dataLocation.FirstOrDefault(c => c.Id == City);
+            var district = city?.Districts.FirstOrDefault(d => d.Id == District);
+            var ward = district?.Wards.FirstOrDefault(w => w.Id == Ward);
+
             // Tạo 1 Bill :
+            var newBillId = Guid.NewGuid();
             Bill newBill = new Bill();
             newBill.BillID = newBillId;
             newBill.UserID = UserId;
             newBill.UserPhone = UserPhone;
-            newBill.AddressUser = City + " " + District + " " + Ward;
+            newBill.AddressUser = city.Name + "," + district.Name + "," + ward.Name + "," + Street;
             newBill.Total = Total;
             newBill.Shipmoney = 10;
             newBill.PaymentMethod = PaymentMethod;

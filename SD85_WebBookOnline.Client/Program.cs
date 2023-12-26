@@ -22,8 +22,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
               .AddCookie(options =>
               {
                   options.Cookie.HttpOnly = true;
-                  options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                  options.ExpireTimeSpan = TimeSpan.FromHours(3);
                   options.LoginPath = "/Home/Login";
+                  options.LogoutPath = "/Home/Logout";
                   options.SlidingExpiration = true;
               });
 
