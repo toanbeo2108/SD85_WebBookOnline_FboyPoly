@@ -105,5 +105,20 @@ namespace SD85_WebBookOnline.Api.Controllers
                 return false;
             }
         }
+
+        [HttpPut("UpdateQuantity")]
+        public async Task<bool> UpdateQuantityBook(Guid id, int TotalQuantity, int QuantitySold, int QuantityExists)
+        {
+            var book = await ires.GetByID(id);
+            if (book == null)
+            {
+                return false;
+            }
+            book.TotalQuantity = TotalQuantity;
+            book.QuantitySold = QuantitySold;
+            book.QuantityExists = QuantityExists;
+
+            return await ires.UpdateItem(book);
+        }
     }
 }

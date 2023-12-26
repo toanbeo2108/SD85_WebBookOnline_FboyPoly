@@ -10,10 +10,7 @@
     <thead>
         <tr>
             <th>
-                UserID
-            </th>
-            <th>
-                Giá trc khi giảm
+                Tổng tiền
             </th>
             <th>
                 Giá ship
@@ -31,13 +28,7 @@
                 Ngày nhận hàng
             </th>
             <th>
-                Tổng tiền
-            </th>
-            <th>
                 Phương thức thanh toán
-            </th>
-            <th>
-                Trạng thái
             </th>
         </tr>
     </thead>
@@ -46,10 +37,7 @@
         {
             <tr>
                 <td>
-                    @items.UserID
-                </td>
-                <td>
-                    @items.PriceBeforeVoucher
+                    @items.Total
                 </td>
                 <td>
                     @items.Shipmoney
@@ -67,13 +55,22 @@
                     @items.DeliveryDate
                 </td>
                 <td>
-                    @items.Total
-                </td>
-                <td>
-                    @items.PaymentMethod
-                </td>
-                <td>
-                    @items.Status
+                    @if (items.PaymentMethod == 1)
+                    {
+                        <p>Paypal</p>
+                    }
+                    else if (items.PaymentMethod == 2)
+                    {
+                        <p>Direct Check</p>
+                    }
+                    else if (items.PaymentMethod == 3)
+                    {
+                        <p>Bank Transfer</p>
+                    }
+                    else
+                    {
+                        <p>VNPay</p>
+                    }
                 </td>
             </tr>
         }
