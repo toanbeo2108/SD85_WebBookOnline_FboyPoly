@@ -13,10 +13,14 @@ namespace SD85_WebBookOnline.Api.Controllers
     public class CartitemController : ControllerBase
     {
         private readonly IAllResponsitories<CartItems> _irp;
+        private readonly IAllResponsitories<Book> _bookReponse;
+        private readonly IAllResponsitories<Combo> _comboReponse;
         AppDbContext _context = new AppDbContext();
         public CartitemController()
         {
             _irp = new AllResponsitories<CartItems>(_context, _context.CartItems);
+            _bookReponse = new AllResponsitories<Book>(_context, _context.Book);
+            _comboReponse = new AllResponsitories<Combo>(_context, _context.Combo);
         }
         [HttpGet("GetAll-CartItem")]
         public async Task<IEnumerable<CartItems>> GetAllCartItem()
@@ -83,6 +87,26 @@ namespace SD85_WebBookOnline.Api.Controllers
             {
                 return false;
             }
+        }
+        [HttpPost("[Action]")]
+        public async Task<bool> CheckQuantity(Guid IdCartItems, int QuantityCartItem)
+        {
+            var list = await _irp.GetAll();
+            var cartItem = list.FirstOrDefault(c => c.CartItemID == IdCartItems);
+            var books = await _bookReponse.GetAll();
+            var book = books.FirstOrDefault(p => p.BookID == cartItem.BookID);
+            if (cartItem != null)
+            {
+                if (QuantityCartItem < book.QuantityExists) 
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else { return false; }
         }
     }
 }

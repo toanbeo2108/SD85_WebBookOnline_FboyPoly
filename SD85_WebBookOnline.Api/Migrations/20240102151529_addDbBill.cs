@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SD85_WebBookOnline.Api.Migrations
 {
-    public partial class _9898 : Migration
+    public partial class addDbBill : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -389,6 +389,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     PriceBeforeVoucher = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Shipmoney = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     UserPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReceiverName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddressUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -621,12 +623,12 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "303577b5-85fa-420e-8231-b8d9dd577225", "9384ad22-2598-453e-969d-614d632265e8", "Admin", "ADMIN" });
+                values: new object[] { "9f4244eb-356e-4fdc-86f6-81bfbbbe1bc0", "e2e83bff-3f65-4c79-bcea-2bcc2b65a6dd", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6f87fc18-475f-4bf2-85fe-460addd8dec3", "ab518645-ab5c-4e19-abc3-188abb120401", "User", "USER" });
+                values: new object[] { "d1901214-92eb-4186-8988-d684a7f304dd", "b552bac8-4fc7-48bd-8125-677412570876", "User", "USER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

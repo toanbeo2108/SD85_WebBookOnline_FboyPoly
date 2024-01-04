@@ -301,15 +301,15 @@
                             </a>
                         </li>
                         <li>
-                            <a asp-action="Logout" asp-controller="Home">
-                                <span class="icon"><ion-icon name="arrow-forward-circle-outline"></ion-icon></span>
-                                <span class="title">LogOut</span>
-                            </a>
-                        </li>
-                        <li>
                             <a asp-action="GetAllComboItem" asp-controller="ComboItem" asp-area="Admin">
                                 <span class="icon"><ion-icon name="arrow-forward-circle-outline"></ion-icon></span>
                                 <span class="title">ComboItem</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Logout" asp-controller="Home" asp-area="">
+                                <span class="icon"><ion-icon name="arrow-forward-circle-outline"></ion-icon></span>
+                                <span class="title">LogOut</span>
                             </a>
                         </li>
                     </ul>
@@ -328,7 +328,7 @@
                         </div>
                         <!--User Img-->
                         <div class="user">
-                            <a asp-controller="Home" asp-action="Logout"><img src="~/user.jpg"></a>
+                            <a asp-controller="Home" asp-action="Logout" asp-area=""><img src="~/user.jpg"></a>
                         </div>
                     </div>
                     <!--Cards-->

@@ -1,4 +1,5 @@
 ﻿@using SD85_WebBookOnline.Share.Models;
+@model SD85_WebBookOnline.Share.ViewModels.SaveBillViewModel;
 <!-- Checkout Start -->
 @{
     Layout = "~/Views/Shared/_layout.cshtml";
@@ -24,6 +25,7 @@
         ship = 10;
         finalTotal = subtotal + ship;
     }
+    
 }
 <form asp-action="Checkout_saveBill" asp-controller="Cart" asp-area="Customer" asp-route-Total="@finalTotal" method="post">
     <div class="container-fluid pt-5">
@@ -34,41 +36,49 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Họ</label>
-                            <input class="form-control" type="text" placeholder="Nguyễn Văn">
+                            <input class="form-control" type="text" placeholder="Nguyễn Văn" asp-for="firstName" required>
+                            <span asp-validation-for="firstName" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Tên</label>
-                            <input class="form-control" type="text" placeholder="A">
+                            <input class="form-control" type="text" placeholder="A" asp-for="lastName" required>
+                            <span asp-validation-for="lastName" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>E-mail</label>
-                            <input class="form-control" type="text" placeholder="example@email.com">
+                            <input class="form-control" type="text" placeholder="example@email.com" asp-for="Email" required>
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Số điện thoại</label>
-                            <input class="form-control U" type="text" name="UserPhone" placeholder="+123 456 789">
+                            <input asp-for="UserPhone" type="text" class="form-control" placeholder="+84 123 45678" required />
+                            <span asp-validation-for="UserPhone" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Tỉnh/Thành phố</label>
-                            <select class="custom-select" id="city" name="City">
+                            <select class="custom-select" id="city" asp-for="City" required>
                                 <option value="">Chọn tỉnh thành</option>
                             </select>
+                            <span asp-validation-for="City" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Quận/Huyện</label>
-                            <select class="custom-select" id="district" name="District">
+                            <select class="custom-select" id="district" asp-for="District" required>
                                 <option value="" selected>Chọn quận huyện</option>
                             </select>
+                            <span asp-validation-for="District" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Xã/Huyện</label>
-                            <select class="custom-select" id="ward" name="Ward">
+                            <select class="custom-select" id="ward" asp-for="Ward" required>
                                 <option value="" selected>Chọn quận huyện</option>
                             </select>
+                            <span asp-validation-for="Ward" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Địa chỉ</label>
-                            <input class="form-control" type="text" name="Street" placeholder="123 Street">
+                            <input class="form-control" type="text" asp-for="Street" placeholder="123 Street">
+                            <span asp-validation-for="Street" class="text-danger"></span>
                         </div>
                         <div class="col-md-12 form-group">
                             <div class="custom-control custom-checkbox">
@@ -174,25 +184,25 @@
                     <div class="card-body">
                         <div class="form-group">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" id="paypal" name="PaymentMethod" value="1">
+                                <input type="radio" class="custom-control-input" id="paypal" asp-for="PaymentMethod" value="1" required>
                                 <label class="custom-control-label" for="paypal">Paypal</label>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" id="directcheck" name="PaymentMethod" value="2">
+                                <input type="radio" class="custom-control-input" id="directcheck" asp-for="PaymentMethod" value="2" required>
                                 <label class="custom-control-label" for="directcheck">Direct Check</label>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" id="banktransfer" name="PaymentMethod" value="3">
+                                <input type="radio" class="custom-control-input" id="banktransfer" asp-for="PaymentMethod" value="3" required>
                                 <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" value="Post" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
             </div>
@@ -200,8 +210,6 @@
     </div>
     <!-- Checkout End -->
 </form>
-
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 <script>
     var citis = document.getElementById("city");
@@ -212,6 +220,7 @@
         method: "GET",
         responseType: "application/json",
     };
+
     var promise = axios(Parameter);
     promise.then(function (result) {
         renderCity(result.data);
