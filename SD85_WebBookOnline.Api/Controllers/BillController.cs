@@ -46,12 +46,14 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await irespon.CreateItem(b);
         }
         [HttpPost("[Action]")]
-        public async Task<bool> CreateBillWithManualBillId(Guid BillID,Guid? voucherID, string UserID, decimal priceBeforeVoucher, decimal shipmoney, string userPhone, string addressUser, DateTime orderDate, DateTime deliveryDate, decimal total, int paymentMethod, int status)
+        public async Task<bool> CreateBillWithManualBillId(Guid BillID,Guid? voucherID,string ReceiverName,string Email, string UserID, decimal priceBeforeVoucher, decimal shipmoney, string userPhone, string addressUser, DateTime orderDate, DateTime deliveryDate, decimal total, int paymentMethod, int status)
         {
             Bill b = new Bill();
             b.BillID = BillID;
             b.VoucherID = voucherID;
             b.UserID = UserID;
+            b.ReceiverName = ReceiverName;
+            b.Email = Email;
             b.PriceBeforeVoucher = priceBeforeVoucher;
             b.Shipmoney = shipmoney;
             b.UserPhone = userPhone;

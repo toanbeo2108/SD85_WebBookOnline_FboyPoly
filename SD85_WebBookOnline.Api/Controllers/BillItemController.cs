@@ -23,7 +23,7 @@ namespace SD85_WebBookOnline.Api.Controllers
 		{
 			return await irespon.GetAll();	
 		}
-        [HttpGet("[Action]/BillID")]
+        [HttpGet("[Action]/{BillID}")]
         public async Task<IEnumerable<BillItems>> GetAllBillItemByBillID(Guid BillID)
         {
             return await context.BillItems.Where(p => p.BillID == BillID).ToListAsync();
