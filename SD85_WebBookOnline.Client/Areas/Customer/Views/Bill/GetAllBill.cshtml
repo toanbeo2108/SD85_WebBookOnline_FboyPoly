@@ -3,10 +3,7 @@
     ViewData["Title"] = "GetAllBill";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-
-<h1>GetAllBill</h1>
-
-<table id="tble_ajax" class="table" enctype="multipart/form-data">
+<table id="tble_ajax" class="table">
     <thead>
         <tr>
             <th>
@@ -87,14 +84,12 @@
                     }
                 </td>
                 <td>
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#BillDetailModal" data-bill-id="@items.BillID">Chi tiết</button>
+                    <a class="btn btn-primary" asp-controller="Bill" asp-action="GetBillDetails" asp-route-id="@items.BillID">Chi tiết</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-<!-- Modal -->
 <div class="modal fade" id="BillDetailModal" tabindex="-1" role="dialog" aria-labelledby="BillDetailModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -132,34 +127,7 @@
 <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function () {
-        // Khởi tạo DataTable
-        var dataTable = $('#tble_ajax').DataTable();
-        // Attach a click event handler to each "Chi tiết" button
-        $('#tble_ajax tbody').on('click', 'button.btn-primary', function () {
-            var billId = $(this).data('bill-id'); // Get BillId from data attribute
-
-            $.ajax({
-                url: 'https://localhost:7079/api/BillItem/GetAllBillItemByBillID/' + billId,
-                type: 'GET',
-                success: function (response) {
-                    $('#bill-item-details').empty(); // Clear previous details
-                    $.each(response, function (index, item) {
-                        $('#bill-item-details').append(
-                            '<tr>' +
-                                '<td>' + item.ProductName + '</td>' +
-                                '<td>' + item.Price + '</td>' +
-                                '<td>' + item.Quantity + '</td>' +
-                                '<td>' + item.Total + '</td>' +
-                            '</tr>'
-                        );
-                    });
-                    $('#BillDetailModal').modal('show');
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Lõi đã xảy ra ở đâu đó");
-                }
-            });
-        });
+        // Biến bảng thành DataTable
+        var table = $('#tble_ajax').DataTable();
     });
-
 </script>
