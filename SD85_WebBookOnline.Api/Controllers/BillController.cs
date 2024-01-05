@@ -27,6 +27,11 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             return await context.Bill.Where(p => p.UserID == UserID).ToListAsync();
         }
+        [HttpGet("[Action]/{id}")]
+        public async Task<Bill> GetBillByBillId(Guid id)
+        {
+            return await context.Bill.FirstOrDefaultAsync(p => p.BillID == id);
+        }
         [HttpPost("[Action]")]
         public async Task<bool> CreateBill(Guid? voucherID,string UserID, decimal priceBeforeVoucher, decimal shipmoney, string userPhone, string addressUser, DateTime orderDate, DateTime deliveryDate, decimal total, int paymentMethod, int status)
         {

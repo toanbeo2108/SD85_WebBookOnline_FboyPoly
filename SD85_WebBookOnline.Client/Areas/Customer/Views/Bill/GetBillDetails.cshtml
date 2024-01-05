@@ -1,0 +1,114 @@
+﻿@model IEnumerable<SD85_WebBookOnline.Share.Models.BillItems>
+@using SD85_WebBookOnline.Share.Models;
+@{
+    ViewData["Title"] = "GetBillDetails";
+    Bill bill = ViewBag.Bill;
+    User user = ViewBag.User;
+}
+
+<div class="web-container">
+    <div class="page-container">
+        Page
+        <span class="page"></span>
+        of
+        <span class="pages"></span>
+    </div>
+
+    <table class="invoice-info-container">
+        <tr>
+            <td rowspan="2" class="client-name">
+                @user.UserName
+            </td>
+            <td>
+                Địa chỉ nhận
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Người nhận: @bill.ReceiverName
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Invoice Date: <strong>@bill.OrderDate</strong>
+            </td>
+            <td>
+                @bill.AddressUser
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Invoice code: <strong>@bill.BillID</strong>
+            </td>
+            <td>
+                @bill.Email
+            </td>
+        </tr>
+    </table>
+
+
+    <table class="line-items-container">
+        <thead>
+            <tr>
+                <th class="heading-quantity">Qty</th>
+                <th class="heading-description">ProductName</th>
+                <th class="heading-price">Price</th>
+                <th class="heading-subtotal">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Quantity</td>
+                    <td>@item.ItemName</td>
+                    <td class="right">@item.Price</td>
+                    <td class="bold">@item.ToTal</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <table class="line-items-container has-bottom-border">
+        <thead>
+            <tr>
+                <th>Payment Info</th>
+                <th>Due By</th>
+                <th>Total Due</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="payment-info">
+                    <div>
+                        Account : <strong>@bill.</strong>
+                    </div>
+                    <div>
+                        Routing No: <strong>120000547</strong>
+                    </div>
+                </td>
+                <td class="large">@bill.OrderDate</td>
+                <td class="large total">@bill.Total</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <div class="footer-info">
+            <span>Toannkph2788@fpt.edu.vn</span> |
+            <span>0869055623</span> |
+            <span>FpolyBoy.com</span>
+        </div>
+        <div class="footer-thanks">
+            <img src="https://github.com/anvilco/html-pdf-invoice-template/raw/main/img/heart.png" alt="heart">
+            <span>Thank you!</span>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="./web/modern-normalize.css">
+<link rel="stylesheet" href="./web/web-base.css">
+<link rel="stylesheet" href="~/css/invoice.css">
+<script type="text/javascript" src="./web/scripts.js"></script>
+
