@@ -1,0 +1,288 @@
+﻿@using SD85_WebBookOnline.Share.Models
+
+@{
+    ViewData["Title"] = "DSVoucher";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    IEnumerable<Voucher> lstVoucher = ViewBag.lstVoucher as IEnumerable<Voucher>;
+}
+<style>
+    .container {
+        background-color: white;
+        text-align: center;
+        min-width: 100%;
+    }
+
+    .formvr {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .bannervr img {
+        width: 1000px;
+    }
+
+    .voucher {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .itemvoucher {
+        margin: 0 auto;
+        width: 500px;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 0;
+    }
+
+    .image_voucher {
+        flex-grow: 3;
+        padding: 0px;
+        width: 150px;
+    }
+
+    .bgvr {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(251, 116, 5, 0.741);
+        height: 100%;
+        width: 100%;
+    }
+
+    .contenvr {
+        flex-grow: 7;
+    }
+
+    .thongtinvr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+        .thongtinvr h4 {
+            text-align: left;
+        }
+
+    .hsdvr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .giatrivr {
+        flex-grow: 8;
+        text-align: left;
+        padding-left: 40px;
+    }
+
+    .btn-click {
+        flex-grow: 2;
+    }
+
+        .btn-click button {
+            background-color: rgb(255, 102, 0);
+            padding: 0 30px;
+            border: 0;
+            color: aliceblue;
+        }
+
+    .datevr {
+        text-align: left;
+        flex-grow: 8;
+        padding: 0 40px;
+    }
+
+    .quantity {
+        width: 100%;
+        height: 4px;
+        background-color: antiquewhite;
+        border-radius: 25px;
+    }
+
+        .quantity hr {
+            height: 4px;
+            margin: 0;
+            background-color: blue;
+            border-radius: 25px;
+        }
+
+    .timeve label {
+        font-size: 15px;
+    }
+
+    .chitietvr {
+        flex-grow: 2;
+    }
+</style>
+
+<div class="container">
+
+        <div class="container">
+
+            <div class="formvr">
+
+
+                @foreach (var itemvr in lstVoucher)
+                {
+                    @if (itemvr.EndDate > DateTime.Now)
+                    {
+                    @if (itemvr.Status == 1)
+                    {
+                        <div class="voucher">
+                            <h3>Voucher </h3>
+                            <div class="itemvoucher flex-container">
+                                <div class="image_voucher">
+                                    <div class="bgvr">
+                                        <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico_freeship.svg?q=10428" alt="">
+                                    </div>
+                                </div>
+                                <div class="contenvr">
+                                    <div class="thongtinvr flex-container">
+                                        <div class="giatrivr ">
+                                            <h4>@itemvr.Name</h4>
+                                            <label id="myLabel" style="display:none">@itemvr.code</label>
+                                            <label for="">@itemvr.Description</label>
+                                        </div>
+                                        <div class="btn-click">
+                                            <button onclick="copyText()">Copy</button>
+                                        </div>
+                                    </div>
+                                    <div class="hsdvr">
+
+                                        <div class="datevr flex-container">
+                                            <div class="quantity">
+                                                <hr>
+                                            </div>
+                                            <div class="timeve">
+                                                <label for="">@itemvr.EndDate</label>
+                                            </div>
+
+                                        </div>
+                                        <div class="chitietvr">
+                                            <a asp-action="VoucherDetail" asp-controller="Cart" asp-area="Customer" asp-route-id="@itemvr.VoucherID">Chi Tiết</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                    @if (itemvr.Status == 2)
+                    {
+                        <div class="voucher">
+
+                            <div class="itemvoucher flex-container">
+                                <div class="image_voucher">
+                                    <div class="bgvr">
+                                        <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico_promotion.svg?q=10294" alt="">
+                                    </div>
+                                </div>
+                                <div class="contenvr">
+                                    <div class="thongtinvr flex-container">
+                                        <div class="giatrivr ">
+                                            <h4>@itemvr.Name</h4>
+                                            <label id="myLabel" style="display:none">@itemvr.code</label>
+                                            <label for="">@itemvr.Description</label>
+                                        </div>
+                                        <div class="btn-click">
+                                            <button onclick="copyText()">Copy</button>
+                                        </div>
+                                    </div>
+                                    <div class="hsdvr">
+
+                                        <div class="datevr flex-container">
+                                            <div class="quantity">
+                                                <hr>
+                                            </div>
+                                            <div class="timeve">
+                                                <label for="">@itemvr.EndDate</label>
+                                            </div>
+
+                                        </div>
+                                        <div class="chitietvr">
+                                            <a asp-action="VoucherDetail" asp-controller="Cart" asp-area="Customer" asp-route-id="@itemvr.VoucherID">Chi Tiết</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                    @if (itemvr.Status == 3)
+                    {
+                        <div class="voucher">
+                            
+                            <div class="itemvoucher flex-container">
+                                <div class="image_voucher">
+                                    <div class="bgvr">
+                                        <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico_ewallet.svg?q=10428" alt="">
+                                    </div>
+                                </div>
+                                <div class="contenvr">
+                                    <div class="thongtinvr flex-container">
+                                        <div class="giatrivr ">
+                                            <h4>@itemvr.Name</h4>
+                                            <label id="myLabel" style="display:none">@itemvr.code</label>
+                                            <label for="">@itemvr.Description</label>
+                                        </div>
+                                        <div class="btn-click">
+                                            <button onclick="copyText()">Copy</button>
+                                        </div>
+                                    </div>
+                                    <div class="hsdvr">
+
+                                        <div class="datevr flex-container">
+                                            <div class="quantity">
+                                                <hr>
+                                            </div>
+                                            <div class="timeve">
+                                                <label for="">@itemvr.EndDate</label>
+                                            </div>
+
+                                        </div>
+                                        <div class="chitietvr">
+                                            <a asp-action="VoucherDetail" asp-controller="Cart" asp-area="Customer" asp-route-id="@itemvr.VoucherID">Chi Tiết</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+
+                    }
+                   
+            }
+            
+        </div>
+
+
+    </div>
+    
+</div>
+<script>
+    function copyText() {
+        var labelElement = document.getElementById("myLabel");
+
+        var tempInput = document.createElement("input");
+        tempInput.value = labelElement.innerText;
+
+        document.body.appendChild(tempInput);
+
+        tempInput.select();
+
+        document.execCommand("copy");
+
+        document.body.removeChild(tempInput);
+
+        alert("Đã sao chép: " + labelElement.innerText);
+    }
+
+</script>

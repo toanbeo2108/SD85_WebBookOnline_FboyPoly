@@ -34,6 +34,13 @@
                         Tên Voucher
                     </th>
                     <th style="text-align : center;">
+                        Mã code
+                    </th>
+                    <th style="text-align : center;">
+                        Số lượng
+                    </th>
+
+                    <th style="text-align : center;">
                         Chú Thích
                     </th>
                     <th style="text-align : center;">
@@ -61,6 +68,12 @@
 
                         <td style="text-align : center;">
                             @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td style="text-align : center;">
+                            @Html.DisplayFor(modelItem => item.code)
+                        </td>
+                        <td style="text-align : center;">
+                            @Html.DisplayFor(modelItem => item.Quantity)
                         </td>
                         <td style="text-align : center;">
                             @Html.DisplayFor(modelItem => item.Description)
@@ -171,6 +184,14 @@
         <div>
             <label for="btn_Name">Name</label>
             <input type="text" id="btn_Name" class="form-control" />
+        </div>
+         <div>
+            <label for="btn_code">code</label>
+            <input type="text" id="btn_code" class="form-control" />
+        </div>
+        <div>
+            <label for="btn_Quantity">Quantity</label>
+            <input type="text" id="btn_Quantity" class="form-control" />
         </div>
          <div>
             <label for="btn_Description">Description</label>
