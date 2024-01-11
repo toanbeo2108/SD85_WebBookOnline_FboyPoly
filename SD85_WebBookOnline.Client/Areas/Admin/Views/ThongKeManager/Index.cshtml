@@ -1,0 +1,98 @@
+﻿@using SD85_WebBookOnline.Client.Models
+@model IEnumerable<SD85_WebBookOnline.Client.Models.ThongKeViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+  
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+
+
+<script src="~/js/Thongke.js"></script>
+
+
+<div id="radiobutton_thongke" class="container">
+    <div class="row">
+       
+             <div class="col-md-4">
+                 <select id="thongke-options" class="form-select" >
+                    <option value="1">Thống kê tổng doanh thu</option>
+                    <option value="2">Thống kê ngày</option>
+                </select>
+            </div>
+            <div class="col-md-8">
+
+                 <div class="d-flex justify-content-sm-end gap-1" style="margin-right: 100px;">
+                <button type="button" class="btn btn-sm btn-info" id="btn-openfilter"><i class="fa-solid fa-filter"></i></button>    
+                 <button type="button" class="btn btn-sm btn-info" onclick="generateExcel()" id="btn-excel"><i class="fa-solid fa-file-excel"></i></button> 
+            </div>
+            </div>
+    </div>
+            
+            
+           
+</div>
+
+
+
+<div  class="form-group" id="thonke1">
+    <h2 id="tittle"></h2>
+     <table class="table" style="width : 100%;" id="table-thongke">
+            <thead>
+              
+
+
+            </thead>
+            <tbody>
+                
+            </tbody>
+     </table>
+</div>
+
+<div class="modal fade" id="modal-filter">
+    <div class=modal-dialog>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Lọc nâng cao</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ft_TUNGAY_tu">Từ ngày</label>
+                            <input id="ft_TUNGAY_tu" type="date" class="form-control" />
+                        </div>
+                    </div>                  
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ft_kethuc_den">Đến ngày</label>
+                            <input id="ft_kethuc_den" type="date" class="form-control" />
+                        </div>
+                    </div>                 
+                    <div class="col-md-12">
+                        <label for="btn_search">Tên sách</label>
+                        <input id="btn_search" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button id="btn_loc" type="button" class="btn btn-sm btn-success ">Xác nhận</button>
+                    <button id="btn_clear" type="button" class="btn btn-sm btn-primary ">Làm mới</button>
+                    <button id="btn_exit" type="button" class="btn btn-sm btn-dark ">Thoát</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+   
+                    <div id="chart-container">
+    <canvas id="myChart"></canvas>
+</div>
