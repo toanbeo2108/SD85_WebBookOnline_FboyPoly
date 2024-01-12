@@ -1,25 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using SD85_WebBookOnline.Share.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting; // Thêm namespace để sử dụng IWebHostEnvironment
-using Microsoft.AspNetCore.Http; // Thêm namespace để sử dụng IFormFile
-using System.Net.Http.Headers;
-using System.Net;
-using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
-using System.Transactions;
 using SD85_WebBookOnline.Share.Data;
+using SD85_WebBookOnline.Share.Models;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Transactions;
 
-namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
+namespace SD85_WebBookOnline.Client.Areas.Employee.Controllers
 {
-    public class ComboManagerController : Controller
+    public class ComboManagerEmpolyeeController : Controller
     {
         private readonly HttpClient _httpClient;
         private readonly HttpClient _httpClientz;
@@ -27,7 +16,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         AppDbContext context;
         public List<ComboItem> ComboItems { get; set; } = new List<ComboItem>();
 
-        public ComboManagerController(IWebHostEnvironment webHostEnvironment)
+        public ComboManagerEmpolyeeController(IWebHostEnvironment webHostEnvironment)
         {
             _httpClient = new HttpClient();
             _httpClientz = new HttpClient();
@@ -35,7 +24,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             context = new AppDbContext();
         }
 
-        [AutoValidateAntiforgeryToken]        
+        [AutoValidateAntiforgeryToken]
         public IActionResult Index()
         {
             return View();
@@ -179,7 +168,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             string updatedJson = JsonConvert.SerializeObject(myList);
             Response.Cookies.Append("lstComboItem", updatedJson);
 
-            return RedirectToAction("CreateCombo", "ComboManager", new { area = "Admin" });
+            return RedirectToAction("CreateCombo", "ComboManagerEmployee", new { area = "Empolyee" });
         }
 
         public async Task<IActionResult> DeleteToCombo(Guid id)
@@ -214,7 +203,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 {
                     string updatedJson = JsonConvert.SerializeObject(myList);
                     Response.Cookies.Append("lstComboItem", updatedJson);
-                    return RedirectToAction("CreateCombo", "ComboManager", new { area = "Admin" });
+                    return RedirectToAction("CreateCombo", "ComboManagerEmployee", new { area = "Empoyee" });
                 }
                 else
                 {
@@ -299,7 +288,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                         Status = item.Status
                     };
 
-                 
+
                     var urlComboItemOfCombo = $"https://localhost:7079/api/ComboItem/Add-ComboItem?BookID={cbItem.BookID}&ComboID={cbItem.ComboID}&ItemName={cbItem.ItemName}&Price={cbItem.Price}&Quantity={cbItem.Quantity}&ToTal={cbItem.ToTal}&Status={cbItem.Status}";
                     var contentComboItemDetail = new StringContent(JsonConvert.SerializeObject(cbItem), Encoding.UTF8, "application/json");
                     var responseCBIT = await _httpClient.PostAsync(urlComboItemOfCombo, contentComboItemDetail);
@@ -322,7 +311,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             // Sau khi lưu Combo thành công, xóa Cookie chứa danh sách ComboItem
             Response.Cookies.Delete("lstComboItem");
 
-            return RedirectToAction("AllComboManager", "ComboManager", new { area = "Admin" });
+            return RedirectToAction("AllComboManager", "ComboManagerEmployee", new { area = "Empoyee" });
         }
 
         [HttpPost]
@@ -330,11 +319,11 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         {
             if (await TryDeleteCombo(id))
             {
-                return RedirectToAction("AllComboManager", "ComboManager", new { area = "Admin" });
+                return RedirectToAction("AllComboManager", "ComboManagerEmployee", new { area = "Empoyee" });
             }
 
             TempData["ErrorMessage"] = "Xóa Combo không thành công"; // Thêm thông báo lỗi
-            return RedirectToAction("AllComboManager", "ComboManager", new { area = "Admin" });
+            return RedirectToAction("AllComboManager", "ComboManagerEmployee", new { area = "Empoyee" });
         }
 
         private async Task<bool> TryDeleteCombo(Guid id)
@@ -411,7 +400,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             if (response.IsSuccessStatusCode)
             {
                 // Nếu cập nhật thành công, chuyển hướng đến trang quản lý Combo
-                return RedirectToAction("AllComboManager", "ComboManager", new { area = "Admin" });
+                return RedirectToAction("AllComboManager", "ComboManagerEmployee", new { area = "Empoyee" });
             }
             else
             {
@@ -420,6 +409,5 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return View(cb);
             }
         }
-
     }
 }
