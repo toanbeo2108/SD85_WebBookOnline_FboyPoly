@@ -39,7 +39,14 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var respon = await _httpClient.GetAsync(url);
             string apiData = await respon.Content.ReadAsStringAsync();
             var lst = JsonConvert.DeserializeObject<List<Images>>(apiData);
-            
+            //var ls = lst.Select(c => new
+            //{
+            //    a = c.Book.BookName,
+            //    b = c.Status,
+
+            //});
+
+            //string qr = string.Format("...");
 
             return View(lst);
         }
@@ -138,7 +145,17 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 message = _mess,
                 data = _data
             }) ;
-           
+            //string apiData = await respon.Content.ReadAsStringAsync();
+            //var lst = JsonConvert.DeserializeObject<List<Images>>(apiData);
+            //var IMGs = lst.FirstOrDefault(x => x.ImagesID == id);
+            //if (IMGs == null)
+            //{
+            //    return BadRequest();
+            //}
+            //else
+            //{
+            //    return View(IMGs);
+            //}
         }
         [HttpGet]
         public async Task<IActionResult> UpdateIMG(Guid id)

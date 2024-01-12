@@ -51,15 +51,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "bfc72319-4755-4a5f-a29b-376ec2f45b37",
-                            ConcurrencyStamp = "bd7894a7-7aa5-48e5-b115-1b44061f7366",
+                            Id = "9f4244eb-356e-4fdc-86f6-81bfbbbe1bc0",
+                            ConcurrencyStamp = "e2e83bff-3f65-4c79-bcea-2bcc2b65a6dd",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "73c2f3da-89ed-4c17-9f1a-a71fd125cbeb",
-                            ConcurrencyStamp = "bfa8a29a-6923-4fe5-ae57-ae37ae012649",
+                            Id = "d1901214-92eb-4186-8988-d684a7f304dd",
+                            ConcurrencyStamp = "b552bac8-4fc7-48bd-8125-677412570876",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -915,18 +915,11 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
-
-                    b.Property<string>("code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("VoucherID");
 
