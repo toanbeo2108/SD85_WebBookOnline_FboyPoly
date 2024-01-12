@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SD85_WebBookOnline.Api.Migrations
 {
-    public partial class test : Migration
+    public partial class hiepupdate1112 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -77,17 +77,16 @@ namespace SD85_WebBookOnline.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "CategoryParents",
                 columns: table => new
                 {
-                    CategoryID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    CategoryParentID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryParentName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.CategoryID);
+                    table.PrimaryKey("PK_CategoryParents", x => x.CategoryParentID);
                 });
 
             migrationBuilder.CreateTable(
@@ -331,6 +330,26 @@ namespace SD85_WebBookOnline.Api.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CategoryID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryParentID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CategoryID);
+                    table.ForeignKey(
+                        name: "FK_Categories_CategoryParents_CategoryParentID",
+                        column: x => x.CategoryParentID,
+                        principalTable: "CategoryParents",
+                        principalColumn: "CategoryParentID");
                 });
 
             migrationBuilder.CreateTable(
@@ -621,12 +640,12 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "31ef03e1-c22e-4fef-a56c-397dd4ca53d8", "68ede0f7-a76f-4dde-be58-4b92fa318e39", "User", "USER" });
+                values: new object[] { "94c2d461-9822-492e-be39-10c6c4ba2f37", "fdd4a8aa-32ac-4dbc-8cef-5c1bc3e1b077", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "c0f7921a-b408-4ac9-80dd-556dfcef995e", "8a456dcd-810e-4f02-ba27-cd3c72391e9c", "Admin", "ADMIN" });
+                values: new object[] { "e4d66196-15eb-4bd4-99da-6dc9a61e1af8", "d347f029-b774-46b4-8787-0166eeaf85f0", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -753,6 +772,11 @@ namespace SD85_WebBookOnline.Api.Migrations
                 column: "ComboID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Categories_CategoryParentID",
+                table: "Categories",
+                column: "CategoryParentID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ComboItem_BookID",
                 table: "ComboItem",
                 column: "BookID");
@@ -847,6 +871,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Book");
+
+            migrationBuilder.DropTable(
+                name: "CategoryParents");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

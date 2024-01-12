@@ -30,7 +30,7 @@
             </div>
             <div class="col-lg-6 text-center text-lg-right">
                 <div class="d-inline-flex align-items-center">
-                    <a href="Login.html" class="nav-item nav-link item-nav">Login</a>
+                    <a asp-action="Login" asp-controller="Home" class="nav-item nav-link item-nav">Login</a>
                     <a href="#" class="nav-item nav-link item-nav">Register</a>
                 </div>
             </div>
@@ -142,75 +142,259 @@
             <div class="col-lg-3 col-md-12">
                 <!-- Price Start -->
                 <div class="border-bottom mb-4 pb-4">
-                    <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
+                    <h5 class="font-weight-semi-bold mb-4">Mệnh Giá</h5>
                     <form>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="price-all">
-                            <label class="custom-control-label" for="price-all">All Price</label>
-                            <span class="badge border font-weight-normal">1000</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-1">
-                            <label class="custom-control-label" for="price-1">$0 - $100</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-2">
-                            <label class="custom-control-label" for="price-2">$100 - $200</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-3">
-                            <label class="custom-control-label" for="price-3">$200 - $300</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-4">
-                            <label class="custom-control-label" for="price-4">$300 - $400</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="price-5">
-                            <label class="custom-control-label" for="price-5">$400 - $500</label>
-                            <span class="badge border font-weight-normal">168</span>
-                        </div>
+                        <a>
+                            <div class="custom-control  d-flex align-items-center justify-content-between mb-3">
+                                <label class="custom-control-label" for="price-all">Tất Cả</label>
+                                <span class="badge border font-weight-normal">1000</span>
+                            </div>
+                        </a>
+                        <a asp-action="UsePricedown100" asp-controller="Shop">
+                            <div class="custom-control  d-flex align-items-center justify-content-between mb-3">
+                                <label class="custom-control-label" for="price-1">Dưới 100.000đ</label>
+                                <span class="badge border font-weight-normal">150</span>
+                            </div>
+                        </a>
+                        <a asp-action="UsePricebetween100to200" asp-controller="Shop">
+                            <div class="custom-control  d-flex align-items-center justify-content-between mb-3">
+                                <label class="custom-control-label" for="price-2">100.000đ - 200.000đ</label>
+                                <span class="badge border font-weight-normal">295</span>
+                            </div>
+                         </a>
+                        <a asp-action="UsePricebetween200to400" asp-controller="Shop">
+                            <div class="custom-control  d-flex align-items-center justify-content-between mb-3">
+                                <label class="custom-control-label" for="price-2">200.000đ - 400.000đ</label>
+                                <span class="badge border font-weight-normal">295</span>
+                            </div>
+                         </a>
+                         <a asp-action="UsePricebetween400to500" asp-controller="Shop">
+                            <div class="custom-control  d-flex align-items-center justify-content-between mb-3">
+                                <label class="custom-control-label" for="price-2">400.000đ - 500.000đ</label>
+                                <span class="badge border font-weight-normal">295</span>
+                            </div>
+                         </a>
+                        <a asp-action="UsePrice500Up" asp-controller="Shop">
+                            <div class="custom-control  d-flex align-items-center justify-content-between mb-3">
+                                <label class="custom-control-label" for="price-2">Trên 500.000đ</label>
+                                <span class="badge border font-weight-normal">295</span>
+                            </div>
+                        </a>
+                        
                     </form>
                 </div>
                 <!-- Price End -->
                 <!-- Color Start -->
+                @inject Microsoft.AspNetCore.Http.IHttpContextAccessor context
+                @using Newtonsoft.Json
+                @using SD85_WebBookOnline.Share.Models
                 <div class="border-bottom mb-4 pb-4">
-                    <h5 class="font-weight-semi-bold mb-4">Filter by color</h5>
+                    <h5 class="font-weight-semi-bold mb-4">Hình Thức</h5>
                     <form>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="color-all">
-                            <label class="custom-control-label" for="price-all">All Color</label>
-                            <span class="badge border font-weight-normal">1000</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-1">
-                            <label class="custom-control-label" for="color-1">Black</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-2">
-                            <label class="custom-control-label" for="color-2">White</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-3">
-                            <label class="custom-control-label" for="color-3">Red</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-4">
-                            <label class="custom-control-label" for="color-4">Blue</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="color-5">
-                            <label class="custom-control-label" for="color-5">Green</label>
-                            <span class="badge border font-weight-normal">168</span>
-                        </div>
+                        <a>
+                            <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                                <label class="custom-control-label" for="price-all">Tất Cả</label>
+                                <span class="badge border font-weight-normal">1000</span>
+                            </div>
+                        </a>
+                       
+                        @{
+                            string lstFormValue = Context.Request.Cookies["lstForm"];
+                            if(lstFormValue == null)
+                            {
+                                <h1>Null Form rồi</h1>
+                            }
+                            List<Form> lstForm = JsonConvert.DeserializeObject<List<Form>>(lstFormValue);
+                            if (lstForm != null)
+                            {
+                                foreach (var item in lstForm)
+                                {
+                                    <a asp-action="FilterByForm" asp-controller="Shop" asp-route-id="@item.FormId">
+                                        <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                                            <label class="custom-control-label" for="price-all">@item.FormName</label>
+                                            <span class="badge border font-weight-normal">1000</span>
+                                        </div>
+                                    </a>
+                                }
+
+                            }
+                        }
+                        
+                    </form>
+                </div>
+
+                <div class="border-bottom mb-4 pb-4">
+                    <h5 class="font-weight-semi-bold mb-4">Tác Giả</h5>
+                    <form>
+                        <a>
+                            <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                                <label class="custom-control-label" for="price-all">Tất Cả</label>
+                                <span class="badge border font-weight-normal">1000</span>
+                            </div>
+                        </a>
+                       
+                        @{
+                            var lstAuthorValue = context.HttpContext.Request.Cookies["lstAuthor"];
+                            if (lstAuthorValue == null)
+                            {
+                                <h1>Null Form rồi</h1>
+                            }
+                            IEnumerable<Author> lstAuthor = JsonConvert.DeserializeObject<IEnumerable<Author>>(lstAuthorValue);
+                            if (lstAuthor != null)
+                            {
+                                foreach (var item in lstAuthor)
+                                {
+                                    <a asp-action="FilterByForm" asp-controller="Shop" asp-route-id="@item.AuthorID">
+                                        <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                                            <label class="custom-control-label" for="price-all">@item.AuthorName</label>
+                                            <span class="badge border font-weight-normal">1000</span>
+                                        </div>
+                                    </a>
+                                }
+
+                            }
+                        }
+                        
+                    </form>
+                </div>
+
+                <div class="border-bottom mb-4 pb-4">
+                    <h5 class="font-weight-semi-bold mb-4">Danh Mục Lớn</h5>
+                    <form>
+                        <a>
+                            <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                                <label class="custom-control-label" for="price-all">Tất Cả</label>
+                                <span class="badge border font-weight-normal">1000</span>
+                            </div>
+                        </a>
+                       
+                        @{
+                            var lstCTPValue = context.HttpContext.Request.Cookies["lstCateParent"];
+                            if (lstCTPValue == null)
+                            {
+                                <h1>Null Form rồi</h1>
+                            }
+                            IEnumerable<CategoryParent> lstCTP = JsonConvert.DeserializeObject<IEnumerable<CategoryParent>>(lstCTPValue);
+                            if (lstCTP != null)
+                            {
+                                foreach (var item in lstCTP)
+                                {
+                                    <a asp-action="FilterByForm" asp-controller="Shop" asp-route-id="@item.CategoryParentID">
+                                        <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                                            <label class="custom-control-label" for="price-all">@item.CategoryParentName</label>
+                                            <span class="badge border font-weight-normal">1000</span>
+                                        </div>
+                                    </a>
+                                }
+
+                            }
+                        }
+                        
+                    </form>
+                </div>
+
+                <div class="border-bottom mb-4 pb-4">
+                    <h5 class="font-weight-semi-bold mb-4">Thể Loại</h5>
+                    <form>
+                        <a>
+                            <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                                <label class="custom-control-label" for="price-all">Tất Cả</label>
+                                <span class="badge border font-weight-normal">1000</span>
+                            </div>
+                        </a>
+                       
+                        @{
+                            var lstCTValue = context.HttpContext.Request.Cookies["lstCategory"];
+                            if (lstCTValue == null)
+                            {
+                                <h1>Null Form rồi</h1>
+                            }
+                            IEnumerable<Category> lstCT = JsonConvert.DeserializeObject<IEnumerable<Category>>(lstCTValue);
+                            if (lstCT != null)
+                            {
+                                foreach (var item in lstCT)
+                                {
+                                    <a asp-action="FilterByForm" asp-controller="Shop" asp-route-id="@item.CategoryID">
+                                        <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                                            <label class="custom-control-label" for="price-all">@item.Name</label>
+                                            <span class="badge border font-weight-normal">1000</span>
+                                        </div>
+                                    </a>
+                                }
+
+                            }
+                        }
+                        
+                    </form>
+                </div>
+
+                <div class="border-bottom mb-4 pb-4">
+                    <h5 class="font-weight-semi-bold mb-4">Ngôn Ngữ</h5>
+                    <form>
+                        <a>
+                            <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                                <label class="custom-control-label" for="price-all">Tất Cả</label>
+                                <span class="badge border font-weight-normal">1000</span>
+                            </div>
+                        </a>
+
+                        @{
+                            var lstLanguageValue = context.HttpContext.Request.Cookies["lstLanguage"];
+                            if (lstLanguageValue == null)
+                            {
+                                <h1>Null Form rồi</h1>
+                            }
+                            IEnumerable<Languge> lstLanguage = JsonConvert.DeserializeObject<IEnumerable<Languge>>(lstLanguageValue);
+                            if (lstLanguage != null)
+                            {
+                                foreach (var item in lstLanguage)
+                                {
+                                    <a asp-action="FilterByForm" asp-controller="Shop" asp-route-id="@item.LangugeID">
+                                        <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                                            <label class="custom-control-label" for="price-all">@item.Name</label>
+                                            <span class="badge border font-weight-normal">1000</span>
+                                        </div>
+                                    </a>
+                                }
+
+                            }
+                        }
+
+                    </form>
+                </div>
+
+                <div class="border-bottom mb-4 pb-4">
+                    <h5 class="font-weight-semi-bold mb-4">Nhà Xuất Bản</h5>
+                    <form>
+                        <a>
+                            <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                                <label class="custom-control-label" for="price-all">Tất Cả</label>
+                                <span class="badge border font-weight-normal">1000</span>
+                            </div>
+                        </a>
+
+                        @{
+                            var lstManuValue = context.HttpContext.Request.Cookies["lstManu"];
+                            if (lstManuValue == null)
+                            {
+                                <h1>Null Form rồi</h1>
+                            }
+                            IEnumerable<Manufacturer> lstManu = JsonConvert.DeserializeObject<IEnumerable<Manufacturer>>(lstManuValue);
+                            if (lstManu != null)
+                            {
+                                foreach (var item in lstManu)
+                                {
+                                    <a asp-action="FilterByForm" asp-controller="Shop" asp-route-id="@item.ManufactureID">
+                                        <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                                            <label class="custom-control-label" for="price-all">@item.ManufactureName</label>
+                                            <span class="badge border font-weight-normal">1000</span>
+                                        </div>
+                                    </a>
+                                }
+
+                            }
+                        }
+
                     </form>
                 </div>
                 <!-- Color End -->
@@ -218,33 +402,33 @@
                 <div class="mb-5">
                     <h5 class="font-weight-semi-bold mb-4">Filter by size</h5>
                     <form>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="size-all">
+                        <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                          
                             <label class="custom-control-label" for="size-all">All Size</label>
                             <span class="badge border font-weight-normal">1000</span>
                         </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-1">
+                        <div class="custom-control  d-flex align-items-center justify-content-between mb-3">
+                            
                             <label class="custom-control-label" for="size-1">XS</label>
                             <span class="badge border font-weight-normal">150</span>
                         </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-2">
+                        <div class="custom-control  d-flex align-items-center justify-content-between mb-3">
+                       
                             <label class="custom-control-label" for="size-2">S</label>
                             <span class="badge border font-weight-normal">295</span>
                         </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-3">
+                        <div class="custom-control  d-flex align-items-center justify-content-between mb-3">
+                           
                             <label class="custom-control-label" for="size-3">M</label>
                             <span class="badge border font-weight-normal">246</span>
                         </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-4">
+                        <div class="custom-control  d-flex align-items-center justify-content-between mb-3">
+                           
                             <label class="custom-control-label" for="size-4">L</label>
                             <span class="badge border font-weight-normal">145</span>
                         </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="size-5">
+                        <div class="custom-control  d-flex align-items-center justify-content-between">
+                         
                             <label class="custom-control-label" for="size-5">XL</label>
                             <span class="badge border font-weight-normal">168</span>
                         </div>

@@ -35,7 +35,7 @@ namespace SD85_WebBookOnline.Api.Data
         public virtual DbSet<Bill> Bill { get; set; }
         public virtual DbSet<Voucher> Voucher { get; set; }
         public virtual DbSet<DeliveryAddress> DeliveryAddress { get; set; }
-
+        public virtual DbSet<CategoryParent> CategoryParents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -51,15 +51,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c0f7921a-b408-4ac9-80dd-556dfcef995e",
-                            ConcurrencyStamp = "8a456dcd-810e-4f02-ba27-cd3c72391e9c",
+                            Id = "e4d66196-15eb-4bd4-99da-6dc9a61e1af8",
+                            ConcurrencyStamp = "d347f029-b774-46b4-8787-0166eeaf85f0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "31ef03e1-c22e-4fef-a56c-397dd4ca53d8",
-                            ConcurrencyStamp = "68ede0f7-a76f-4dde-be58-4b92fa318e39",
+                            Id = "94c2d461-9822-492e-be39-10c6c4ba2f37",
+                            ConcurrencyStamp = "fdd4a8aa-32ac-4dbc-8cef-5c1bc3e1b077",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -569,6 +569,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CategoryParentID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -581,7 +584,26 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.HasKey("CategoryID");
 
+                    b.HasIndex("CategoryParentID");
+
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("SD85_WebBookOnline.Share.Models.CategoryParent", b =>
+                {
+                    b.Property<Guid>("CategoryParentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryParentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoryParentID");
+
+                    b.ToTable("CategoryParents");
                 });
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Combo", b =>
@@ -1119,6 +1141,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Navigation("Combo");
                 });
 
+            modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Category", b =>
+                {
+                    b.HasOne("SD85_WebBookOnline.Share.Models.CategoryParent", "CategoryParent")
+                        .WithMany("Categorys")
+                        .HasForeignKey("CategoryParentID");
+
+                    b.Navigation("CategoryParent");
+                });
+
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.ComboItem", b =>
                 {
                     b.HasOne("SD85_WebBookOnline.Share.Models.Book", "Book")
@@ -1200,6 +1231,11 @@ namespace SD85_WebBookOnline.Api.Migrations
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Category", b =>
                 {
                     b.Navigation("BookDetails");
+                });
+
+            modelBuilder.Entity("SD85_WebBookOnline.Share.Models.CategoryParent", b =>
+                {
+                    b.Navigation("Categorys");
                 });
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Combo", b =>
