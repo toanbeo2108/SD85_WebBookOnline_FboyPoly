@@ -4,27 +4,26 @@ using SD85_WebBookOnline.Share.Models;
 using System.Net.Http.Headers;
 using System.Text;
 
+
 namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 {
-    //https://localhost:7079/api/Image/Update-image/937c4343-f9da-4f00-bef8-666c4a88c4ff
-    //https://localhost:7079/api/Image/delete-image/ad931fd6-3d24-451c-a4a0-260d0f8ea7fc
-    //
-    //
-    public class ImagesManagerController : Controller
+    public class InputSlipManagerController : Controller
     {
+
+        //  getall
+        // urlInputSlip = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";  creat
+        // 
         HttpClient _httpClient;
-        
-        public ImagesManagerController()
+        public InputSlipManagerController()
         {
             _httpClient = new HttpClient();
         }
-       
         public IActionResult Index()
         {
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> AllImages()
+        public async Task<IActionResult> AllInput()
         {
             var urlBook = $"https://localhost:7079/api/Book/get-all-book";
             var responBook = await _httpClient.GetAsync(urlBook);
@@ -34,56 +33,46 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var url = $"https://localhost:7079/api/Image/getAll_Image";
+            var url = $"https://localhost:7079/api/InputSlipController/GetAllInputSlip";
             var httpClient = new HttpClient();
             var respon = await _httpClient.GetAsync(url);
             string apiData = await respon.Content.ReadAsStringAsync();
-            var lst = JsonConvert.DeserializeObject<List<Images>>(apiData);
-            
+            var lst = JsonConvert.DeserializeObject<List<InputSlip>>(apiData);
+
 
             return View(lst);
         }
-        [HttpGet]
-        public async Task<IActionResult> CreateIMG()
+        public async Task<IActionResult> CreateIP()
         {
-           
+
             return View();
         }
-        [HttpPost,Route("themm-image")]
-        public async Task<IActionResult> CreateIMG(Images img)
+        [HttpPost, Route("themm-inputslip")]
+        public async Task<IActionResult> CreateIP(InputSlip ip)
         {
             string _mess = "";
             bool _stt = false;
 
 
-           
+
 
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            
-            img.ImagesID = Guid.NewGuid();
-            
-            var url = $"https://localhost:7079/api/Image/add-image?BookID={img.BookID}&ImageName={img.ImageName}&Status={img.Status}";
+
+            ip.InputSlipID = Guid.NewGuid();
+
+            var url = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";
             var httpClient = new HttpClient();
-            var content = new StringContent(JsonConvert.SerializeObject(img), Encoding.UTF8, "application/json");
-            var respon = await httpClient.PostAsync(url, content);
-            //if (respon.IsSuccessStatusCode)
-            //{
-
-            //    return RedirectToAction("AllImages", "ImagesManager", new { area = "Admin" });
-
-            //}
-
-            //TempData["erro message"] = "thêm thất bại";
-            //return View();
+            var content = new StringContent(JsonConvert.SerializeObject(ip), Encoding.UTF8, "application/json");
+            var respon = await httpClient.PostAsync(url, content);           
             if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-               
+
                 _stt = true;
                 _mess = "them thanh cong!";
-                
+
             }
-            else 
+            else
             {
                 _stt = false;
                 _mess = "them that bai!";
@@ -96,8 +85,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 
 
         }
-        [HttpGet, Route("detail-image/{id}")]
-        public async Task<IActionResult> ImagesDetail(Guid id)
+        [HttpGet, Route("detail-inp/{id}")]
+        public async Task<IActionResult> InPDetail(Guid id)
         {
             string _mess = "";
             bool _stt = false;
@@ -105,14 +94,14 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var url = $"https://localhost:7079/api/Image/getAll_Image";
+            var url = $"https://localhost:7079/api/InputSlipController/GetAllInputSlip";
             var respon = await _httpClient.GetAsync(url);
             string apiData = await respon.Content.ReadAsStringAsync();
-            
+
             if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                var lst = JsonConvert.DeserializeObject<List<Images>>(apiData);
-                var img = lst.FirstOrDefault(c => c.ImagesID == id);
+                var lst = JsonConvert.DeserializeObject<List<InputSlip>>(apiData);
+                var img = lst.FirstOrDefault(c => c.InputSlipID == id);
                 if (img == null)
                 {
                     _stt = false;
@@ -122,14 +111,14 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 {
                     _stt = true;
                     _mess = "";
-                    _data =  img ;
+                    _data = img;
                 }
-                   
-                                   
+
+
             }
             else
             {
-                _stt= false;
+                _stt = false;
                 _mess = "không tìm thấy";
             }
             return Json(new
@@ -137,20 +126,19 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 status = _stt,
                 message = _mess,
                 data = _data
-            }) ;
-           
+            });
+
         }
-        [HttpGet]
-        public async Task<IActionResult> UpdateIMG(Guid id)
+        public async Task<IActionResult> UpdateInP(Guid id)
         {
 
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var url = $"https://localhost:7079/api/Image/getAll_Image";
+            var url = $"https://localhost:7079/api/InputSlipController/GetAllInputSlip";
             var respon = await _httpClient.GetAsync(url);
             string apiData = await respon.Content.ReadAsStringAsync();
-            var lst = JsonConvert.DeserializeObject<List<Images>>(apiData);
-            var IMGs = lst.FirstOrDefault(x => x.ImagesID == id);
+            var lst = JsonConvert.DeserializeObject<List<InputSlip>>(apiData);
+            var IMGs = lst.FirstOrDefault(x => x.InputSlipID == id);
             if (IMGs == null)
             {
                 return BadRequest();
@@ -160,21 +148,21 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return View(IMGs);
             }
         }
-        [HttpPost,Route("update-img/{id}")]
-         public async Task<IActionResult> UpdateIMG(Guid id, Images img)
+        [HttpPost, Route("update-inp/{id}")]
+        public async Task<IActionResult> UpdateIMG(Guid id, InputSlip img)
         {
             string _mess = "";
             bool _stt = false;
-           
-            var url = $"https://localhost:7079/api/Image/Update-image/{id}";
+
+            var url = $"https://localhost:7079/api/InputSlipController/UpdateInputSlip/{id}";
             var content = new StringContent(JsonConvert.SerializeObject(img), Encoding.UTF8, "application/json");
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var respon = await _httpClient.PutAsync(url, content);
-            
+
             if (respon.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                
+
                 _stt = true;
                 _mess = "cập nhật thành công !";
             }
@@ -187,48 +175,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             {
                 status = _stt,
                 message = _mess
-            });
-            
-            //if (!respon.IsSuccessStatusCode)
-            //{
-            //    return BadRequest();
-            //}
-           
-            //return RedirectToAction("AllImages", "ImagesManager", new { area = "Admin" });
-
+            });           
         }
-        [HttpGet, Route("delete-image/{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            string _mess = "";
-            bool _stt = true;
-            object _data = null;
-            var token = Request.Cookies["Token"];
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var url = $"https://localhost:7079/api/Image/delete-image/{id}";
-            var respon = await _httpClient.DeleteAsync(url);
-            //if (!respon.IsSuccessStatusCode)
-            //{
-            //    return BadRequest();
-            //}
-            //return RedirectToAction("AllImages", "ImagesManager", new { area = "Admin" });
-            if (respon.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                _stt = true;
-                _mess = "xóa thành công";
-            }
-            else
-            {
-                _stt = false;
-                _mess = "xóa thất bại";
-            }
-            return Json(new
-            {
-                status = _stt,
-                message = _mess,
-            });
-
-        }
-        
     }
-} 
+}
