@@ -46,7 +46,8 @@ namespace SD85_WebBookOnline.Api.Data
         {
             builder.Entity<IdentityRole>().HasData(
                     new IdentityRole() { Name = "Admin", NormalizedName = "ADMIN" },
-                    new IdentityRole() { Name = "User", NormalizedName = "USER" }
+                    new IdentityRole() { Name = "User", NormalizedName = "USER" },
+                    new IdentityRole() { Name = "Empolyee", NormalizedName = "EMPLOYEE" }
                 );
         }
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

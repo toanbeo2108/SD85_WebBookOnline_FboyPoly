@@ -24,6 +24,9 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Customer\Data\" />
     <Folder Include="Areas\Customer\Models\" />
+    <Folder Include="Areas\Employee\Data\" />
+    <Folder Include="Areas\Employee\Models\" />
+    <Folder Include="Areas\Employee\Views\" />
     <Folder Include="wwwroot\ImgaeUser\" />
     <Folder Include="wwwroot\photoBanner\" />
     <Folder Include="wwwroot\photoCombo\" />
