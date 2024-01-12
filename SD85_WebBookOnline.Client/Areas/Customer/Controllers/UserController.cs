@@ -41,12 +41,20 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             return View(User);
         }
         [HttpPost]
-        public async Task<IActionResult> Update(User user, IFormFile imageFile)
+        public async Task<IActionResult> Update(User u,IFormFile imageFile)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            string apiURL = $"https://localhost:7079/api/user/UpdateUser";
+            
+            var UserId = Request.Cookies["UserID"];
+            var urlUser = $"https://localhost:7079/api/user/GetUsersById?id=" + UserId;
+            var responseUser = await _httpClient.GetAsync(urlUser);
+            string apiDataUser = await responseUser.Content.ReadAsStringAsync();
+            var User = JsonConvert.DeserializeObject<User>(apiDataUser);
+            User.UserName = u.UserName;
+            User.PhoneNumber = u.PhoneNumber;
+            User.Email = u.Email;
+            User.Country = u.Country;
 
             if (imageFile != null && imageFile.Length > 0)
             {
@@ -55,17 +63,15 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                 {
                     await imageFile.CopyToAsync(stream);
                 }
-                user.Avatar = imageFile.FileName;
+                User.Avatar = imageFile.FileName;
             }
             else
             {
-                var url = $"https://localhost:7079/api/user/GetUsersById?id=" + user.Id;
-                var responseUrl = await _httpClient.GetAsync(url);
-                string apiDataUser = await responseUrl.Content.ReadAsStringAsync();
-                var existingUser = JsonConvert.DeserializeObject<User>(apiDataUser);
-                user.Avatar = existingUser.Avatar;
+                User.Avatar = User.Avatar;
             }
-            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+
+            string apiURL = $"https://localhost:7079/api/user/UpdateUser";
+            var content = new StringContent(JsonConvert.SerializeObject(User), Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync(apiURL, content);
 
             if (response.IsSuccessStatusCode)
@@ -74,7 +80,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             }
             else
             {
-                return BadRequest();
+                return BadRequest("Lỗi cập nhật User");
             }
         }
     }

@@ -15,7 +15,6 @@ namespace SD85_WebBookOnline.Share.Models
         public int? SoLuong { get; set; }
         public decimal? GiaNhap { get; set; }
         public DateTime? NgayNhap { get; set; }
-
         public virtual Book? Book { get; set; }
         public virtual User? User { get; set; }
 

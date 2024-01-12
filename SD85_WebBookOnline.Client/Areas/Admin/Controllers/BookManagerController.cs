@@ -80,42 +80,27 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             ViewBag.lstForm = lstForm;
             return View();
         }
-        [HttpPost, Route("Add-Book")]
+        [HttpPost,Route("Add-Book")]
         public async Task<IActionResult> CreateBook(Book bk, IFormFile imageFile)
         {
             var urlAllBook = $"https://localhost:7079/api/Book/get-all-book";
             var responAllBook = await _httpClient.GetAsync(urlAllBook);
             string apiDataAllBook = await responAllBook.Content.ReadAsStringAsync();
             var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataAllBook);
-
-            if (lstBook == null)
+            if (responAllBook.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return NotFound("Hiện Tại Không có sách trên Gian Hàng");
+                if (lstBook == null)
+                {
+
+                    _stt = false;
+                    _mess = "Hiện Tại Không có sách trên Gian Hàng";
+                }
+
             }
+            
             var book = lstBook.FirstOrDefault(x => x.BookName.ToLower() == bk.BookName.ToLower());
             if (book == null)
             {
-                var urlManufacturer = $"https://localhost:7079/api/Manufacturer/GetAllManufacturer";
-                var responManufacturer = await _httpClient.GetAsync(urlManufacturer);
-                string apiDataManufacturer = await responManufacturer.Content.ReadAsStringAsync();
-                var lstManufacturer = JsonConvert.DeserializeObject<List<Manufacturer>>(apiDataManufacturer);
-                ViewBag.lstManufacturer = lstManufacturer;
-
-                var urlCoupon = $"https://localhost:7079/api/Coupon/GetAllCoupon";
-                var responCoupon = await _httpClient.GetAsync(urlCoupon);
-                string apiDataCoupon = await responCoupon.Content.ReadAsStringAsync();
-                var lstCoupon = JsonConvert.DeserializeObject<List<Coupon>>(apiDataCoupon);
-                ViewBag.lstCoupon = lstCoupon;
-
-
-
-                var urlForm = $"https://localhost:7079/api/Form/GetAllForm";
-                var responForm = await _httpClient.GetAsync(urlForm);
-                string apiDataForm = await responForm.Content.ReadAsStringAsync();
-                var lstForm = JsonConvert.DeserializeObject<List<Form>>(apiDataForm);
-                ViewBag.lstForm = lstForm;
-
-
                 if (imageFile != null && imageFile.Length > 0)
                 {
                     var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photoBooks", imageFile.FileName);
@@ -134,8 +119,9 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 
                 var content = new StringContent(JsonConvert.SerializeObject(bk), Encoding.UTF8, "application/json");
                 var respon = await _httpClient.PostAsync(urlBook, content);
-                if (respon.IsSuccessStatusCode)
+                if (respon.StatusCode == System.Net.HttpStatusCode.OK)
                 {
+
                     InputSlip ip = new InputSlip();
                     ip.InputSlipID = Guid.NewGuid();
                     ip.IdNhanVienNhap = null;
@@ -146,16 +132,29 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                     var urlInputSlip = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";
                     var contentIP = new StringContent(JsonConvert.SerializeObject(ip), Encoding.UTF8, "application/json");
                     var responIP = await _httpClient.PostAsync(urlInputSlip, contentIP);
-                    if (responIP.IsSuccessStatusCode)
+                    if (responIP.StatusCode == System.Net.HttpStatusCode.OK)
                     {
-                        return RedirectToAction("AllBookManager", "BookManager", new { area = "Admin" });
+                        _stt = true;
+                        _mess = "Thêm thành công!"; 
                     }
-                    return BadRequest("Bạn đã thêm sách thành công nhưng Phiếu Nhập không thể khởi tạo !");
-                }
-                TempData["erro message"] = "thêm thất bại";
-                return View(TempData);
+                    else
+                    {
+                        _stt = true;
+                        _mess = "Thêm thất bại!"; 
+                    }
+                }                
             }
-            return View(TempData);
+            else
+            {
+                _stt = false;
+                _mess = "Sách này đã tồn tại !";
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess,
+
+            });
             
         }
         [HttpGet,Route("detail-book/{id}")]
@@ -168,6 +167,9 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             string apiDataBook = await responBook.Content.ReadAsStringAsync();
             var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
             var Book = lstBook.FirstOrDefault(x => x.BookID == id);
+
+            
+
             if (responBook.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 if (Book == null)
@@ -193,14 +195,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 message = _mess,
                 data = _data
             });
-            //if (Book == null)
-            //{
-            //    return BadRequest();
-            //}
-            //else
-            //{
-            //    return View(Book);
-            //}
+            
            
         }
         [HttpGet]

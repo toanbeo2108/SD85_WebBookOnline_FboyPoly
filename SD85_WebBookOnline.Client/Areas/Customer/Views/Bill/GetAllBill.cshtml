@@ -1,0 +1,133 @@
+﻿@model IEnumerable<SD85_WebBookOnline.Share.Models.Bill>
+@{
+    ViewData["Title"] = "GetAllBill";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<table id="tble_ajax" class="table">
+    <thead>
+        <tr>
+            <th>
+                Người nhận
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Tổng tiền
+            </th>
+            <th>
+                Giá ship
+            </th>
+            <th>
+                Số điện thoại
+            </th>
+            <th>
+                Địa chỉ người nhận
+            </th>
+            <th>
+                Ngày đặt hàng
+            </th>
+            <th>
+                Ngày nhận hàng
+            </th>
+            <th>
+                Phương thức thanh toán
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var items in Model)
+        {
+            <tr>
+                <td>
+                    @items.ReceiverName
+                </td>
+                <td>
+                    @items.Email
+                </td>
+                <td>
+                    @items.Total
+                </td>
+                <td>
+                    @items.Shipmoney
+                </td>
+                <td>
+                    @items.UserPhone
+                </td>
+                <td>
+                    @items.AddressUser
+                </td>
+                <td>
+                    @items.OrderDate
+                </td>
+                <td>
+                    @items.DeliveryDate
+                </td>
+                <td>
+                    @if (items.PaymentMethod == 1)
+                    {
+                        <p>Paypal</p>
+                    }
+                    else if (items.PaymentMethod == 2)
+                    {
+                        <p>Direct Check</p>
+                    }
+                    else if (items.PaymentMethod == 3)
+                    {
+                        <p>Bank Transfer</p>
+                    }
+                    else
+                    {
+                        <p>VNPay</p>
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-controller="Bill" asp-action="GetBillDetails" asp-route-id="@items.BillID">Chi tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="modal fade" id="BillDetailModal" tabindex="-1" role="dialog" aria-labelledby="BillDetailModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="BillDetailModal">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered text-center mb-0">
+                    <thead class="bg-secondary text-dark">
+                        <tr>
+                            <th>Products</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle" id="bill-item-details">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Link datatable*@
+<link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Biến bảng thành DataTable
+        var table = $('#tble_ajax').DataTable();
+    });
+</script>

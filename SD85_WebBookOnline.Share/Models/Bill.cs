@@ -15,6 +15,8 @@ namespace SD85_WebBookOnline.Share.Models
         public decimal? PriceBeforeVoucher { get; set; } // Gía gốc
         public decimal? Shipmoney { get; set; } // Tiền Ship
         public string? UserPhone { get; set; } // SĐT Khách hàng
+        public string? Email { get; set; } // Email
+        public string? ReceiverName { get; set; } // Tên người nhận
         public string? AddressUser { get; set; } // Địa chỉ khách hàng
         public DateTime? OrderDate { get; set; } // Ngày đặt hàng
         public DateTime? DeliveryDate { get; set; } // Ngày giao hàng

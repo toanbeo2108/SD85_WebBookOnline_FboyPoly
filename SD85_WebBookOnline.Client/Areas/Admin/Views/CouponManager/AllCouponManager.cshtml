@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
 
 <script src="~/js/Coupon.js"></script>
 
@@ -25,7 +26,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th style="text-align : center;">
+                    <th style="text-align : center; display:none" >
                         ID coupon
                     </th>
                     <th style="text-align : center;">
@@ -55,7 +56,7 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td style="text-align : center; margin-bottom : 20px">
+                        <td style="text-align : center; margin-bottom : 20px;display:none">
                             @Html.DisplayFor(modelItem => item.CouponID)
                         </td>
                         <td style="text-align : center; margin-bottom : 20px">
@@ -81,7 +82,7 @@
                             <a asp-action="VoucherDetail" asp-route-id="@item.CouponID" class="btn status tamkhoa"> Details</a>*@
                             <button class="btn btn-primary" id="btn_chitiet" data-id="@item.CouponID">Chi tiết</button>
 
-                            <button class="btn btn-primary" id="btn_xoa" data-id="@item.CouponID">Xóa</button>
+                            @*<button class="btn btn-primary" id="btn_xoa" data-id="@item.CouponID">Xóa</button>*@
                         </td>
                     </tr>
                 }
@@ -99,30 +100,30 @@
       </div>
       <div class="modal-body">
        <div class="col-md-12">
-           <input id="btn_ID" type="text" style=""/>
+           <input id="btn_ID" type="text" style="display:none"/>
        </div>
        <div>
-           <label for="btn_name" class="form-control">Name</label>
+           <label for="btn_name">Name</label>
            <input class="form-control" id="btn_name" type="text" />
        </div>
        <div>
-           <label for="btn_PercentDiscount" class="form-control">PercentDiscount</label>
+           <label for="btn_PercentDiscount">PercentDiscount</label>
            <input class="form-control" id="btn_PercentDiscount" type="text" />
        </div>
        <div>
-           <label for="btn_StartDate" class="form-control">StartDate</label>
+           <label for="btn_StartDate">StartDate</label>
            <input class="form-control" id="btn_StartDate" type="date" />
        </div>
        <div>
-           <label for="btn_EndDate" class="form-control">EndDate</label>
+           <label for="btn_EndDate">EndDate</label>
            <input class="form-control" id="btn_EndDate" type="date" />
        </div>
        <div>
-           <label for="btn_Description" class="form-control">Description</label>
+           <label for="btn_Description">Description</label>
            <input class="form-control" id="btn_Description" type="text" />
        </div>
        <div>
-           <label for="btn_Status" class="form-control">Status</label>
+           <label for="btn_Status">Status</label>
            <input class="form-control" id="btn_Status" type="text" />
        </div>
 

@@ -156,8 +156,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var existingItem = myList.FirstOrDefault(x => x.BookID == book.BookID);
             if (existingItem != null)
             {
-                // Nếu sách đã có, tăng số lượng lên 1
-                existingItem.Quantity += 1;
+                // Nếu sách đã có, k tăng số lượng lên
+                existingItem.Quantity += 0;
                 existingItem.ToTal = existingItem.Price * existingItem.Quantity;
             }
             else
@@ -268,7 +268,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 
             cb.ComboID = Guid.NewGuid();
             // Lưu Combo vào cơ sở dữ liệu
-            var urlCombo = $"https://localhost:7079/api/Combo/CreateCombo?ComBoId={cb.ComboID}&comboname={cb.ComboName}&price={cb.Price}&status={cb.Status}&image={cb.Image}";
+            var urlCombo = $"https://localhost:7079/api/Combo/CreateCombo?ComBoId={cb.ComboID}&comboname={cb.ComboName}&quanTity={cb.Quantity}&price={cb.Price}&status={cb.Status}&image={cb.Image}";
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var content = new StringContent(JsonConvert.SerializeObject(cb), Encoding.UTF8, "application/json");

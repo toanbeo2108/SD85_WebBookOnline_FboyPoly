@@ -4,43 +4,71 @@
         $('#pp_Modal').modal('show');
     })
     $('body').on('click', '#btn_save', function () {
-        var send = getData();
-         if ($('#btn_IdBoook').val() == null || $('#btn_IdBoook').val() == undefined || $('#btn_IdBoook').val() == '') {
-        $.post('/Add-Book', { bk: send }, function (re) {
-            if (re.status) {
-                alert(re.message);
-                $('#pp_Modal').modal('hide');
-                window.location.reload();
-            }
-            else {
-                alert(re.message);
-            }
-        })
+        var data = getData();
+
+        var formData = new FormData();
+        formData.append('imageFile', $('#btn_File')[0].files[0]);
+
+        for (var key in data) {
+            formData.append(key, data[key]);
+        }
+
+
+        if ($('#btn_IdBoook').val() == null || $('#btn_IdBoook').val() == undefined || $('#btn_IdBoook').val() == '') {
+            $.ajax({
+                url: '/Add-Book',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.status) {
+                        // Thêm thành công
+                        alert(response.message);
+                        window.location.reload();
+                    } else {
+                        // Thêm thất bại
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
+                }
+            });
+            
         }
          else {
              let id = $('#btn_IdBoook').val();
-             $.post('/update-Book/' + id, { vc: send }, function (re) {
-
-                 if (re.status) {
-
-                     alert(re.message);
-                     $('#pp_Modal').modal('hide');
-
-                     window.location.reload();
-                 }
-                 else {
-                     alert(re.message);
-
-                 }
-             })
+            $.ajax({
+                url: '/update-Book/'+id,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.status) {
+                        // Thêm thành công
+                        alert(response.message);
+                        window.location.reload();
+                    } else {
+                        // Thêm thất bại
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
+                }
+            });
          }
     })
     $('body').on('click', '#btn_chitiet', function () {
         let id = $(this).attr('data-id')
         $.get('/detail-book/' + id, function (re) {
-            $('#pp_Modal').modal('show');
-            setData(re.data)
-            
+            if (re.status) {
+                
+                setData(re.data)
+                $('#pp_Modal').modal('show');
+            }
         })
     })
     $('body').on('click', '#btn_xoa', function () {
@@ -57,6 +85,7 @@
 })
 
 function setData(data) {
+   
     if (data == null || data == undefined || data == '') {
 
 
@@ -79,9 +108,10 @@ function setData(data) {
         $('#btn_TransactionStatus').val('') ;
         $('#btn_Status').val('') ;
         $('#btn_File').val('') ;
-      
+        $('#file_name').text('');
     }
     else {
+        
        $('#btn_IdBoook').val(data.bookID);
         $('#cb_manu').val(data.manufacturerID);
         $('#cb_form').val(data.formID);
@@ -101,7 +131,13 @@ function setData(data) {
         $('#btn_Status').val(data.status);
         $('#btn_Weight').val(data.weight);
         $('#btn_Volume').val(data.volume);
-        $('#btn_File').val(data.mainPhoto);
+
+        var fileName = data.mainPhoto;
+        if (fileName) {
+            var splitted = fileName.split("\\");
+            fileName = splitted[splitted.length - 1];
+        }
+        $('#file_name').text('main Photo: ' + fileName);
     }
 }
 
