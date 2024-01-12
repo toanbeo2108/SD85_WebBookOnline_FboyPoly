@@ -15,7 +15,9 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
     {
         private readonly HttpClient _httpClient;
         public List<CartItems> CartItemss { get; set; } = new List<CartItems>();
-        public CustomsApi<Book> _BookApi;
+
+        public int QuantityPro { get;set; }
+
         public CartController(HttpClient httpClient)
         {
             _httpClient = httpClient;

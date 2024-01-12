@@ -8,6 +8,10 @@
     <title>@ViewData["Title"] - SD85_WebBookOnline.Client</title>
 </head>
 <body>
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor context
+    @{
+        var cookievalue = context.HttpContext.Request.Cookies["QuantityPro"];
+    }
     @if (!User.Identity.IsAuthenticated)
     {
         <!-- Google Web Fonts -->
@@ -605,6 +609,7 @@
         }
         else if (User.IsInRole("User"))
         {
+           
             <link rel="preconnect" href="https://fonts.gstatic.com">
             <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
             <!-- Font Awesome -->
@@ -658,7 +663,14 @@
                             </a>
                             <a asp-action="MyCart" asp-controller="Cart" asp-area="Customer" class="btn border">
                                 <i class="fas fa-shopping-cart text-primary"></i>
-                                <span class="badge">0</span>
+                                @if (cookievalue != null)
+                                {
+                                    <span class="badge">@cookievalue</span>
+                                }
+                                else
+                                {
+                                    <span class="badge">0</span>
+                                }
                             </a>
                         </div>
                     </div>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SD85_WebBookOnline.Api.Data;
 
@@ -11,9 +12,10 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240112023700_hiepupdate11-12")]
+    partial class hiepupdate1112
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,19 +53,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-
-                            Id = "9f4244eb-356e-4fdc-86f6-81bfbbbe1bc0",
-                            ConcurrencyStamp = "e2e83bff-3f65-4c79-bcea-2bcc2b65a6dd",
-
+                            Id = "e4d66196-15eb-4bd4-99da-6dc9a61e1af8",
+                            ConcurrencyStamp = "d347f029-b774-46b4-8787-0166eeaf85f0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-
-                            Id = "d1901214-92eb-4186-8988-d684a7f304dd",
-                            ConcurrencyStamp = "b552bac8-4fc7-48bd-8125-677412570876",
-
+                            Id = "94c2d461-9822-492e-be39-10c6c4ba2f37",
+                            ConcurrencyStamp = "fdd4a8aa-32ac-4dbc-8cef-5c1bc3e1b077",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -297,9 +295,6 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -308,9 +303,6 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.Property<decimal?>("PriceBeforeVoucher")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ReceiverName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Shipmoney")
                         .HasColumnType("decimal(18,2)");

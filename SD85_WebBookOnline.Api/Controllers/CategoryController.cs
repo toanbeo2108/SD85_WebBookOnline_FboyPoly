@@ -22,10 +22,11 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await irespon.GetAll();
         }
         [HttpPost("[Action]")]
-        public async Task<bool> CreateCategory(string name, string description, int status)
+        public async Task<bool> CreateCategory(Guid CategoryParentID,string name, string description, int status)
         {
             Category c = new Category();
             c.CategoryID = Guid.NewGuid();
+            c.CategoryParentID = CategoryParentID;
             c.Name = name;
             c.Description = description;
             c.Status = 1;
@@ -42,6 +43,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             }
             else
             {
+                c.CategoryParentID = dm.CategoryParentID;
                 c.Name = dm.Name;
                 c.Description = dm.Description;
                 c.Status = dm.Status;
