@@ -51,21 +51,24 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-
-                            Id = "9f4244eb-356e-4fdc-86f6-81bfbbbe1bc0",
-                            ConcurrencyStamp = "e2e83bff-3f65-4c79-bcea-2bcc2b65a6dd",
-
+                            Id = "cf58a6a8-2f8f-4d45-af9e-897377f51a69",
+                            ConcurrencyStamp = "89b7a2d9-d824-418c-851f-8c5e39184e90",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-
-                            Id = "d1901214-92eb-4186-8988-d684a7f304dd",
-                            ConcurrencyStamp = "b552bac8-4fc7-48bd-8125-677412570876",
-
+                            Id = "1cdb5564-8e1e-4d62-9ddb-29f5413b3e42",
+                            ConcurrencyStamp = "3df82646-6955-4442-8f19-50dfd51c0683",
                             Name = "User",
                             NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "cc8a65ef-e386-4206-a787-658e3639224f",
+                            ConcurrencyStamp = "3264cbe1-ac73-4373-96be-4c46022eff20",
+                            Name = "Empolyee",
+                            NormalizedName = "EMPLOYEE"
                         });
                 });
 
@@ -941,11 +944,18 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("VoucherID");
 

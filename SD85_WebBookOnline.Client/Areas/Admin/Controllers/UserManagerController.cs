@@ -20,13 +20,23 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var url = $"https://localhost:7079/api/user/GetAllUser";
+            var url = $"https://localhost:7079/api/user/GetUsersByRole?roleName=User";
             var response = await _httpClient.GetAsync(url);
             string apiDataUser = await response.Content.ReadAsStringAsync();
             var ListUser = JsonConvert.DeserializeObject<List<User>>(apiDataUser);
             return View(ListUser);
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetAllEmployee()
+        {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var url = $"https://localhost:7079/api/user/GetUsersByRole?roleName=Employee";
+            var response = await _httpClient.GetAsync(url);
+            string apiDataUser = await response.Content.ReadAsStringAsync();
+            var ListUser = JsonConvert.DeserializeObject<List<User>>(apiDataUser);
+            return View(ListUser);
+        }
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {

@@ -328,6 +328,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             var responCart = await _httpClient.GetAsync(urlCart);
             string apiDataCart = await responCart.Content.ReadAsStringAsync();
             var ListCart = JsonConvert.DeserializeObject<List<Cart>>(apiDataCart);
+
             foreach (var Cart in ListCart)
             {
                 var urlCartItems = $"https://localhost:7079/api/CartItem/GetCartItemByCartID/{Cart.CartId}";
@@ -416,6 +417,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                         {
                             return BadRequest("Thêm không thành công");
                         }
+
                         // Cập nhật lại số lượng sản phẩm trong database
                         var urlUpdateQuantity = $"https://localhost:7079/api/Book/BuyBook?id={item.BookID}&quantityBuy={item.Quantity}";
                         var contentUpdateQuantity = new StringContent(JsonConvert.SerializeObject(billItems), Encoding.UTF8, "application/json");

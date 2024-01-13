@@ -239,27 +239,15 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <span class="icon"><ion-icon name="key-outline"></ion-icon></span>
-                                <span class="title">Account</span>
-                            </a>
-                        </li>
-                        <li>
                             <a asp-area="Admin" asp-controller="UserManager" asp-action="GetAllUser">
                                 <span class="icon"><ion-icon name="accessibility-outline"></ion-icon></span>
                                 <span class="title">User</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a asp-area="Admin" asp-controller="UserManager" asp-action="GetAllEmployee">
                                 <span class="icon"><ion-icon name="person-circle-outline"></ion-icon></span>
                                 <span class="title">Employee</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="icon"><ion-icon name="airplane-outline"></ion-icon></span>
-                                <span class="title">Shipper</span>
                             </a>
                         </li>
                         <li>
@@ -324,12 +312,12 @@
                             <ion-icon name="menu"></ion-icon>
                         </div>
                         <!--Search-->
-                        <div class="search">
+                        @* <div class="search">
                             <label>
                                 <input type="text" placeholder="Nhập tên sản phẩm">
                                 <ion-icon name="search"></ion-icon>
                             </label>
-                        </div>
+                        </div> *@
                         <!--User Img-->
                         <div class="user">
                             <a asp-controller="Home" asp-action="Logout" asp-area=""><img src="~/user.jpg"></a>
