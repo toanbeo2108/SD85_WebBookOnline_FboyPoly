@@ -20,8 +20,8 @@
 <script src="~/js/BookManager.js"></script>
 <style>
     .modal {
-    
-    --bs-modal-width: 900px;}
+        --bs-modal-width: 900px;
+    }
 </style>
 <div class="details" style="width : 100%">
     <div class="recentOrder">
@@ -38,12 +38,14 @@
                     <th style="text-align : center;">
                         Tên Sách
                     </th>
-
                     <th style="text-align : center;">
                         Ảnh đại diện
                     </th>
                     <th style="text-align : center;">
                         Tổng số lượng
+                    </th>
+                    <th style="text-align : center;">
+                        Số lượng tồn
                     </th>
                     <th style="text-align : center;">
                         Giá đầu vào
@@ -52,16 +54,7 @@
                         Giá bán
                     </th>
                     <th style="text-align : center;">
-                        Mô tả
-                    </th>
-                    <th style="text-align : center;">
                         Mã định danh
-                    </th>
-                    <th style="text-align : center;">
-                        Năm phát hành
-                    </th>
-                    <th style="text-align : center;">
-                        trạng thái sách
                     </th>
                     <th></th>
 
@@ -77,10 +70,12 @@
                         </td>
                         <td style="text-align: center;">
                             <img src="~/photoBooks/@item.MainPhoto" alt="Combo Image" width="100" height="100" />
-                            @*<img src="~/photoBooks/@item.MainPhoto" class="rounded float-start" alt="...">*@
                         </td>
                         <td style="text-align : center; margin-bottom : 20px">
                             @Html.DisplayFor(modelItem => item.TotalQuantity)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.QuantityExists)
                         </td>
                         <td style="text-align : center; margin-bottom : 20px">
                             @Html.DisplayFor(modelItem => item.EntryPrice)
@@ -89,19 +84,10 @@
                             @Html.DisplayFor(modelItem => item.Price)
                         </td>
                         <td style="text-align : center; margin-bottom : 20px">
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td style="text-align : center; margin-bottom : 20px">
-                            @Html.DisplayFor(modelItem => item.ISBN)
-                        </td>
-                        <td style="text-align : center; margin-bottom : 20px">
-                            @Html.DisplayFor(modelItem => item.YearOfRelease)
-                        </td>
-                        <td style="text-align : center; margin-bottom : 20px">
                             @Html.DisplayFor(modelItem => item.Status)
                         </td>
                         <td style="text-align : center; margin-bottom : 20px">
-                            <button class="btn btn-primary" type="button" id="btn_chitiet" data-id="@item.BookID">Xem chi tiết</button>                            
+                            <button class="btn btn-primary" type="button" id="btn_chitiet" data-id="@item.BookID">Xem chi tiết</button>
                             <button type="button" id="btn_xoa" class="btn btn-primary" data-id="@item.BookID">Xóa</button>
                         </td>
                     </tr>
@@ -114,133 +100,133 @@
 
 
 <div class="modal fade" id="pp_Modal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-       <div class="col-md-12">
-           <input class="form-control" type="text" id="btn_IdBoook" style="display:none"/>
-       </div>
-       <div class="row">
-          
-           <div class="col-md-6">
-               <label  class="form-label">Manufacture Name</label>
-           
-             <select id="cb_manu" class="form-select" aria-label="Default select example">
-                                
-                  @foreach (var item in lstManu)
-                    {
-                
-                <option value="@item.ManufactureID">@item.ManufactureName</option>
-                    }
-            </select>
-           </div>
-            <div class="col-md-6">
-                <label   class="form-label">Coupon Name</label>
-           
-             <select id="cb_coupon" class="form-select" aria-label="Default select example">
-                                
-                  @foreach (var item in lstCoupon)
-                    {
-                
-                <option value="@item.CouponID">@item.CouponName</option>
-                    }
-            </select>
-           </div>
-           <div class="col-md-6">
-               <label class="form-label">Form Name</label>
-           
-             <select id="cb_form" class="form-select" aria-label="Default select example">
-                                
-                  @foreach (var item in lstForm)
-                    {
-                
-                <option value="@item.FormId">@item.FormName</option>
-                    }
-            </select>
-           </div>
-           <div class="col-md-6">
-               <label >Book Name</label>
-               <input id="btn_bookName" type="text" class="form-control" />
-           </div>
-           <div class="col-md-6">
-                <label >Total Quantity</label>
-               <input id="btn_ttqtt" type="number" class="form-control" />
-           </div>
-           <div class="col-md-6">
-               <label>Quantity Sold</label>
-               <input id="btn_qttsold" type="number" class="form-control" />
-           </div>
-           <div class="col-md-6">
-                <label>Quantity Exit</label>
-               <input id="btn_qttexit" type="number" class="form-control" />
-           </div>
-           <div class="col-md-6">
-               <label> Entry Price</label>
-               <input id="btn_entryprice" type="number" class="form-control" />
-           </div>
-           <div class="col-md-6">
-                <label for="btn_price">  Price</label>
-               <input id="btn_price" type="number" class="form-control" />
-           </div>
-           <div class="col-md-6">
-                <label for="btn_in4">Information</label>
-               <input id="btn_in4" type="text" class="form-control" />
-           </div>
-           <div class="col-md-6">
-                 <label for="btn_Description">Description</label>
-               <input id="btn_Description" type="text" class="form-control" />
-           </div>
-           <div class="col-md-6">
-                <label>ISBN</label>
-               <input id="btn_ISBN" type="text" class="form-control" />
-           </div>
-           <div class="col-md-6">
-                <label>Year Of Release</label>
-               <input id="btn_Y_release" type="number" class="form-control" />
-           </div>
-          @* <div class="col-md-6">
-                <label>Create Date</label>
-               <input id="btn_createdate" type="date" class="form-control" />
-           </div>
-           <div class="col-md-6">
-                <label>Delete date</label>
-               <input id="btn_Deletedate" type="date" class="form-control" />
-           </div>*@
-           <div class="col-md-6">
-               <label>Weight</label>
-               <input id="btn_Weight" type="number" class="form-control" />
-           </div>
-           <div class="col-md-6">
-               <label>Volume</label>
-               <input id="btn_Volume" type="number" class="form-control" />
-           </div>
-           <div class="col-md-6">
-               <label>TransactionStatus</label>
-               <input id="btn_TransactionStatus" type="number" class="form-control" />
-           </div>
-           <div class="col-md-6">
-               <label>Status</label>
-               <input id="btn_Status" type="number" class="form-control" />
-           </div>
-           <div class="col-md-12">
-              <label for="btn_File">Chọn File</label>
-              <input id="btn_File" type="file" class="form-control" name="imageFile"/>
-               <p id="file_name"></p>
-             
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-       </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <input class="form-control" type="text" id="btn_IdBoook" style="display:none" />
+                </div>
+                <div class="row">
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="btn_save" class="btn btn-primary">Lưu</button>
-      </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Manufacture Name</label>
+
+                        <select id="cb_manu" class="form-select" aria-label="Default select example">
+
+                            @foreach (var item in lstManu)
+                            {
+
+                                <option value="@item.ManufactureID">@item.ManufactureName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Coupon Name</label>
+
+                        <select id="cb_coupon" class="form-select" aria-label="Default select example">
+
+                            @foreach (var item in lstCoupon)
+                            {
+
+                                <option value="@item.CouponID">@item.CouponName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Form Name</label>
+
+                        <select id="cb_form" class="form-select" aria-label="Default select example">
+
+                            @foreach (var item in lstForm)
+                            {
+
+                                <option value="@item.FormId">@item.FormName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Book Name</label>
+                        <input id="btn_bookName" type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Total Quantity</label>
+                        <input id="btn_ttqtt" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Quantity Sold</label>
+                        <input id="btn_qttsold" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Quantity Exit</label>
+                        <input id="btn_qttexit" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label> Entry Price</label>
+                        <input id="btn_entryprice" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="btn_price">  Price</label>
+                        <input id="btn_price" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="btn_in4">Information</label>
+                        <input id="btn_in4" type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="btn_Description">Description</label>
+                        <input id="btn_Description" type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>ISBN</label>
+                        <input id="btn_ISBN" type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Year Of Release</label>
+                        <input id="btn_Y_release" type="number" class="form-control" />
+                    </div>
+                    @* <div class="col-md-6">
+                    <label>Create Date</label>
+                    <input id="btn_createdate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                    <label>Delete date</label>
+                    <input id="btn_Deletedate" type="date" class="form-control" />
+                    </div>*@
+                    <div class="col-md-6">
+                        <label>Weight</label>
+                        <input id="btn_Weight" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Volume</label>
+                        <input id="btn_Volume" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>TransactionStatus</label>
+                        <input id="btn_TransactionStatus" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Status</label>
+                        <input id="btn_Status" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-12">
+                        <label for="btn_File">Chọn File</label>
+                        <input id="btn_File" type="file" class="form-control" name="imageFile" />
+                        <p id="file_name"></p>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btn_save" class="btn btn-primary">Lưu</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 

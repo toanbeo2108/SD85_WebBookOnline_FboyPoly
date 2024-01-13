@@ -7,17 +7,17 @@
 
     $('body').on('click', '#btn_chitiet', function () {
         let id = $(this).attr('data-id');
-            $.get('/detail-bookdetail/' + id, function (re) {
-                if (re.status) {
-                    setData(re.data)
-                    $('#pp_Modal').modal('show');
+        $.get('/detail-bookdetail/' + id, function (re) {
+            if (re.status) {
+                setData(re.data)
+                $('#pp_Modal').modal('show');
 
-                }
-                else {
-                    alert(re.message)
-                }
-            })
-        
+            }
+            else {
+                alert(re.message)
+            }
+        })
+
     })
     $('body').on('click', '#btn_luu', function () {
         if ($('#btn_bookdetailID').val() == null || $('#btn_bookdetailID').val() == undefined || $('#btn_bookdetailID').val() == '') {
@@ -35,7 +35,7 @@
         }
         else {
             let id = $(this).attr('data-id')
-            $.post('/UpdateBookDetail/' + id, {vc: getData()}, function (re) {
+            $.post('/UpdateBookDetail/' + id, { vc: getData() }, function (re) {
 
                 if (re.status) {
                     alert(re.message);
@@ -48,7 +48,7 @@
             })
         }
     })
-   
+
 
 })
 function setData(data) {
@@ -69,10 +69,10 @@ function setData(data) {
 }
 function getData() {
     return {
-       /* BookDetailID: $('#btn_bookdetailID').val(),*/
+        /* BookDetailID: $('#btn_bookdetailID').val(),*/
         BookID: $('#cb_bookname').val(),
         CategoriesID: $('#cb_category').val(),
         AuthorID: $('#cb_author').val(),
         LagugeID: $('#cb_languge').val()
-    }                  
+    }
 }
