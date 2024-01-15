@@ -8,9 +8,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 {
     public class RatingManagerController : Controller
     {
-        string _mess = "";
-        bool _stt = false;
-        object _data = null;
+        
         private HttpClient _httpClient;
         public RatingManagerController()
         {
