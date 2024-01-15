@@ -52,6 +52,7 @@ namespace SD85_WebBookOnline.Api.IServices.Services
             {
                 UserName = registerUser.Username,
                 Email = registerUser.Email,
+                Point = 0,
                 PhoneNumber = registerUser.PhoneNumber
             };
 

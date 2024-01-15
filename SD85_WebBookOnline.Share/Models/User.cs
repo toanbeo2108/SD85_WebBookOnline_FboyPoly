@@ -15,6 +15,7 @@ namespace SD85_WebBookOnline.Share.Models
         public DateTime? CreateDate { get; set; } // Ngày tạo
         public DateTime? UpdateDate { get; set; } // Ngày chỉnh sửa
         public string? CardNumber { get; set; } // CMT
+        public int? Point { get; set; }//Điểm tích lũy
         public int? Status { get; set; } // trạng thái : 0 == Ko còn hoạt động, ẩn nick ,....
 
         // Set Quan hệ

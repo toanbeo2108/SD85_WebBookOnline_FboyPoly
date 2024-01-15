@@ -1,125 +1,597 @@
 ﻿@model IEnumerable<SD85_WebBookOnline.Share.Models.Bill>
+@using SD85_WebBookOnline.Share.Models;
 @{
     ViewData["Title"] = "GetAllBill";
     Layout = "~/Views/Shared/_layout.cshtml";
+    List<Bill> bills = Model.ToList();
+    List<Bill> bill1 = bills.Where(p => p.Status == 1).ToList();
+    List<Bill> bill2 = bills.Where(p => p.Status == 2).ToList();
+    List<Bill> bill3 = bills.Where(p => p.Status == 3).ToList();
+    List<Bill> bill4 = bills.Where(p => p.Status == 4).ToList();
+    List<Bill> bill0 = bills.Where(p => p.Status == 0).ToList();
 }
-<table id="tble_ajax" class="table">
-    <thead>
-        <tr>
-            <th>
-                Người nhận
-            </th>
-            <th>
-                Email
-            </th>
-            <th>
-                Tổng tiền
-            </th>
-            <th>
-                Giá ship
-            </th>
-            <th>
-                Số điện thoại
-            </th>
-            <th>
-                Địa chỉ người nhận
-            </th>
-            <th>
-                Ngày đặt hàng
-            </th>
-            <th>
-                Ngày nhận hàng
-            </th>
-            <th>
-                Phương thức thanh toán
-            </th>
-            <th>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var items in Model)
+@* Sử dụng tablist để phân chia các trạng thái hóa đơn *@
+<ul class="nav nav-tabs container" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">Tất cả</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="wait-tab" data-bs-toggle="tab" data-bs-target="#wait" type="button" role="tab" aria-controls="wait" aria-selected="true">Chờ xác nhận</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping" type="button" role="tab" aria-controls="shipping" aria-selected="false">Đang giao</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="done-tab" data-bs-toggle="tab" data-bs-target="#done" type="button" role="tab" aria-controls="done" aria-selected="false">Hoàn thành</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="YcHuy-tab" data-bs-toggle="tab" data-bs-target="#YcHuy" type="button" role="tab" aria-controls="YcHuy" aria-selected="false">Yêu cầu hủy</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="cancel-tab" data-bs-toggle="tab" data-bs-target="#cancel" type="button" role="tab" aria-controls="cancel" aria-selected="false">Đã hủy</button>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+        @if (bills.Count == 0)
         {
-            <tr>
-                <td>
-                    @items.ReceiverName
-                </td>
-                <td>
-                    @items.Email
-                </td>
-                <td>
-                    @items.Total
-                </td>
-                <td>
-                    @items.Shipmoney
-                </td>
-                <td>
-                    @items.UserPhone
-                </td>
-                <td>
-                    @items.AddressUser
-                </td>
-                <td>
-                    @items.OrderDate
-                </td>
-                <td>
-                    @items.DeliveryDate
-                </td>
-                <td>
-                    @if (items.PaymentMethod == 1)
-                    {
-                        <p>Paypal</p>
-                    }
-                    else if (items.PaymentMethod == 2)
-                    {
-                        <p>Direct Check</p>
-                    }
-                    else if (items.PaymentMethod == 3)
-                    {
-                        <p>Bank Transfer</p>
-                    }
-                    else
-                    {
-                        <p>VNPay</p>
-                    }
-                </td>
-                <td>
-                    <a class="btn btn-primary" asp-controller="Bill" asp-action="GetBillDetails" asp-route-id="@items.BillID">Chi tiết</a>
-                </td>
-            </tr>
+            <div style="text-align: center; margin: 100px">
+                <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/return/5fafbb923393b712b96488590b8f781f.png"></img>
+                <h3> Bạn chưa có Bill nào </h3>
+            </div>
         }
-    </tbody>
-</table>
-<div class="modal fade" id="BillDetailModal" tabindex="-1" role="dialog" aria-labelledby="BillDetailModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="BillDetailModal">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered text-center mb-0">
-                    <thead class="bg-secondary text-dark">
+        else
+        {
+            <table id="tble_ajax" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Người nhận
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Tổng tiền
+                        </th>
+                        <th>
+                            Giá ship
+                        </th>
+                        <th>
+                            Số điện thoại
+                        </th>
+                        <th>
+                            Địa chỉ người nhận
+                        </th>
+                        <th>
+                            Ngày đặt hàng
+                        </th>
+                        <th>
+                            Phương thức thanh toán
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var items in Model)
+                    {
                         <tr>
-                            <th>Products</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
+                            <td>
+                                @items.ReceiverName
+                            </td>
+                            <td>
+                                @items.Email
+                            </td>
+                            <td>
+                                @items.Total
+                            </td>
+                            <td>
+                                @items.Shipmoney
+                            </td>
+                            <td>
+                                @items.UserPhone
+                            </td>
+                            <td>
+                                @items.AddressUser
+                            </td>
+                            <td>
+                                @items.OrderDate
+                            </td>
+                            <td>
+                                @if (items.PaymentMethod == 1)
+                                {
+                                    <p>Paypal</p>
+                                }
+                                else if (items.PaymentMethod == 2)
+                                {
+                                    <p>Direct Check</p>
+                                }
+                                else if (items.PaymentMethod == 3)
+                                {
+                                    <p>Bank Transfer</p>
+                                }
+                                else
+                                {
+                                    <p>VNPay</p>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" asp-controller="Bill" asp-action="GetBillDetails" asp-route-id="@items.BillID">Chi tiết</a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody class="align-middle" id="bill-item-details">
-
-                    </tbody>
-                </table>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="tab-pane fade" id="wait" role="tabpanel" aria-labelledby="wait-tab">
+        @if (bill1.Count == 0)
+        {
+            <div style="text-align: center; margin: 100px">
+                <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/return/5fafbb923393b712b96488590b8f781f.png"></img>
+                <h3> Bạn chưa có Bill nào </h3>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        }
+        else
+        {
+            <table id="tble_ajax" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Người nhận
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Tổng tiền
+                        </th>
+                        <th>
+                            Giá ship
+                        </th>
+                        <th>
+                            Số điện thoại
+                        </th>
+                        <th>
+                            Địa chỉ người nhận
+                        </th>
+                        <th>
+                            Ngày đặt hàng
+                        </th>
+                        <th>
+                            Phương thức thanh toán
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var items in bill1)
+                    {
+                        <tr>
+                            <td>
+                                @items.ReceiverName
+                            </td>
+                            <td>
+                                @items.Email
+                            </td>
+                            <td>
+                                @items.Total
+                            </td>
+                            <td>
+                                @items.Shipmoney
+                            </td>
+                            <td>
+                                @items.UserPhone
+                            </td>
+                            <td>
+                                @items.AddressUser
+                            </td>
+                            <td>
+                                @items.OrderDate
+                            </td>
+                            <td>
+                                @if (items.PaymentMethod == 1)
+                                {
+                                    <p>Paypal</p>
+                                }
+                                else if (items.PaymentMethod == 2)
+                                {
+                                    <p>Direct Check</p>
+                                }
+                                else if (items.PaymentMethod == 3)
+                                {
+                                    <p>Bank Transfer</p>
+                                }
+                                else
+                                {
+                                    <p>VNPay</p>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" asp-controller="Bill" asp-action="HuyHoaDon" asp-route-id="@items.BillID" onclick="return confirm('Bạn có chắc muốn hủy đơn hàng?')">Hủy hóa đơn mua hàng</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
+        @if (bill2.Count == 0)
+        {
+            <div style="text-align: center; margin: 100px">
+                <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/return/5fafbb923393b712b96488590b8f781f.png"></img>
+                <h3> Bạn chưa có Bill nào </h3>
             </div>
-        </div>
+        }
+        else
+        {
+            <table id="tble_ajax" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Người nhận
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Tổng tiền
+                        </th>
+                        <th>
+                            Giá ship
+                        </th>
+                        <th>
+                            Số điện thoại
+                        </th>
+                        <th>
+                            Địa chỉ người nhận
+                        </th>
+                        <th>
+                            Ngày đặt hàng
+                        </th>
+                        <th>
+                            Phương thức thanh toán
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var items in bill2)
+                    {
+                        <tr>
+                            <td>
+                                @items.ReceiverName
+                            </td>
+                            <td>
+                                @items.Email
+                            </td>
+                            <td>
+                                @items.Total
+                            </td>
+                            <td>
+                                @items.Shipmoney
+                            </td>
+                            <td>
+                                @items.UserPhone
+                            </td>
+                            <td>
+                                @items.AddressUser
+                            </td>
+                            <td>
+                                @items.OrderDate
+                            </td>
+                            <td>
+                                @if (items.PaymentMethod == 1)
+                                {
+                                    <p>Paypal</p>
+                                }
+                                else if (items.PaymentMethod == 2)
+                                {
+                                    <p>Direct Check</p>
+                                }
+                                else if (items.PaymentMethod == 3)
+                                {
+                                    <p>Bank Transfer</p>
+                                }
+                                else
+                                {
+                                    <p>VNPay</p>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" asp-controller="Bill" asp-action="GetBillDetails" asp-route-id="@items.BillID">Chi tiết</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="tab-pane fade" id="done" role="tabpanel" aria-labelledby="done-tab">
+        @if (bill3.Count == 0)
+        {
+            <div style="text-align: center; margin: 100px">
+                <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/return/5fafbb923393b712b96488590b8f781f.png"></img>
+                <h3> Bạn chưa có Bill nào </h3>
+            </div>
+        }
+        else
+        {
+            <table id="tble_ajax" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Người nhận
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Tổng tiền
+                        </th>
+                        <th>
+                            Giá ship
+                        </th>
+                        <th>
+                            Số điện thoại
+                        </th>
+                        <th>
+                            Địa chỉ người nhận
+                        </th>
+                        <th>
+                            Ngày đặt hàng
+                        </th>
+                        <th>
+                            Phương thức thanh toán
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var items in bill3)
+                    {
+                        <tr>
+                            <td>
+                                @items.ReceiverName
+                            </td>
+                            <td>
+                                @items.Email
+                            </td>
+                            <td>
+                                @items.Total
+                            </td>
+                            <td>
+                                @items.Shipmoney
+                            </td>
+                            <td>
+                                @items.UserPhone
+                            </td>
+                            <td>
+                                @items.AddressUser
+                            </td>
+                            <td>
+                                @items.OrderDate
+                            </td>
+                            <td>
+                                @if (items.PaymentMethod == 1)
+                                {
+                                    <p>Paypal</p>
+                                }
+                                else if (items.PaymentMethod == 2)
+                                {
+                                    <p>Direct Check</p>
+                                }
+                                else if (items.PaymentMethod == 3)
+                                {
+                                    <p>Bank Transfer</p>
+                                }
+                                else
+                                {
+                                    <p>VNPay</p>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" asp-controller="Bill" asp-action="GetBillDetails" asp-route-id="@items.BillID">Chi tiết</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="tab-pane fade" id="YcHuy" role="tabpanel" aria-labelledby="YcHuy-tab">
+        @if (bill4.Count == 0)
+        {
+            <div style="text-align: center; margin: 100px">
+                <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/return/5fafbb923393b712b96488590b8f781f.png"></img>
+                <h3> Bạn chưa có Bill nào </h3>
+            </div>
+        }
+        else
+        {
+            <table id="tble_ajax" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Người nhận
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Tổng tiền
+                        </th>
+                        <th>
+                            Giá ship
+                        </th>
+                        <th>
+                            Số điện thoại
+                        </th>
+                        <th>
+                            Địa chỉ người nhận
+                        </th>
+                        <th>
+                            Ngày đặt hàng
+                        </th>
+                        <th>
+                            Phương thức thanh toán
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var items in bill4)
+                    {
+                        <tr>
+                            <td>
+                                @items.ReceiverName
+                            </td>
+                            <td>
+                                @items.Email
+                            </td>
+                            <td>
+                                @items.Total
+                            </td>
+                            <td>
+                                @items.Shipmoney
+                            </td>
+                            <td>
+                                @items.UserPhone
+                            </td>
+                            <td>
+                                @items.AddressUser
+                            </td>
+                            <td>
+                                @items.OrderDate
+                            </td>
+                            <td>
+                                @if (items.PaymentMethod == 1)
+                                {
+                                    <p>Paypal</p>
+                                }
+                                else if (items.PaymentMethod == 2)
+                                {
+                                    <p>Direct Check</p>
+                                }
+                                else if (items.PaymentMethod == 3)
+                                {
+                                    <p>Bank Transfer</p>
+                                }
+                                else
+                                {
+                                    <p>VNPay</p>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" asp-controller="Bill" asp-action="HuyYeuCauHuyDon" asp-route-id="@items.BillID">Thu hồi yêu cầu hủy</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="tab-pane fade" id="cancel" role="tabpanel" aria-labelledby="cancel-tab">
+        @if (bill0.Count == 0)
+        {
+            <div style="text-align: center; margin: 100px">
+                <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/return/5fafbb923393b712b96488590b8f781f.png"></img>
+                <h3> Bạn chưa có Bill nào </h3>
+            </div>
+        }
+        else
+        {
+            <table id="tble_ajax" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Người nhận
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Tổng tiền
+                        </th>
+                        <th>
+                            Giá ship
+                        </th>
+                        <th>
+                            Số điện thoại
+                        </th>
+                        <th>
+                            Địa chỉ người nhận
+                        </th>
+                        <th>
+                            Ngày đặt hàng
+                        </th>
+                        <th>
+                            Phương thức thanh toán
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var items in Model)
+                    {
+                        <tr>
+                            <td>
+                                @items.ReceiverName
+                            </td>
+                            <td>
+                                @items.Email
+                            </td>
+                            <td>
+                                @items.Total
+                            </td>
+                            <td>
+                                @items.Shipmoney
+                            </td>
+                            <td>
+                                @items.UserPhone
+                            </td>
+                            <td>
+                                @items.AddressUser
+                            </td>
+                            <td>
+                                @items.OrderDate
+                            </td>
+                            <td>
+                                @if (items.PaymentMethod == 1)
+                                {
+                                    <p>Paypal</p>
+                                }
+                                else if (items.PaymentMethod == 2)
+                                {
+                                    <p>Direct Check</p>
+                                }
+                                else if (items.PaymentMethod == 3)
+                                {
+                                    <p>Bank Transfer</p>
+                                }
+                                else
+                                {
+                                    <p>VNPay</p>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" asp-controller="Bill" asp-action="GetBillDetails" asp-route-id="@items.BillID">Chi tiết</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div>
 </div>
+
 
 @*Link datatable*@
 <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using SD85_WebBookOnline.Share.Models;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 {
@@ -45,6 +46,63 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             ViewBag.Bill = Bill;
             ViewBag.User = User;
             return View(ListBillItems);
+        }
+
+        public async Task<IActionResult> HuyHoaDon(Guid id)
+        {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var urlBill = $"https://localhost:7079/api/Bill/GetBillByBillId/" + id;
+            var responeBill = await _httpClient.GetAsync(urlBill);
+            string apiBill = await responeBill.Content.ReadAsStringAsync();
+            var Bill = JsonConvert.DeserializeObject<Bill>(apiBill);
+
+            // Lấy tất cả những BillItem từ Bill trên :
+            var urlBillItems = $"https://localhost:7079/api/BillItem/GetAllBillItemByBillID/" + Bill.BillID;
+            var responeBillItems = await _httpClient.GetAsync(urlBillItems);
+            string apiBillItems = await responeBillItems.Content.ReadAsStringAsync();
+            var BillItems = JsonConvert.DeserializeObject<List<BillItems>>(apiBillItems);
+            foreach (var item in BillItems)
+            {
+                // Cập nhật lại số lượng cho sản phẩm:
+                if (item.ComboID == null) // billitem k có comboid tức là billItem của book
+                {
+                    // cập nhật lại sl bán được và sl tồn của sách
+                    var UrlUpdateBook = $"https://localhost:7079/api/Book/PlusBook/?id={item.BookID}&quantity={item.Quantity}";
+                    var contentUpdateBook = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+                    var responseUpdateBook = await _httpClient.PostAsync(UrlUpdateBook, contentUpdateBook);
+                    if (!responseUpdateBook.IsSuccessStatusCode)
+                    {
+                        return BadRequest("Lỗi cập nhật lại số lượng tồn của sản phẩm");
+                    }
+
+                    // Xóa BillItem
+                    var UrlDeleteBillItem = $"https://localhost:7079/api/BillItem/DeleteBillItem/{item.BillItemID}";
+                    var responseDeleteBillItem = await _httpClient.DeleteAsync(UrlDeleteBillItem);
+                    var ApiDeleteBillItem = await responseDeleteBillItem.Content.ReadAsStringAsync();
+                    if (!responseDeleteBillItem.IsSuccessStatusCode)
+                    {
+                        return BadRequest("Lỗi xóa billItems");
+                    }
+                }
+                else
+                {
+
+                }
+            }
+
+            // Sau khi xóa BillItem thì Xóa bill
+            var UrlDeleteBill = $"https://localhost:7079/api/Bill/DeleteBill/{id}";
+            var responseDeleteBill = await _httpClient.DeleteAsync(UrlDeleteBill);
+            var ApiDeleteBill = await responseDeleteBill.Content.ReadAsStringAsync();
+            if (!responseDeleteBill.IsSuccessStatusCode)
+            {
+                return BadRequest("Lỗi xóa Bill");
+            }
+            else 
+            {
+                return RedirectToAction("GetAllBill");
+            }    
         }
     }
 }
