@@ -6,38 +6,58 @@
     })
 
     $('body').on('click', '#btn_chitiet', function () {
-        $('#pp_Modal').modal('show')
-    })
+        let id = $(this).attr('data-id');
+        $.get('/detail-bookdetail/' + id, function (re) {
+            if (re.status) {
+                setData(re.data)
+                $('#pp_Modal').modal('show');
 
-    $('body').on('click', '#btn_xoa', function () {
-        $('#pp_Modal').modal('show')
+            }
+            else {
+                alert(re.message)
+            }
+        })
+
     })
     $('body').on('click', '#btn_luu', function () {
-        if ($('#btn_bookdetailID').val() == null || $('#btn_bookdetailID').val() == undefined || $('#btn_bookdetailID').val() == '')
-        {
-            
+        if ($('#btn_bookdetailID').val() == null || $('#btn_bookdetailID').val() == undefined || $('#btn_bookdetailID').val() == '') {
+
             $.post('/add-bookDetail', { bk: getData() }, function (re) {
                 if (re.status) {
                     alert(re.message);
-                    $('#pp_Modal').modal('hide')
+                    $('#pp_Modal').modal('hide');
+                    window.location.reload()
                 }
                 else {
-                        alert(re.message)
+                    alert(re.message)
                 }
             })
         }
-        
+        else {
+            let id = $(this).attr('data-id')
+            $.post('/UpdateBookDetail/' + id, { vc: getData() }, function (re) {
+
+                if (re.status) {
+                    alert(re.message);
+                    $('#pp_Modal').modal('hide');
+                    window.location.reload()
+                }
+                else {
+                    alert(re.message)
+                }
+            })
+        }
     })
-   
+
 
 })
 function setData(data) {
     if (data != null && data != undefined && data != '') {
-        $('#btn_bookdetailID').val(data.BookDetailID);
+        $('#btn_bookdetailID').val(data.bookDetailID);
         $('#cb_bookname').val(data.bookID);
-        $('#cb_category').val(data.categoryID);
+        $('#cb_category').val(data.categoriesID);
         $('#cb_author').val(data.authorID);
-        $('#cb_languge').val(data.LangugeID);
+        $('#cb_languge').val(data.lagugeID);
     }
     else {
         $('#btn_bookdetailID').val('');
@@ -49,9 +69,10 @@ function setData(data) {
 }
 function getData() {
     return {
+        /* BookDetailID: $('#btn_bookdetailID').val(),*/
         BookID: $('#cb_bookname').val(),
-        CategoryID: $('#cb_category').val(),
+        CategoriesID: $('#cb_category').val(),
         AuthorID: $('#cb_author').val(),
-        LangugeID: $('#cb_languge').val()
-    }                  
+        LagugeID: $('#cb_languge').val()
+    }
 }

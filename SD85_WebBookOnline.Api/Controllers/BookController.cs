@@ -14,12 +14,12 @@ namespace SD85_WebBookOnline.Api.Controllers
     public class BookController : ControllerBase
     {
         private readonly IAllResponsitories<Book> ires;
-         AppDbContext context = new AppDbContext();
+        AppDbContext context = new AppDbContext();
         public BookController()
         {
             ires = new AllResponsitories<Book>(context, context.Book);
         }
-        
+
         [HttpGet("get-all-book")]
         public async Task<IEnumerable<Book>> GetAllbook()
         {
@@ -31,7 +31,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await ires.GetByID(id);
         }
         [HttpPost("add-book")]
-        public async Task<bool> addbook(Guid bookid,Guid? ManufacturerID,Guid? FormID, Guid? CouponID, string BookName, int TotalQuantity, string MainPhoto, int QuantitySold, int QuantityExists, decimal EntryPrice,decimal Price, string Information, string Description, string ISBN, int YearOfRelease, DateTime? DeleteDate, int TransactionStatus, int Status, decimal weight, decimal volume)
+        public async Task<bool> addbook(Guid bookid, Guid? ManufacturerID, Guid? FormID, Guid? CouponID, string BookName, int TotalQuantity, string MainPhoto, int QuantitySold, int QuantityExists, decimal EntryPrice, decimal Price, string Information, string Description, string ISBN, int YearOfRelease, DateTime? DeleteDate, int TransactionStatus, int Status, decimal weight, decimal volume)
         {
             Book b = new Book();
             b.BookID = bookid;
@@ -72,13 +72,13 @@ namespace SD85_WebBookOnline.Api.Controllers
             }
         }
         [HttpPut("updat-Book/{id}")]
-        public async Task<bool> UpdateBook(Guid id, [FromBody]Book book)
+        public async Task<bool> UpdateBook(Guid id, [FromBody] Book book)
         {
             var listBook = await ires.GetAll();
             var b = listBook.FirstOrDefault(c => c.BookID == id);
             if (b != null)
             {
-                
+
                 b.ManufacturerID = book.ManufacturerID;
                 b.FormID = book.FormID;
                 b.CouponID = book.CouponID;
@@ -104,6 +104,65 @@ namespace SD85_WebBookOnline.Api.Controllers
             {
                 return false;
             }
+        }
+        [HttpPost("[Action]")]
+        public async Task<bool> CheckQuantity(Guid BookID, int Quantity)
+        {
+            var books = await ires.GetAll();
+            var book = books.FirstOrDefault(p => p.BookID == BookID);
+            if (book != null)
+            {
+                if (Quantity < book.QuantityExists)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else { return false; }
+        }
+        [HttpPut("UpdateQuantity")]
+        public async Task<bool> UpdateQuantityBook(Guid id, int TotalQuantity, int QuantitySold, int QuantityExists)
+        {
+            var book = await ires.GetByID(id);
+            if (book == null)
+            {
+                return false;
+            }
+            book.TotalQuantity = TotalQuantity;
+            book.QuantitySold = QuantitySold;
+            book.QuantityExists = QuantityExists;
+
+            return await ires.UpdateItem(book);
+        }
+        [HttpPut("BuyBook")]
+        public async Task<bool> BuyBook(Guid id, int quantityBuy)
+        {
+            var book = await ires.GetByID(id);
+            if (book == null)
+            {
+                return false;
+            }
+            book.QuantitySold += quantityBuy;
+            book.QuantityExists -= quantityBuy;
+
+            return await ires.UpdateItem(book);
+        }
+
+        [HttpPost("PlusBook")]
+        public async Task<bool> PlusBook(Guid id, int quantity)
+        {
+            var book = await ires.GetByID(id);
+            if (book == null)
+            {
+                return false;
+            }
+            book.QuantitySold -= quantity;
+            book.QuantityExists += quantity;
+
+            return await ires.UpdateItem(book);
         }
     }
 }

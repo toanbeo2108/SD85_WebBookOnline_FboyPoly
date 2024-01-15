@@ -22,8 +22,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
               .AddCookie(options =>
               {
                   options.Cookie.HttpOnly = true;
-                  options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                  options.ExpireTimeSpan = TimeSpan.FromHours(3);
                   options.LoginPath = "/Home/Login";
+                  options.LogoutPath = "/Home/Logout";
                   options.SlidingExpiration = true;
               });
 
@@ -62,7 +63,11 @@ app.UseEndpoints(endpoints =>
     areaName: "Customer",
     pattern: "Customer/{controller=CustomerHome}/{action=Index}/{id?}"
     );
-
+    endpoints.MapAreaControllerRoute(
+    name: "EmployeeHome",
+    areaName: "Employee",
+    pattern: "Employee/{controller=EmployeeHome}/{action=Index}/{id?}"
+    );
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");

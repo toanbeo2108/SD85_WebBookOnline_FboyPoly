@@ -156,8 +156,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var existingItem = myList.FirstOrDefault(x => x.BookID == book.BookID);
             if (existingItem != null)
             {
-                // Nếu sách đã có, tăng số lượng lên 1
-                existingItem.Quantity += 1;
+                // Nếu sách đã có, k tăng số lượng lên
+                existingItem.Quantity += 0;
                 existingItem.ToTal = existingItem.Price * existingItem.Quantity;
             }
             else
@@ -227,7 +227,6 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCombo(Combo cb, IFormFile imageFile)
         {
-
             var urlBook = $"https://localhost:7079/api/Book/get-all-book";
             var httpClient = new HttpClient();
             var responseBook = await httpClient.GetAsync(urlBook);
@@ -265,10 +264,32 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return BadRequest("Danh sách ComboItem rỗng.");
             }
 
+            // Kiểm tra số lượng sách tồn có đủ để tạo combo không :
+            List<ComboItem> myListCheck = JsonConvert.DeserializeObject<List<ComboItem>>(json);
+            foreach (var item in myListCheck)
+            {
+                var UrlCheck = $"https://localhost:7079/api/Book/CheckQuantity?BookID={item.BookID}&Quantity={cb.Quantity}";
+                var contentCheck = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+                var responseCheck = await _httpClient.PostAsync(UrlCheck, contentCheck);
+                if (responseCheck.IsSuccessStatusCode)
+                {
+                    string result = await responseCheck.Content.ReadAsStringAsync();
+                    var KqCheck = JsonConvert.DeserializeObject<bool>(result);
+                    if (KqCheck != true)
+                    {
+                        return BadRequest($"Số lượng sản phẩm {item.ItemName} không đáp ứng đủ");
+                    }
+                }
+                else
+                {
+                    return BadRequest("Lỗi kiểm tra số lượng sản phẩm còn tồn trong cửa hàng");
+                }
+            }
+
 
             cb.ComboID = Guid.NewGuid();
             // Lưu Combo vào cơ sở dữ liệu
-            var urlCombo = $"https://localhost:7079/api/Combo/CreateCombo?ComBoId={cb.ComboID}&comboname={cb.ComboName}&price={cb.Price}&status={cb.Status}&image={cb.Image}";
+            var urlCombo = $"https://localhost:7079/api/Combo/CreateCombo?ComBoId={cb.ComboID}&comboname={cb.ComboName}&quanTity={cb.Quantity}&price={cb.Price}&status={cb.Status}&image={cb.Image}";
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var content = new StringContent(JsonConvert.SerializeObject(cb), Encoding.UTF8, "application/json");
@@ -309,6 +330,14 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                         allRequestsSuccessful = false;
                         break;
                     }
+
+                    // Tạo xong comboItem thì chỉnh sửa lại số lượng tồn của sản phẩm
+                    Book b = lstBook.FirstOrDefault(p => p.BookID == cbItem.BookID);
+                    int CbQuantity = Convert.ToInt32(cb.Quantity);
+                    b.QuantityExists -= CbQuantity;
+                    var urlUpdateQuantity = $"https://localhost:7079/api/Book/UpdateQuantity?id={b.BookID}&TotalQuantity={b.TotalQuantity}&QuantitySold={b.QuantitySold}&QuantityExists={b.QuantityExists}";
+                    var contentUpdateQuantity = new StringContent(JsonConvert.SerializeObject(b), Encoding.UTF8, "application/json");
+                    var responseUpdateQuantity = await _httpClient.PutAsync(urlUpdateQuantity, contentUpdateQuantity);
 
 
                 }

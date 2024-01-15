@@ -14,10 +14,16 @@
         <thead>
             <tr>
                 <th style="text-align: center;">
+                    Ảnh sp
+                </th>
+                <th style="text-align: center;">
                     Tên sách
                 </th>
                 <th style="text-align: center;">
                     Giá bán
+                </th>
+                <th style="text-align: center;">
+                    Số lượng
                 </th>
                 <th>                          
                     Action
@@ -32,13 +38,16 @@
                 {
                     <tr>
                         <td style="text-align: center; margin-bottom: 20px">
+                            <img src="~/photoBooks/@item.Quantity" alt="Combo Image" width="100" height="100" />
+                        </td>
+                        <td style="text-align: center; margin-bottom: 20px">
                             @item.ItemName
                         </td>
                         <td style="text-align: center; margin-bottom: 20px">
                             @item.Price
                         </td>
                         <td style="text-align: center; margin-bottom: 20px">
-                            <a asp-action="DeleteToCombo" asp-route-id="@item.ComboItemID" class="btn status delivered">Xóa</a>
+                            @item.Quantity
                         </td>
                     </tr>
                 }
@@ -77,8 +86,4 @@
             } *@
         </dd>
     </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="AllComboManager">Back to List</a>
 </div>

@@ -1,4 +1,4 @@
-﻿@using SD85_WebBookOnline.Share.Models
+﻿﻿@using SD85_WebBookOnline.Share.Models
 @model IEnumerable<SD85_WebBookOnline.Share.Models.BookDetail>
 
 @{
@@ -18,68 +18,64 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
 <script src="~/js/BookDetail.js"></script>
 <p>
     <button type="button" class="btn btn-primary" id="btn_add">Thêm mới</button>
 </p>
-<table class="table" id="tb_bookdetail">
+<table class="table">
     <thead>
         <tr>
-            
             <th>
                 STT
             </th>
-            <th style="text-align : center;">
-                        Tên Sách
-             </th>
-             
-             <th style="text-align : center;">
-                 Thể Loại
-             </th>
-             <th style="text-align : center;">
-                 Tác Giả
-             </th>
-             <th style="text-align : center;">
-                 Ngôn ngữ
-             </th>
+            <th>
+               Book Name
+            </th>
+            <th>
+               Categories Name
+            </th>
+            <th>
+                Author Name
+            </th>
+            <th>
+               Laguge
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @{
+     @{
             int i = 1;
         }
-@foreach (var item in Model) {
+@foreach (var item in lstBookDetail) {
         <tr>
             <td>
                 @i
             </td>
             <td>
                 @lstBook.FirstOrDefault(c=>c.BookID == item.BookID).BookName
-               
             </td>
             <td>
-                @*@lstCategory.FirstOrDefault(d=>d.CategoryID == item.CategoriesID).Name*@
-               @item.CategoriesID
+                @lstCategory.FirstOrDefault(c=>c.CategoryID == item.CategoriesID).Name
             </td>
             <td>
-                @*@lstAuthor.FirstOrDefault(s=>s.AuthorID == item.AuthorID).AuthorName*@
-               @item.AuthorID
+                @lstAuthor.FirstOrDefault(c=>c.AuthorID == item.AuthorID).AuthorName
             </td>
             <td>
-               @* @lstLanguge.FirstOrDefault(f=>f.LangugeID == item.LagugeID).Name*@
-                @item.Languge
+                @lstLanguge.FirstOrDefault(c=>c.LangugeID == item.LagugeID).Name
             </td>
             <td>
-                    <button class="btn btn-primary" id="btn_chitiet" data-id="@item.BookDetailID">Chi Tiết</button>                   
-                    <button class="btn btn-primary" id="btn_xoa" data-id="@item.BookDetailID">Chi Tiết</button>                   
-                   
+                   <button id="btn_chitiet" class="btn btn-primary" type="button" data-id="@item.BookDetailID">Xem chi tiết</button>
+            </td>
         </tr>
             i++;
 }
     </tbody>
 </table>
 
+
+               
 
 
 

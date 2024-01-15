@@ -51,17 +51,24 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e4d66196-15eb-4bd4-99da-6dc9a61e1af8",
-                            ConcurrencyStamp = "d347f029-b774-46b4-8787-0166eeaf85f0",
+                            Id = "cf58a6a8-2f8f-4d45-af9e-897377f51a69",
+                            ConcurrencyStamp = "89b7a2d9-d824-418c-851f-8c5e39184e90",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "94c2d461-9822-492e-be39-10c6c4ba2f37",
-                            ConcurrencyStamp = "fdd4a8aa-32ac-4dbc-8cef-5c1bc3e1b077",
+                            Id = "1cdb5564-8e1e-4d62-9ddb-29f5413b3e42",
+                            ConcurrencyStamp = "3df82646-6955-4442-8f19-50dfd51c0683",
                             Name = "User",
                             NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "cc8a65ef-e386-4206-a787-658e3639224f",
+                            ConcurrencyStamp = "3264cbe1-ac73-4373-96be-4c46022eff20",
+                            Name = "Empolyee",
+                            NormalizedName = "EMPLOYEE"
                         });
                 });
 
@@ -293,6 +300,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -301,6 +311,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.Property<decimal?>("PriceBeforeVoucher")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ReceiverName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Shipmoney")
                         .HasColumnType("decimal(18,2)");
@@ -931,11 +944,18 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("VoucherID");
 

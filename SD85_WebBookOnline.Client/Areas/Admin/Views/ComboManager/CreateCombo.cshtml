@@ -24,14 +24,14 @@
                 Giá bán
             </th>
             <th style="text-align: center;">
-                Số Lượng
+                Số lượng tồn
             </th>
-            <th style="text-align: center;">
+            @* <th style="text-align: center;">
                 Thông Tin
             </th>
             <th style="text-align: center;">
                 Mô Tả
-            </th>
+            </th> *@
             <th style="text-align: center;">
                 Ảnh đại diện
             </th>
@@ -57,14 +57,14 @@
                         @item.Price
                     </td>
                     <td style="text-align: center; margin-bottom: 20px">
-                        @item.TotalQuantity
+                        @item.QuantityExists
                     </td>
-                    <td style="text-align: center; margin-bottom: 20px">
+                    @* <td style="text-align: center; margin-bottom: 20px">
                         @item.Information
                     </td>
                     <td style="text-align: center; margin-bottom: 20px">
                         @item.Description
-                    </td>
+                    </td> *@
                     <td style="text-align: center;">
                         <img src="~/photoBooks/@item?.MainPhoto" alt="Combo Image" width="100" height="100" />
                     </td>
@@ -108,20 +108,8 @@
                     <td style="text-align: center; margin-bottom: 20px">
                         @item.Price
                     </td>
-                    <td>
-                        <div class="input-group quantity">
-                            <div class="input-group-btn">
-                                <button class="btn btn-primary btn-minus" style="background-color: green;">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                            </div>
-                            <input type="text" class="quantity form-control text-center" style="background-color: white;" value="@item.Quantity">
-                            <div class="input-group-btn">
-                                <button class="btn btn-primary btn-plus" style="background-color: green;">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
+                    <td style="text-align: center; margin-bottom: 20px">
+                        @item.Quantity
                     </td>
                     <td style="text-align: center; margin-bottom: 20px">
                         <a asp-area="Admin" asp-controller="ComboManager" asp-action="DeleteToCombo" asp-route-id="@item.ComboItemID" class="btn status delivered">Xóa</a>
@@ -149,6 +137,11 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
                 <input asp-for="Status" class="form-control" />
                 <span asp-validation-for="Status" class="text-danger"></span>
@@ -164,25 +157,19 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
-<script>
-    document.querySelectorAll('.btn-minus').forEach(function (button) {
-        button.addEventListener('click', function () {
-            let quantity = this.parentElement.nextElementSibling;
-            if (quantity.value > 1) {
-                quantity.value = parseInt(quantity.value) - 1;
-            }
-        });
-    });
+@*Link datatable*@
+<link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-    document.querySelectorAll('.btn-plus').forEach(function (button) {
-        button.addEventListener('click', function () {
-            let quantity = this.parentElement.previousElementSibling;
-            quantity.value = parseInt(quantity.value) + 1;
+@section scripts
+    {
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Khởi tạo DataTable
+            var dataTable = $('#page').DataTable();
         });
-    });
-</script>
+    </script>
+}
+
 

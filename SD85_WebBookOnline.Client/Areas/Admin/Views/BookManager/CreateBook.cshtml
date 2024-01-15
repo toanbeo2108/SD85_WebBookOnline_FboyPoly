@@ -1,12 +1,7 @@
-﻿@using SD85_WebBookOnline.Share.Models
-@model SD85_WebBookOnline.Share.Models.Book
+﻿@model SD85_WebBookOnline.Share.Models.Book
 
 @{
     ViewData["Title"] = "CreateBook";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    IEnumerable<Manufacturer> lstManu = ViewBag.lstManufacturer as IEnumerable<Manufacturer>;
-    IEnumerable<Form> lstForm = ViewBag.lstForm as IEnumerable<Form>;
-    IEnumerable<Coupon> lstCoupon = ViewBag.lstCoupon as IEnumerable<Coupon>;
 }
 
 <h1>CreateBook</h1>
@@ -15,40 +10,27 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-
-        <form asp-action="CreateBook" enctype="multipart/form-data" method="post">
-
+        <form asp-action="CreateBook">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+            <div class="form-group">
+                <label asp-for="BookID" class="control-label"></label>
+                <input asp-for="BookID" class="form-control" />
+                <span asp-validation-for="BookID" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="ManufacturerID" class="control-label"></label>
-                <select class="form-select" asp-for="ManufacturerID" aria-label="Default select example">
-                    <option selected>Manufacturer</option>
-                    @foreach (Manufacturer item in lstManu)
-                    {
-                        <option value="@item.ManufactureID">@item.ManufactureName</option>
-                    }
-                </select>
+                <input asp-for="ManufacturerID" class="form-control" />
+                <span asp-validation-for="ManufacturerID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FormID" class="control-label"></label>
-                <select class="form-select" asp-for="FormID" aria-label="Default select example">
-                    <option selected>Form</option>
-                    @foreach (Form item in lstForm)
-                    {
-                        <option value="@item.FormId">@item.FormName</option>
-                    }
-                </select>
+                <input asp-for="FormID" class="form-control" />
+                <span asp-validation-for="FormID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CouponID" class="control-label"></label>
-                <select class="form-select" asp-for="CouponID" aria-label="Default select example">
-                    <option selected>Coupon</option>
-                    @foreach (Coupon item in lstCoupon)
-                    {
-                        <option value="@item.CouponID">@item.CouponName</option>
-                    }
-                </select>
+                <input asp-for="CouponID" class="form-control" />
+                <span asp-validation-for="CouponID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="BookName" class="control-label"></label>
@@ -61,8 +43,9 @@
                 <span asp-validation-for="TotalQuantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="formFile" class="form-label">Chọn ảnh cho sản phẩm</label>
-                <input asp-for="MainPhoto" class="form-control" type="file" name="imageFile" accept="image/*">
+                <label asp-for="MainPhoto" class="control-label"></label>
+                <input asp-for="MainPhoto" class="form-control" />
+                <span asp-validation-for="MainPhoto" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="QuantitySold" class="control-label"></label>
@@ -105,14 +88,14 @@
                 <span asp-validation-for="YearOfRelease" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Weight" class="control-label"></label>
-                <input asp-for="Weight" class="form-control" />
-                <span asp-validation-for="Weight" class="text-danger"></span>
+                <label asp-for="CreateDate" class="control-label"></label>
+                <input asp-for="CreateDate" class="form-control" />
+                <span asp-validation-for="CreateDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Volume" class="control-label"></label>
-                <input asp-for="Volume" class="form-control" />
-                <span asp-validation-for="Volume" class="text-danger"></span>
+                <label asp-for="DeleteDate" class="control-label"></label>
+                <input asp-for="DeleteDate" class="form-control" />
+                <span asp-validation-for="DeleteDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="TransactionStatus" class="control-label"></label>
@@ -123,6 +106,16 @@
                 <label asp-for="Status" class="control-label"></label>
                 <input asp-for="Status" class="form-control" />
                 <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Weight" class="control-label"></label>
+                <input asp-for="Weight" class="form-control" />
+                <span asp-validation-for="Weight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Volume" class="control-label"></label>
+                <input asp-for="Volume" class="form-control" />
+                <span asp-validation-for="Volume" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -136,5 +129,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
