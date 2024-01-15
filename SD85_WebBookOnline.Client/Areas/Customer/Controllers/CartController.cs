@@ -46,12 +46,12 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             var lstRating = JsonConvert.DeserializeObject<List<Rating>>(apiDataRating);
             var lstRating_book = lstRating.Where(x => x.IdBook == id).ToList();
             ViewBag.lstRating_book = lstRating_book;
-            int countStar = lstRating_book.Count(x => x.IdBook == id);
-            ViewBag.countStar = countStar;
-            decimal sumStar = (decimal)lstRating_book.Sum(x => x.Stars);
-            ViewBag.sumStar = sumStar;
-            decimal averageStars = sumStar / countStar;
-            ViewBag.AverageStars = averageStars;
+            int countstar = lstRating_book.Count(x => x.IdBook == id);
+            ViewBag.countstar = countstar;
+            decimal sumstar = (decimal)lstRating_book.Sum(x => x.Stars);
+            ViewBag.sumstar = sumstar;
+            //decimal averagestars = sumstar / countstar;
+            //ViewBag.averagestars = averagestars;
             var lstSelectRating = lstRating_book.OrderByDescending(x => x.RatingDate).Take(4).ToList();
             ViewBag.lstSelectRating = lstSelectRating;
 

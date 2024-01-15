@@ -7,7 +7,16 @@
     IEnumerable<User> ListUser = ViewBag.ListUser as IEnumerable<User>;
     IEnumerable<Rating> lstSelectRating = ViewBag.lstSelectRating as IEnumerable<Rating>;
     Book book = ViewBag.BookDetail as Book;
-    decimal averageStars = ViewBag.sumStar / ViewBag.countStar;
+    decimal averageStars =0;
+    if (ViewBag.countStar == 0)
+    {
+         averageStars = 0;
+    }
+    else
+    {
+         averageStars = ViewBag.sumStar / ViewBag.countStar;
+    }
+    
 
     int quantity = 1;
 }
@@ -49,7 +58,7 @@
                 <div class="text-primary mr-2">
                     <small>@averageStars</small>
                     <small class="fas fa-star"></small>
-                    
+
                 </div>
                 <small class="pt-1">(50 Reviews)</small>
             </div>
@@ -128,8 +137,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h4 class="mb-4">1 review for "Colorful Stylish Shirt"</h4>
-                            <div >
-                               <div>
+                            <div>
+                                <div>
                                     @foreach (var item in lstSelectRating)
                                     {
                                         @if (item.IdBook == book.BookID)
@@ -141,9 +150,9 @@
                                                 {
                                                     <div class="text-primary mb-2">
                                                         <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                     </div>
                                                 }
@@ -152,8 +161,8 @@
                                                     <div class="text-primary mb-2">
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                     </div>
                                                 }
@@ -163,19 +172,19 @@
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
+                                                        <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                     </div>
                                                 }
-                                                @if (item.Stars==4)
+                                                @if (item.Stars == 4)
                                                 {
                                                     <div class="text-primary mb-2">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                    </div>
                                                 }
                                                 @if (item.Stars == 5)
                                                 {
@@ -187,23 +196,23 @@
                                                         <i class="fas fa-star"></i>
                                                     </div>
                                                 }
-                                                
+
                                                 <p>@item.Comment</p>
                                             </div>
                                         }
                                     }
-                               </div>
+                                </div>
                                 <div>
                                     <a asp-action="Book_AllRating" asp-controller="Cart" asp-route-id="@book.BookID">Xem Them</a>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div>
-                                <a  asp-action="CreateRating" asp-controller="Cart" asp-route-id="@book.BookID">Them Danh Gia</a>
+                                <a asp-action="CreateRating" asp-controller="Cart" asp-route-id="@book.BookID">Them Danh Gia</a>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
