@@ -12,8 +12,8 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240115101347_toantest")]
-    partial class toantest
+    [Migration("20240115170651_999999")]
+    partial class _999999
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,22 +53,22 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0e8a5e5c-43de-4255-921c-db0b92a69b47",
-                            ConcurrencyStamp = "180cd263-2c72-475a-bf59-f6297800bafd",
+                            Id = "1f5b3aa4-3702-4e1e-a3b1-c28ee6cdbaa6",
+                            ConcurrencyStamp = "5e92e656-b607-4df0-9acb-e1f9812866a8",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "b27fcb03-ecf4-4f11-8ad9-c5c983db2b1f",
-                            ConcurrencyStamp = "707d7339-dbb4-48e0-bed9-9e3c1b126b8a",
+                            Id = "b061414c-6cc8-47c8-ac89-09aeeb946be0",
+                            ConcurrencyStamp = "07e9eae5-ae8c-4292-871a-fd932ee79b9b",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "d0b34527-2528-4215-b5e0-425a7840fc42",
-                            ConcurrencyStamp = "be1a42f0-07c1-4893-93b6-bf65bb20cb4d",
+                            Id = "e5aec01f-d73b-4c7b-9f1e-ecf0590f7bdc",
+                            ConcurrencyStamp = "60b1021d-ef2e-4eec-b322-a8713390e552",
                             Name = "Empolyee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -358,6 +358,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.Property<Guid?>("ComboID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("GiaNhap")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ItemName")
                         .IsRequired()
@@ -818,6 +821,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.Property<Guid?>("BookID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("GiaBan")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("GiaNhap")
                         .HasColumnType("decimal(18,2)");

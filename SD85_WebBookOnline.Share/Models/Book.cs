@@ -41,6 +41,7 @@ namespace SD85_WebBookOnline.Share.Models
         public virtual IEnumerable<BillItems>? BillItems { get; set; }
         public virtual IEnumerable<InputSlip>? InputSlip { get; set; }
         public virtual IEnumerable<Rating>? Ratings { get; set; }
+  
 
     }
 }

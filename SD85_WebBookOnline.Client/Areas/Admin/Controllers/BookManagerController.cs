@@ -240,6 +240,17 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 // Cập nhật thuộc tính 'MainPhoto' với tên tệp hình ảnh mới
                 vc.MainPhoto = imageFile.FileName;
             }
+            else
+            {
+                var token = Request.Cookies["Token"];
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var url_Book = $"https://localhost:7079/api/Book/get-all-book";
+                var responBook = await _httpClient.GetAsync(url_Book);
+                string apiDataBook = await responBook.Content.ReadAsStringAsync();
+                var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+                var Book = lstBook.FirstOrDefault(x => x.BookID == id);
+                vc.MainPhoto = Book.MainPhoto + "";
+            }
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8, "application/json");
             var respon = await _httpClient.PutAsync(urlBook, content);
             //if (!respon.IsSuccessStatusCode)

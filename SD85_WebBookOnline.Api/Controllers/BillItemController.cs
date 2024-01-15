@@ -29,7 +29,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await context.BillItems.Where(p => p.BillID == BillID).ToListAsync();
         }
         [HttpPost("[Action]")]
-		public async Task<bool> CreateBillItem(Guid? bookid, Guid? comboid, Guid? billid, string itemname,decimal price, int quantity,decimal total)
+		public async Task<bool> CreateBillItem(Guid? bookid, Guid? comboid, Guid? billid, string itemname,decimal price, int quantity,decimal total, decimal giaNhap)
 		{
 			var lstbillItem = await irespon.GetAll();
 			BillItems bt = new BillItems();
@@ -39,6 +39,7 @@ namespace SD85_WebBookOnline.Api.Controllers
 			bt.ComboID = comboid;
 			bt.ItemName = itemname;
 			bt.Price = price;
+			bt.GiaNhap = giaNhap;
 			bt.Quantity = quantity;
 			bt.ToTal = total;
 			bt.Status = 1;

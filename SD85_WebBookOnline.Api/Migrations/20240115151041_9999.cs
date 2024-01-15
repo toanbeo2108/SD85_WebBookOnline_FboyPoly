@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SD85_WebBookOnline.Api.Migrations
 {
-    public partial class toantest : Migration
+    public partial class _9999 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -674,17 +674,17 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "0e8a5e5c-43de-4255-921c-db0b92a69b47", "180cd263-2c72-475a-bf59-f6297800bafd", "Admin", "ADMIN" });
+                values: new object[] { "2c93ab83-d24b-49b7-93f2-c9c91f57dfda", "72eff912-345c-4b24-94ed-0cf7fc133480", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "b27fcb03-ecf4-4f11-8ad9-c5c983db2b1f", "707d7339-dbb4-48e0-bed9-9e3c1b126b8a", "User", "USER" });
+                values: new object[] { "930fe483-d370-4884-b16b-6ab921289596", "4462bff4-d42a-4eff-893f-e460e4630a6e", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "d0b34527-2528-4215-b5e0-425a7840fc42", "be1a42f0-07c1-4893-93b6-bf65bb20cb4d", "Empolyee", "EMPLOYEE" });
+                values: new object[] { "b3953a7d-452d-46e2-bfbb-112eb04be224", "ae6c1093-0cb2-4a48-baa6-c0247f45e014", "Empolyee", "EMPLOYEE" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
