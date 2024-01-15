@@ -122,26 +122,26 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 if (respon.StatusCode == System.Net.HttpStatusCode.OK)
                 {
 
-                    InputSlip ip = new InputSlip();
-                    ip.InputSlipID = Guid.NewGuid();
-                    ip.IdNhanVienNhap = null;
-                    ip.IdSachNhap = bk.BookID;
-                    ip.NgayNhap = DateTime.Now;
-                    ip.SoLuong = bk.TotalQuantity;
-                    ip.GiaNhap = bk.EntryPrice;
-                    var urlInputSlip = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";
-                    var contentIP = new StringContent(JsonConvert.SerializeObject(ip), Encoding.UTF8, "application/json");
-                    var responIP = await _httpClient.PostAsync(urlInputSlip, contentIP);
-                    if (responIP.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
+                    //InputSlip ip = new InputSlip();
+                    //ip.InputSlipID = Guid.NewGuid();
+                    //ip.IdNhanVienNhap = null;
+                    //ip.IdSachNhap = bk.BookID;
+                    //ip.NgayNhap = DateTime.Now;
+                    //ip.SoLuong = bk.TotalQuantity;
+                    //ip.GiaNhap = bk.EntryPrice;
+                    //var urlInputSlip = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";
+                    //var contentIP = new StringContent(JsonConvert.SerializeObject(ip), Encoding.UTF8, "application/json");
+                    //var responIP = await _httpClient.PostAsync(urlInputSlip, contentIP);
+                    //if (responIP.StatusCode == System.Net.HttpStatusCode.OK)
+                    //{
                         _stt = true;
                         _mess = "Thêm thành công!"; 
-                    }
-                    else
-                    {
-                        _stt = true;
-                        _mess = "Thêm thất bại!"; 
-                    }
+                    //}
+                    //else
+                    //{
+                    //    _stt = true;
+                    //    _mess = "Thêm thất bại!"; 
+                    //}
                 }                
             }
             else

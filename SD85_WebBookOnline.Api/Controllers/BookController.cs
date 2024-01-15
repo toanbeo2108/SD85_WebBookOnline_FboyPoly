@@ -83,11 +83,11 @@ namespace SD85_WebBookOnline.Api.Controllers
                 b.FormID = book.FormID;
                 b.CouponID = book.CouponID;
                 b.BookName = book.BookName;
-                b.TotalQuantity = book.TotalQuantity;
+              //  b.TotalQuantity = book.TotalQuantity;
                 b.MainPhoto = book.MainPhoto;
-                b.QuantitySold = book.QuantitySold;
-                b.QuantityExists = book.QuantityExists;
-                b.EntryPrice = book.EntryPrice;
+             //   b.QuantitySold = book.QuantitySold;
+              //  b.QuantityExists = book.QuantityExists;
+             //   b.EntryPrice = book.EntryPrice;
                 b.Information = book.Information;
                 b.Description = book.Description;
                 b.ISBN = book.ISBN;

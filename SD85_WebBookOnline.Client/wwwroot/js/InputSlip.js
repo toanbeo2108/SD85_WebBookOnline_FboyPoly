@@ -67,11 +67,12 @@ function setData(data) {
 
     if (data != null && data != undefined && data != "") {
 
-        $('#btn_inpID').val(data.InputSlipID);
+        $('#btn_inpID').val(data.inputSlipID);
         $('#cb_bookname').val(data.idSachNhap);
         $('#cb_nv').val(data.idNhanVienNhap);
         $('#btn_soluong').val(data.soLuong);
         $('#btn_gianhap').val(data.giaNhap);
+        $('#btn_ban').val(data.giaBan);
         $('#btn_ngaynhap').val(data.NgayNhap);
        
 
@@ -81,6 +82,7 @@ function setData(data) {
         $('#cb_nv').val('');
         $('#btn_soluong').val('');
         $('#btn_gianhap').val('');
+        $('#btn_ban').val('');
         $('#btn_ngaynhap').val('');
 
     }
@@ -93,6 +95,7 @@ function getData() {
         IdNhanVienNhap :$('#cb_nv').val(),
         SoLuong  :$('#btn_soluong').val(),
         GiaNhap  :$('#btn_gianhap').val(),
+        GiaBan: $('#btn_ban').val(),
         NgayNhap  :$('#btn_ngaynhap').val()
     }
 }

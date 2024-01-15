@@ -60,8 +60,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ip.InputSlipID = Guid.NewGuid();
-
-            var url = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";
+            var url = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&giaban={ip.GiaBan}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";
+            // var url = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(ip), Encoding.UTF8, "application/json");
             var respon = await httpClient.PostAsync(url, content);           
@@ -154,7 +154,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             string _mess = "";
             bool _stt = false;
 
-            var url = $"https://localhost:7079/api/InputSlipController/UpdateInputSlip/{id}";
+        //    var url = $"https://localhost:7079/api/InputSlipController/UpdateInputSlip_/{id}";
+            var url = $"https://localhost:7079/api/InputSlipController/Update-image/{id}";
             var content = new StringContent(JsonConvert.SerializeObject(img), Encoding.UTF8, "application/json");
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

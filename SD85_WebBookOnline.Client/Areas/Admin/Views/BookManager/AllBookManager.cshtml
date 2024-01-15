@@ -163,10 +163,10 @@
             </select>
            </div>
            <div class="col-md-6">
-               <label >Book Name</label>
+               <label >Tên sách</label>
                <input id="btn_bookName" type="text" class="form-control" />
            </div>
-           <div class="col-md-6">
+           @*<div class="col-md-6">
                 <label >Total Quantity</label>
                <input id="btn_ttqtt" type="number" class="form-control" />
            </div>
@@ -177,59 +177,64 @@
            <div class="col-md-6">
                 <label>Quantity Exit</label>
                <input id="btn_qttexit" type="number" class="form-control" />
-           </div>
-           <div class="col-md-6">
+           </div>*@
+           @*<div class="col-md-6">
                <label> Entry Price</label>
                <input id="btn_entryprice" type="number" class="form-control" />
            </div>
            <div class="col-md-6">
                 <label for="btn_price">  Price</label>
                <input id="btn_price" type="number" class="form-control" />
-           </div>
+           </div>*@
            <div class="col-md-6">
-                <label for="btn_in4">Information</label>
+                <label for="btn_in4">Thông tin</label>
                <input id="btn_in4" type="text" class="form-control" />
            </div>
            <div class="col-md-6">
-                 <label for="btn_Description">Description</label>
+                 <label for="btn_Description">Mô tả</label>
                <input id="btn_Description" type="text" class="form-control" />
            </div>
            <div class="col-md-6">
-                <label>ISBN</label>
+                <label>Mã định danh</label>
                <input id="btn_ISBN" type="text" class="form-control" />
            </div>
            <div class="col-md-6">
-                <label>Year Of Release</label>
+                <label>Năm phát hành</label>
                <input id="btn_Y_release" type="number" class="form-control" />
            </div>
-          @* <div class="col-md-6">
+           <div class="col-md-6">
                 <label>Create Date</label>
                <input id="btn_createdate" type="date" class="form-control" />
            </div>
-           <div class="col-md-6">
+          @* <div class="col-md-6">
                 <label>Delete date</label>
                <input id="btn_Deletedate" type="date" class="form-control" />
            </div>*@
            <div class="col-md-6">
-               <label>Weight</label>
+               <label>Cân nặng</label>
                <input id="btn_Weight" type="number" class="form-control" />
            </div>
            <div class="col-md-6">
-               <label>Volume</label>
+               <label>Thể tích</label>
                <input id="btn_Volume" type="number" class="form-control" />
            </div>
            <div class="col-md-6">
-               <label>TransactionStatus</label>
+               <label>Trạng thái giao dịch</label>
                <input id="btn_TransactionStatus" type="number" class="form-control" />
            </div>
            <div class="col-md-6">
-               <label>Status</label>
+               <label>Trạng thái</label>
                <input id="btn_Status" type="number" class="form-control" />
            </div>
+            <div class="col-md-6" id="div_anh" style="display:none;">
+               <label>Ảnh</label>
+               <input  id="file_name" type="text" class="form-control" disabled="disabled"/>
+           </div>
+
            <div class="col-md-12">
-              <label for="btn_File">Chọn File</label>
+              <label for="btn_File">Chọn ảnh mới</label>
               <input id="btn_File" type="file" class="form-control" name="imageFile"/>
-               <p id="file_name"></p>
+              
              
             </div>
        </div>

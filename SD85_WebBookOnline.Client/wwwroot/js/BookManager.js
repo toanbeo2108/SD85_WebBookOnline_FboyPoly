@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     $('body').on('click', '#btn_add', function () {
+        document.getElementById("div_anh").style.display = "none";
         setData(null)
         $('#pp_Modal').modal('show');
     })
@@ -65,7 +66,9 @@
         let id = $(this).attr('data-id')
         $.get('/detail-book/' + id, function (re) {
             if (re.status) {
-                
+                // Hiển thị lại div
+                document.getElementById("div_anh").style.display = "block";
+  
                 setData(re.data)
                 $('#pp_Modal').modal('show');
             }
@@ -137,7 +140,7 @@ function setData(data) {
             var splitted = fileName.split("\\");
             fileName = splitted[splitted.length - 1];
         }
-        $('#file_name').text('main Photo: ' + fileName);
+        $('#file_name').val(fileName);
     }
 }
 
@@ -158,7 +161,7 @@ function getData() {
         Description       : $('#btn_Description').val(),
         ISBN              : $('#btn_ISBN').val(),
         YearOfRelease     : $('#btn_Y_release').val(),
-        /*CreateDate        : $('#btn_Weight').val(),*/
+        CreateDate        : $('#btn_createdate').val(),
         /*DeleteDate        : $('#btn_IdBoook').val(),*/
         TransactionStatus : $('#btn_TransactionStatus').val(),
         Status            : $('#btn_Status').val(),

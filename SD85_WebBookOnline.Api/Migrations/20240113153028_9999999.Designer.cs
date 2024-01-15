@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SD85_WebBookOnline.Api.Data;
 
@@ -11,9 +12,10 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240113153028_9999999")]
+    partial class _9999999
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +53,15 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "60eff3b2-6bb1-49e7-b173-5b07b3078ddb",
-                            ConcurrencyStamp = "0289716d-a554-4be0-bb8d-85e7dd51e296",
+                            Id = "1e977c11-873f-4e67-b14b-d68d637a02c7",
+                            ConcurrencyStamp = "0acd200b-225e-4541-afcf-0f46958cd5fc",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f740561d-eb5b-4849-8dcc-f08f22f21d00",
-                            ConcurrencyStamp = "cb14454b-7157-49d8-9cc4-eceaceda0241",
+                            Id = "a430f426-aebc-4c3a-820c-b5bc14193683",
+                            ConcurrencyStamp = "e2f15a7f-cac8-4006-b7c7-f5bb8c3cf318",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -350,12 +352,6 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<Guid?>("ComboID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("GiaNhap")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid?>("InputSlipID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ItemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -379,8 +375,6 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasIndex("BookID");
 
                     b.HasIndex("ComboID");
-
-                    b.HasIndex("InputSlipID");
 
                     b.ToTable("BillItems");
                 });
@@ -1052,17 +1046,11 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .WithMany("BillItems")
                         .HasForeignKey("ComboID");
 
-                    b.HasOne("SD85_WebBookOnline.Share.Models.InputSlip", "Input")
-                        .WithMany()
-                        .HasForeignKey("InputSlipID");
-
                     b.Navigation("Bill");
 
                     b.Navigation("Book");
 
                     b.Navigation("Combo");
-
-                    b.Navigation("Input");
                 });
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Book", b =>

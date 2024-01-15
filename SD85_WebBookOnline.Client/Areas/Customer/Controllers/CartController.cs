@@ -395,6 +395,11 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 
                     foreach (var item in ListCartItems)
                     {
+                        var urlBook = $"https://localhost:7079/api/Book/GetBookByID/{item.BookID}";
+                        var responseGetBookInfo = await _httpClient.GetAsync(urlBook);
+                        string apiDataBookInfo = await responseGetBookInfo.Content.ReadAsStringAsync();
+                        var bookInfo = JsonConvert.DeserializeObject<Book>(apiDataBookInfo);
+
                         // Tạo các BillItems từ các CartItem đã lưu :
                         BillItems billItems = new BillItems();
                         billItems.BillItemID = Guid.NewGuid();
@@ -402,12 +407,15 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                         billItems.BookID = item.BookID;
                         billItems.ItemName = item.ItemName;
                         billItems.Price = item.Price;
+                        billItems.GiaNhap = bookInfo.EntryPrice;
                         billItems.Quantity = item.Quantity;
                         billItems.ToTal = billItems.Quantity * billItems.Price;
                         billItems.Status = 1;
 
                         // Sau khi tạo xong thì lưu nó vô database
-                        var urlSaveBillItems = $"https://localhost:7079/api/BillItem/CreateBillItem?bookid={billItems.BookID}&billid={billItems.BillID}&itemname={billItems.ItemName}&price={billItems.Price}&quantity={billItems.Quantity}&total={billItems.ToTal}";
+                        // var urlSaveBillItems = $"https://localhost:7079/api/BillItem/CreateBillItem?bookid={billItems.BookID}&billid={billItems.BillID}&itemname={billItems.ItemName}&price={billItems.Price}&quantity={billItems.Quantity}&total={billItems.ToTal}";
+
+                        var urlSaveBillItems = $"https://localhost:7079/api/BillItem/CreateBillItem?bookid={billItems.BookID}&billid={billItems.BillID}&itemname={billItems.ItemName}&price={billItems.Price}&quantity={billItems.Quantity}&total={billItems.ToTal}&giaNhap={billItems.GiaNhap}";
                         var contentBillItem = new StringContent(JsonConvert.SerializeObject(billItems), Encoding.UTF8, "application/json");
                         var responseCBIT = await _httpClient.PostAsync(urlSaveBillItems, contentBillItem);
                         if (!responseCBIT.IsSuccessStatusCode)

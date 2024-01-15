@@ -2,7 +2,7 @@
 {
     public class ThongKeViewModel
     {
-        public Guid Id { get; set; }
+       // public Guid Id { get; set; }
         public string tensach { get; set; }
         public int TongSoSachBanDuoc { get; set; }
         public int SoSachConLai { get; set; }

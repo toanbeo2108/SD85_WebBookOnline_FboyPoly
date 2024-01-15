@@ -200,53 +200,95 @@ function InitPage3() {
 }
 
 function generateExcel() {
-    $.get('/GetThongKe', function (re) {
-        if (re.status) {
-            var data = re.data;
+    if ($('#thongke-options').val() == 1) {
+        $.get('/GetThongKe', function (re) {
+            if (re.status) {
+                var data = re.data;
+                excel(data)
+                // Tạo một đối tượng JSON để lưu trữ dữ liệu
 
-            // Tạo một đối tượng JSON để lưu trữ dữ liệu
-            var jsonData = [];
+            } else {
+                alert(re.message);
+            }
+        });
+    }
+    if ($('#thongke-options').val() == 2) {
+        $.get('/ThongkeNgay', function (re) {
+            if (re.status) {
+                var data = re.data;
+                excel(data)
+                // Tạo một đối tượng JSON để lưu trữ dữ liệu
 
-            // Lặp qua dữ liệu để chuyển đổi thành định dạng phù hợp để tạo Excel
-            data.forEach(function (item) {
-                var row = {
-                    'Tên sách': item.tensach,
-                    'Tổng số sách bán được': item.tongSoSachBanDuoc,
-                    'Tổng doanh thu': item.tongDoanhThusach,
-                    'Lợi nhuận': item.loiNhuansach,
-                    'Chi phí gốc': item.chiPhiGocsach,
-                    'Số sách còn lại': item.soSachConLai != 0 ? item.soSachConLai : '',
-                };
-                jsonData.push(row);
-            });
+            } else {
+                alert(re.message);
+            }
+        });
+    }
+    if ($('#thongke-options').val() == null) {
+        $.post('/load-data-thongke', { filter: getBindFormFilter() }, function (re) {
+            if (re.status) {
+                var data = re.data;
+                excel(data)
+                // Tạo một đối tượng JSON để lưu trữ dữ liệu
 
-            // Tạo một đối tượng workbook từ dữ liệu JSON
-            var workbook = XLSX.utils.book_new();
-            var ws = XLSX.utils.json_to_sheet(jsonData);
+            } else {
+                alert(re.message);
+            }
+        });
+    }
+}
 
-            // Thêm sheet vào workbook
-            XLSX.utils.book_append_sheet(workbook, ws, 'ThongKeSheet');
 
-            // Tạo buffer để lưu trữ dữ liệu Excel
-            var buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-
-            // Tạo blob từ buffer
-            var blob = new Blob([buffer], { type: 'application/octet-stream' });
-
-            // Tạo URL từ blob và tạo ra thẻ <a> để tải xuống
-            var url = window.URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = 'ThongKe.xlsx';
-
-            // Thêm thẻ <a> vào body và kích hoạt sự kiện click để tải xuống
-            document.body.appendChild(a);
-            a.click();
-
-            // Xóa thẻ <a> sau khi tải xuống
-            document.body.removeChild(a);
-        } else {
-            alert(re.message);
+function excel(data) {
+    var workbook = new ExcelJS.Workbook();
+    var worksheet = workbook.addWorksheet('ThongKeSheet');
+    var headerRow = worksheet.addRow([
+        'Tên sách',
+        'Tổng số sách bán được',
+        'Tổng doanh thu',
+        'Lợi nhuận',
+        'Chi phí gốc',
+        'Số sách còn lại'
+    ]);
+    for (var i = 1; i <= 6; i++) {
+        headerRow.getCell(i).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FF008000' }
         }
-    });
+        data.forEach(function (item) {
+            var dataRow = worksheet.addRow([
+                item.tensach,
+                item.tongSoSachBanDuoc,
+                item.tongDoanhThusach,
+                item.loiNhuansach,
+                item.chiPhiGocsach,
+                item.soSachConLai != 0 ? item.soSachConLai : ''
+            ]);
+        });
+        var footerRow = worksheet.addRow([
+            'Tổng cộng',
+            data.reduce((sum, item) => sum + item.tongSoSachBanDuoc, 0),
+            data.reduce((sum, item) => sum + item.tongDoanhThusach, 0),
+            data.reduce((sum, item) => sum + item.loiNhuansach, 0),
+            data.reduce((sum, item) => sum + item.chiPhiGocsach, 0),
+            ''
+        ]);
+        for (var i = 1; i <= 6; i++) {
+            footerRow.getCell(i).fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'FFFFD700' }
+            };
+        }
+        workbook.xlsx.writeBuffer().then(buffer => {
+            var blob = new Blob([buffer], { type: 'application/octet-stream' });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'ThongKe.xlsx';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    }
 }

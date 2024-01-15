@@ -24,7 +24,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await _irespon.GetAll();
         }
         [HttpPost("[Action]")]
-        public async Task<bool> CreateInputSlip(Guid? idNhanVienNhap, Guid? idSachNhap, int soLuong, DateTime ngayNhap,decimal giaNhap)
+        public async Task<bool> CreateInputSlip(Guid? idNhanVienNhap, Guid? idSachNhap,decimal giaban, int soLuong, DateTime ngayNhap,decimal giaNhap)
         {
             InputSlip insp = new InputSlip();
             var book = await _context.Book.FindAsync(idSachNhap);
@@ -42,9 +42,12 @@ namespace SD85_WebBookOnline.Api.Controllers
                 insp.SoLuong = soLuong;
                 insp.NgayNhap = ngayNhap;
                 insp.GiaNhap = giaNhap;
+                insp.GiaBan = giaban;
                 book.QuantityExists += insp.SoLuong  ?? 0;
                 book.TotalQuantity += insp.SoLuong  ?? 0;
-            return await _irespon.CreateItem(insp);
+                book.Price = giaban;
+                book.EntryPrice = giaNhap;
+                return await _irespon.CreateItem(insp);
             }
         }
 
@@ -64,6 +67,41 @@ namespace SD85_WebBookOnline.Api.Controllers
             insp.GiaNhap = giaNhap;
 
             return await _irespon.CreateItem(insp);
+        }
+        [HttpPut("Update-image/{id}")]
+        public async Task<bool> UpdateImage(Guid id, [FromBody] InputSlip input)
+        {
+            var list = await _irespon.GetAll();
+            var book = await _context.Book.FindAsync(input.IdSachNhap);
+            if (book != null)
+            {
+
+                var img = list.FirstOrDefault(c => c.InputSlipID == id);
+                if (img != null)
+                {
+
+                    img.IdSachNhap = input.IdSachNhap;
+                    img.SoLuong = input.SoLuong;
+                    img.NgayNhap = input.NgayNhap;
+                    img.GiaNhap = input.GiaNhap;
+                    img.GiaBan = input.GiaBan;
+
+                    book.QuantityExists += input.SoLuong ?? 0;
+                    book.TotalQuantity += input.SoLuong ?? 0;
+                    book.Price = (decimal)input.GiaBan;
+                    return await _irespon.UpdateItem(img);
+
+                }
+
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
