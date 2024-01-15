@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+
 }
 
 <h4>RegisterUser</h4>
@@ -34,16 +36,16 @@
         <p>FpolyBook</p>
     </div>
     <section>
-        <div class="box-Login">
+        <div class="box-Login" style="height : 680px">
             <form asp-action="Register">
-                <h2>SIGN IN</h2>
+                <h2>ĐĂNG KÝ THÀNH VIÊN MỚI</h2>
                 <div class="inputBox">
                     <input type="text" required="required" asp-for="Username">
                     <span>UserName</span>
                     <i></i>
                 </div>
                 <div class="inputBox">
-                    <input type="password" required="required" asp-for="Email">
+                    <input type="email" required="required" asp-for="Email">
                     <span>Email</span>
                     <i></i>
                 </div>
@@ -59,7 +61,7 @@
                 </div>
                 <div class="links">
                 </div>
-                <input type="submit" value="LOGIN NOW">
+                <input type="submit" value="ĐĂNG KÝ">
             </form>
         </div>
     </section>
