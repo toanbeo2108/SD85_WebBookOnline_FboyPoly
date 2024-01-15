@@ -69,7 +69,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             }
 
         }
-        [HttpDelete("[Action]/{id}")]
+        [HttpPut("[Action]/{id}")]
         public async Task<bool> DeleteVoucher(Guid id)
         {
             var lstv = await irespon.GetAll();
@@ -80,7 +80,8 @@ namespace SD85_WebBookOnline.Api.Controllers
             }
             else
             {
-                return await irespon.DeleteItem(v);
+                v.Status = 0;
+                return await irespon.UpdateItem(v);
             }
         }
     }

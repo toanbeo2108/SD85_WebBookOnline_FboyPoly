@@ -103,6 +103,7 @@
                         <td style="text-align : center; margin-bottom : 20px">
                             <button class="btn btn-primary" type="button" id="btn_chitiet" data-id="@item.BookID">Xem chi tiết</button>                            
                             <button type="button" id="btn_xoa" class="btn btn-primary" data-id="@item.BookID">Xóa</button>
+                            <a type="button" asp-action="Book_AllRating" asp-controller="RatingManager" asp-area="Admin" asp-route-id="@item.BookID">Đánh giá</a>
                         </td>
                     </tr>
                 }

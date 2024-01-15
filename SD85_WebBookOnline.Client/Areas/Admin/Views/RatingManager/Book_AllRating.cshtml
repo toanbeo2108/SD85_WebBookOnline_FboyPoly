@@ -1,0 +1,71 @@
+﻿@using SD85_WebBookOnline.Share.Models
+@model IEnumerable<SD85_WebBookOnline.Share.Models.Rating>
+
+@{
+    ViewData["Title"] = "Book_AllRating";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IEnumerable<User> ListUser = ViewBag.ListUser as IEnumerable<User>;
+    IEnumerable<Rating> lstRating = ViewBag.lstRating as IEnumerable<Rating>;
+    
+}
+
+<h1>Book_AllRating</h1>
+
+<p>
+    <button class=" btn btn-primary" id="btn_addnew" type="button">Create New</button>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th style="text-align : center;">
+                Tên người dùng
+            </th>
+            <th style="text-align : center;">
+                Comment
+            </th>
+            <th style="text-align : center;">
+                đánh giá
+            </th>
+
+            <th style="text-align : center;">
+                Ngày đánh giá
+            </th>
+            <th style="text-align : center;">
+                Trạng Thái
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+             @*@(ListUser.FirstOrDefault(c => c.Id == item.IdNguoiDung).UserName)*@
+             @item.IdNguoiDung
+            </td>
+            <td>
+                @item.Comment
+            </td>
+                <td>
+                    @item.Stars
+                </td>
+                <td>
+                    @item.RatingDate
+                </td>
+                <td>
+                    @item.Status
+                </td>
+            <td>
+                <br>
+                    <a asp-action="RatingUpdate" asp-controller="RatingManager" asp-route-idrat="@item.ID">sua</a>
+                    <a asp-action="RatingDelete" asp-controller="RatingManager" asp-route-idrat="@item.ID">xóa</a>
+
+                    @*<button class="btn btn-primary" data-id="@item.ID" id="btn_chitiet"> Xem Chi tiết</button>
+                    <button class="btn btn-primary" data-id="@item.ID" id="btn_xoa"> Xóa</button>*@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
