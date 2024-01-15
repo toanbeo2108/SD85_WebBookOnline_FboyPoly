@@ -1,7 +1,7 @@
 ﻿@using SD85_WebBookOnline.Share.Models
 
 @{
-    Layout = "~/Views/Shared/_LayoutShop.cshtml";
+    Layout = "~Areas/Customer/Views/Shared/_LayoutShopCus.cshtml";
     IEnumerable<Book> lstBook = ViewBag.lstSelect as IEnumerable<Book>;
     IEnumerable<Combo> lstcombo = ViewBag.lstComboSelect as IEnumerable<Combo>;
 }
@@ -45,7 +45,7 @@
 {
     foreach (var item in lstcombo)
     {
-        <a asp-action="Detail_cb" asp-controller="Home" asp-route-id="@item.ComboID">
+        <a asp-action="DeTail" asp-controller="Home" asp-route-id="@item.ComboID">
             <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
                 <div class="card product-item border-0 mb-4">
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">

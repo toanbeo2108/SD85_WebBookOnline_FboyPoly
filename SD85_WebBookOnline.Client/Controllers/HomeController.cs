@@ -47,14 +47,15 @@ namespace SD85_WebBookOnline.Client.Controllers
             //
             string urlctd = $"https://localhost:7079/api/CategoryParent/GetAllCategoryParents";
             var responctd = await _httpClient.GetAsync(urlctd);
-            string apidata = await responctd.Content.ReadAsStringAsync();
-            var lstctd = JsonConvert.DeserializeObject<List<CategoryParent>>(apidata);
+            string apidatactd = await responctd.Content.ReadAsStringAsync();
+            var lstctd = JsonConvert.DeserializeObject<List<CategoryParent>>(apidatactd);
             if(lstctd == null)
             {
                 erro = "Danh muc null";
             }
             var lstcatePOk = JsonConvert.SerializeObject(lstctd);
             Response.Cookies.Append("lstCateParent", lstcatePOk);
+            //var lstCTPValue = Request.Cookies["lstCateParent"];
             //
             var urllanguage = $"https://localhost:7079/api/Languge/GetAllLanguge";
             var responlaguage = await _httpClient.GetAsync(urllanguage);
@@ -397,6 +398,31 @@ namespace SD85_WebBookOnline.Client.Controllers
             }
 
             return RedirectToAction("MyCart", "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Detail_cb(Guid id)
+        {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+            var httpClient = new HttpClient();
+            var responCombo = await _httpClient.GetAsync(urlCombo);
+            string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+            var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+            var combo = lstCombo.FirstOrDefault(x => x.ComboID == id);
+            if(combo == null)
+            {
+                return NotFound("Combo này đang null, kiểm tra lại dùm");
+            }
+            string json = Request.Cookies["lstComboItem"];
+            if (json != null)
+            {
+                List<ComboItem> myList = JsonConvert.DeserializeObject<List<ComboItem>>(json);
+                ViewBag.ListComboItem = myList;
+                
+            }
+            ViewBag.combo = combo;
+            return View();
         }
         //[HttpGet]
         //public async Task<IActionResult> Shop()
