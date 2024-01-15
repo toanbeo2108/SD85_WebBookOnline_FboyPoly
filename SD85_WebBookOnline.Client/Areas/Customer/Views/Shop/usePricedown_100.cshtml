@@ -1,8 +1,8 @@
 ﻿@using SD85_WebBookOnline.Share.Models
 
 @{
-    Layout = "~/Views/Shared/_LayoutShop.cshtml";
-    IEnumerable<Book> lstBook = ViewBag.lstSelect as IEnumerable<Book>;
+    Layout = "~Areas/Customer/Views/Shared/_LayoutShopCus.cshtml";
+    IEnumerable<Book> lstBook = ViewBag.lstbookSelect as IEnumerable<Book>;
     IEnumerable<Combo> lstcombo = ViewBag.lstComboSelect as IEnumerable<Combo>;
 }
 @if (lstBook != null)
@@ -30,6 +30,12 @@
         </a>
     }
 }
+else
+{
+    <div class="text-center mb-4">
+        <h2 class="section-title px-5"><span class="px-2">Tạm thời nhưng sản phẩm đã hết</span></h2>
+    </div>
+}
 <div class="container-fluid py-5">
     <div class="text-center mb-4">
         <h2 class="section-title px-5"><span class="px-2">Combo</span></h2>
@@ -45,7 +51,7 @@
 {
     foreach (var item in lstcombo)
     {
-        <a asp-action="Detail_cb" asp-controller="Home" asp-route-id="@item.ComboID">
+        <a asp-action="DeTail" asp-controller="Home" asp-route-id="@item.ComboID">
             <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
                 <div class="card product-item border-0 mb-4">
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">

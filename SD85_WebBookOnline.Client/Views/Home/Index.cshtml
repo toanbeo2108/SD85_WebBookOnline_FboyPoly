@@ -100,29 +100,33 @@ else if (User.IsInRole("User"))
     <div class="container-fluid mb-5">
         <div class="row border-top px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
-                <a class="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; margin-top: -1px; padding: 0 30px;">
+                <a asp-action="Index" asp-controller="Home" class="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100" data-toggle="collapse"  style="height: 65px; margin-top: -1px; padding: 0 30px;">
                     <h6 class="m-0">Categories</h6>
                     <i class="fa fa-angle-down text-dark"></i>
                 </a>
+                @inject Microsoft.AspNetCore.Http.IHttpContextAccessor context
+                @using Newtonsoft.Json
+                @using SD85_WebBookOnline.Share.Models
                 <nav class="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
                     <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link" data-toggle="dropdown">Sách Học Cấp<i class="fa fa-angle-down float-right mt-1"></i></a>
-                            <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                                <a asp-action="Index" asp-controller="Home" class="dropdown-item">Sách Cấp 1</a>
-                                <a asp-action="Index" asp-controller="Home" class="dropdown-item">Sách Cấp 2</a>
-                                <a asp-action="Index" asp-controller="Home" class="dropdown-item">Sách Cấp 3</a>
-                            </div>
-                        </div>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Truyện Tranh Nhật Bản</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Truyện Cổ Tích</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Truyện Kinh Dị</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Truyện Cười</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Sách Tiểu Thuyết</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Sách Thiếu Nhi</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Sách Kinh Tế</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Sách Văn Học Kinh Điển</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Đồ Dùng Học Tập</a>
+                        @{
+                            var lstCTPValue = context.HttpContext.Request.Cookies["lstCateParent"];
+                            if (lstCTPValue == null)
+                            {
+                                <h1>Null Form rồi</h1>
+                            }
+                            IEnumerable<CategoryParent> lstCTP = JsonConvert.DeserializeObject<IEnumerable<CategoryParent>>(lstCTPValue);
+                            if (lstCTP != null)
+                            {
+                                foreach (var item in lstCTP)
+                                {
+                                    <a asp-action="FilterByForm" asp-controller="Shop" class="nav-item nav-link" asp-route-id="@item.CategoryParentID">
+                                        @item.CategoryParentName
+                                    </a>
+                                }
+
+                            }
+                        }
                     </div>
                 </nav>
             </div>
@@ -137,8 +141,12 @@ else if (User.IsInRole("User"))
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a asp-action="Index" asp-controller="Home" class="nav-item nav-link active">Trang Chủ</a>
+<<<<<<< HEAD
+                            <a asp-action="All" asp-controller="Shop" asp-area="Customer" class="nav-item nav-link">Shop</a>
+=======
 
                             <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Shop</a>
+>>>>>>> 8a9699c6db6ce026d1e31e548ba567752bd6aa42
                             <a asp-action="MyCart" asp-controller="Cart" asp-area="Customer" class="nav-item nav-link">Giỏ Hàng</a>
                             <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Chương Trình Khuyến Mãi</a>
 
@@ -317,23 +325,45 @@ else
                 </a>
                 <nav class="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
                     <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link" data-toggle="dropdown">Sách Học Cấp<i class="fa fa-angle-down float-right mt-1"></i></a>
-                            <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                                <a asp-action="Index" asp-controller="Home" class="dropdown-item">Sách Cấp 1</a>
-                                <a asp-action="Index" asp-controller="Home" class="dropdown-item">Sách Cấp 2</a>
-                                <a asp-action="Index" asp-controller="Home" class="dropdown-item">Sách Cấp 3</a>
-                            </div>
-                        </div>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Truyện Tranh Nhật Bản</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Truyện Cổ Tích</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Truyện Kinh Dị</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Truyện Cười</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Sách Tiểu Thuyết</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Sách Thiếu Nhi</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Sách Kinh Tế</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Sách Văn Học Kinh Điển</a>
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Đồ Dùng Học Tập</a>
+                        @*@{
+                            var lstCTPValue = context.HttpContext.Request.Cookies["lstCateParent"];
+                            if (lstCTPValue == null)
+                            {
+                                <h1>Null Form rồi</h1>
+                            }
+                            IEnumerable<CategoryParent> lstCTP = JsonConvert.DeserializeObject<IEnumerable<CategoryParent>>(lstCTPValue);
+                            if (lstCTP != null)
+                            {
+                                foreach (var item in lstCTP)
+                                {
+                                    <a asp-action="FilterByForm" asp-controller="Shop" class="nav-item nav-link" asp-route-id="@item.CategoryParentID">
+                                        @item.CategoryParentName
+                                    </a>
+                                }
+
+                            }
+                            else
+                            {
+                                <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Tranh Nhật Bản</a>
+                                <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Cổ Tích</a>
+                                <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Kinh Dị</a>
+                                <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Cười</a>
+                                <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Tiểu Thuyết</a>
+                                <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Thiếu Nhi</a>
+                                <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Kinh Tế</a>
+                                <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Văn Học Kinh Điển</a>
+                                <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Đồ Dùng Học Tập</a>
+                            }
+                        }*@
+                        <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Tranh Nhật Bản</a>
+                        <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Cổ Tích</a>
+                        <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Kinh Dị</a>
+                        <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Cười</a>
+                        <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Tiểu Thuyết</a>
+                        <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Thiếu Nhi</a>
+                        <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Kinh Tế</a>
+                        <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Văn Học Kinh Điển</a>
+                        <a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Đồ Dùng Học Tập</a>
                     </div>
                 </nav>
             </div>

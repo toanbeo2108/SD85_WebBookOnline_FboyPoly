@@ -17,12 +17,12 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             _irespon = new AllResponsitories<CategoryParent>(_context,_context.CategoryParents);
         }
-        [HttpGet("Action")]
+        [HttpGet("[Action]")]
         public async Task<IEnumerable<CategoryParent>> GetAllCategoryParents()
         {
             return await _irespon.GetAll();
         }
-        [HttpPost("Action")]
+        [HttpPost("[Action]")]
         public async Task<bool> CreateCategoryParent(Guid? caTegoryId, string? CategoryParentName)
         {
             CategoryParent ctd = new CategoryParent();
@@ -31,7 +31,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             ctd.Status = 1;
             return await  _irespon.CreateItem(ctd);
         }
-        [HttpGet("Action/{id}")]
+        [HttpGet("[Action]/{id}")]
         public async Task<bool> UpdateCategory(Guid id, [FromBody] CategoryParent? cTd)
         {
             var lstctd = await _irespon.GetAll();
@@ -47,7 +47,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             }
             return await _irespon.UpdateItem(ctd);
         }
-        [HttpDelete("Action/{id}")]
+        [HttpDelete("[Action]/{id}")]
         public async Task<bool> DeleteCategoryParent(Guid id)
         {
             var lstctd = await _irespon.GetAll();

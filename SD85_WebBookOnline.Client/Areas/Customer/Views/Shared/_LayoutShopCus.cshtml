@@ -30,8 +30,8 @@
 			</div>
 			<div class="col-lg-6 text-center text-lg-right">
 				<div class="d-inline-flex align-items-center">
-					<a asp-action="Login" asp-controller="Home" class="nav-item nav-link item-nav">Login</a>
-					<a asp-action="Register" asp-controller="Home" class="nav-item nav-link item-nav">Register</a>
+					<a asp-area="Customer" asp-controller="User" asp-action="Account"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfHKr4J28Bd2GLN_c-P4FtX99NIFVS6rTurA&usqp=CAU" class="rounded-circle" style="width : 50px; height:50px;object-fit: cover" alt="Error Image" /></a>
+					<a asp-area="" asp-controller="Home" asp-action="Logout" class="nav-item nav-link item-nav">Logout</a>
 				</div>
 			</div>
 		</div>
@@ -81,34 +81,34 @@
 					<div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
 
 						@*@{
-							var lstCTPValue = context.HttpContext.Request.Cookies["lstCateParent"];
-							if (lstCTPValue == null)
-							{
-								<h1>Null Form rồi</h1>
-							}
-							IEnumerable<CategoryParent> lstCTP = JsonConvert.DeserializeObject<IEnumerable<CategoryParent>>(lstCTPValue);
-							if (lstCTP != null)
-							{
-								foreach (var item in lstCTP)
-								{
-									<a asp-action="FilterByForm" asp-controller="Shop" class="nav-item nav-link" asp-route-id="@item.CategoryParentID">
-										@item.CategoryParentName
-									</a>
-								}
+						var lstCTPValue = context.HttpContext.Request.Cookies["lstCateParent"];
+						if (lstCTPValue == null)
+						{
+						<h1>Null Form rồi</h1>
+						}
+						IEnumerable<CategoryParent> lstCTP = JsonConvert.DeserializeObject<IEnumerable<CategoryParent>>(lstCTPValue);
+						if (lstCTP != null)
+						{
+						foreach (var item in lstCTP)
+						{
+						<a asp-action="FilterByForm" asp-controller="Shop" class="nav-item nav-link" asp-route-id="@item.CategoryParentID">
+						@item.CategoryParentName
+						</a>
+						}
 
-							}
-							else
-							{
-								<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Tranh Nhật Bản</a>
-								<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Cổ Tích</a>
-								<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Kinh Dị</a>
-								<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Cười</a>
-								<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Tiểu Thuyết</a>
-								<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Thiếu Nhi</a>
-								<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Kinh Tế</a>
-								<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Văn Học Kinh Điển</a>
-								<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Đồ Dùng Học Tập</a>
-							}
+						}
+						else
+						{
+						<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Tranh Nhật Bản</a>
+						<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Cổ Tích</a>
+						<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Kinh Dị</a>
+						<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Cười</a>
+						<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Tiểu Thuyết</a>
+						<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Thiếu Nhi</a>
+						<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Kinh Tế</a>
+						<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Sách Văn Học Kinh Điển</a>
+						<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Đồ Dùng Học Tập</a>
+						}
 						}*@
 						<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Tranh Nhật Bản</a>
 						<a asp-action="All" asp-controller="Shop" class="nav-item nav-link">Truyện Cổ Tích</a>
@@ -166,37 +166,31 @@
 				<div class="border-bottom mb-4 pb-4">
 					<h5 class="font-weight-semi-bold mb-4">Mệnh Giá</h5>
 					<form>
-						<a>
-							<div class="custom-control  d-flex align-items-center justify-content-between mb-3">
-								<label class="custom-control-label" for="price-all">Tất Cả</label>
-								<span class="badge border font-weight-normal">1000</span>
-							</div>
-						</a>
-						<a asp-action="UsePricedown100" asp-controller="Shop">
+							<a asp-action="UsePricedown_100" asp-controller="Shop" asp-area="Customer">
 							<div class="custom-control  d-flex align-items-center justify-content-between mb-3">
 								<label class="custom-control-label" for="price-1">Dưới 100.000đ</label>
 								<span class="badge border font-weight-normal">150</span>
 							</div>
 						</a>
-						<a asp-action="UsePricebetween100to200" asp-controller="Shop">
+						<a asp-action="UsePricebetween_100to200" asp-controller="Shop" asp-area="Customer">
 							<div class="custom-control  d-flex align-items-center justify-content-between mb-3">
 								<label class="custom-control-label" for="price-2">100.000đ - 200.000đ</label>
 								<span class="badge border font-weight-normal">295</span>
 							</div>
 						</a>
-						<a asp-action="UsePricebetween200to400" asp-controller="Shop">
+						<a asp-action="UsePricebetween_200to400" asp-controller="Shop" asp-area="Customer">
 							<div class="custom-control  d-flex align-items-center justify-content-between mb-3">
 								<label class="custom-control-label" for="price-2">200.000đ - 400.000đ</label>
 								<span class="badge border font-weight-normal">295</span>
 							</div>
 						</a>
-						<a asp-action="UsePricebetween400to500" asp-controller="Shop">
+						<a asp-action="UsePricebetween_400to500" asp-controller="Shop" asp-area="Customer">
 							<div class="custom-control  d-flex align-items-center justify-content-between mb-3">
 								<label class="custom-control-label" for="price-2">400.000đ - 500.000đ</label>
 								<span class="badge border font-weight-normal">295</span>
 							</div>
 						</a>
-						<a asp-action="UsePrice500Up" asp-controller="Shop">
+						<a asp-action="UsePrice_500Up" asp-controller="Shop" asp-area="Customer">
 							<div class="custom-control  d-flex align-items-center justify-content-between mb-3">
 								<label class="custom-control-label" for="price-2">Trên 500.000đ</label>
 								<span class="badge border font-weight-normal">295</span>
@@ -229,7 +223,7 @@
 							{
 								foreach (var item in lstForm)
 								{
-									<a asp-action="FilterByForm" asp-controller="Shop" asp-route-id="@item.FormId">
+									<a asp-action="FilterBy_Form" asp-controller="Shop" asp-route-id="@item.FormId" asp-area="Customer">
 										<div class="custom-control d-flex align-items-center justify-content-between mb-3">
 											<label class="custom-control-label" for="price-all">@item.FormName</label>
 											<span class="badge border font-weight-normal">1000</span>
@@ -264,7 +258,7 @@
 							{
 								foreach (var item in lstAuthor)
 								{
-									<a asp-action="FilterByAuthor" asp-controller="Shop" asp-route-id="@item.AuthorID">
+									<a asp-action="FilterBy_Author" asp-controller="Shop" asp-area="Customer" asp-route-id="@item.AuthorID">
 										<div class="custom-control d-flex align-items-center justify-content-between mb-3">
 											<label class="custom-control-label" for="price-all">@item.AuthorName</label>
 											<span class="badge border font-weight-normal">1000</span>
@@ -301,7 +295,7 @@
 							{
 								foreach (var item in lstCT)
 								{
-									<a asp-action="FilterByCategory" asp-controller="Shop" asp-route-id="@item.CategoryID">
+									<a asp-action="FilterBy_Category" asp-controller="Shop" asp-area="Customer" asp-route-id="@item.CategoryID">
 										<div class="custom-control d-flex align-items-center justify-content-between mb-3">
 											<label class="custom-control-label" for="price-all">@item.Name</label>
 											<span class="badge border font-weight-normal">1000</span>
@@ -336,7 +330,7 @@
 							{
 								foreach (var item in lstLanguage)
 								{
-									<a asp-action="FilterByLanguage" asp-controller="Shop" asp-route-id="@item.LangugeID">
+									<a asp-action="FilterBy_Language" asp-controller="Shop" asp-area="Customer" asp-route-id="@item.LangugeID">
 										<div class="custom-control d-flex align-items-center justify-content-between mb-3">
 											<label class="custom-control-label" for="price-all">@item.Name</label>
 											<span class="badge border font-weight-normal">1000</span>
@@ -371,7 +365,7 @@
 							{
 								foreach (var item in lstManu)
 								{
-									<a asp-action="FilterByManufacture" asp-controller="Shop" asp-route-id="@item.ManufactureID">
+									<a asp-action="FilterBy_Manufacture" asp-controller="Shop" asp-area="Customer" asp-route-id="@item.ManufactureID">
 										<div class="custom-control d-flex align-items-center justify-content-between mb-3">
 											<label class="custom-control-label" for="price-all">@item.ManufactureName</label>
 											<span class="badge border font-weight-normal">1000</span>
