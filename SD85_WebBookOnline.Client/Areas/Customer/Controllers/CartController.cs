@@ -8,11 +8,13 @@ using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Helpers;
+using System.Xml.Linq;
 
 namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 {
     public class CartController : Controller
     {
+        
         private readonly HttpClient _httpClient;
         public List<CartItems> CartItemss { get; set; } = new List<CartItems>();
 
@@ -29,6 +31,31 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> deTail(Guid id)
         {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var url = $"https://localhost:7079/api/user/GetAllUser";
+            var response = await _httpClient.GetAsync(url);
+            string apiDataUser = await response.Content.ReadAsStringAsync();
+            var ListUser = JsonConvert.DeserializeObject<List<User>>(apiDataUser);
+            ViewBag.ListUser = ListUser;
+            
+            var urlRating = $"https://localhost:7079/api/Rating/GetAllRating";
+            var httpClient = new HttpClient();
+            var responRating = await _httpClient.GetAsync(urlRating);
+            string apiDataRating = await responRating.Content.ReadAsStringAsync();
+            var lstRating = JsonConvert.DeserializeObject<List<Rating>>(apiDataRating);
+            var lstRating_book = lstRating.Where(x => x.IdBook == id).ToList();
+            ViewBag.lstRating_book = lstRating_book;
+            int countStar = lstRating_book.Count(x => x.IdBook == id);
+            ViewBag.countStar = countStar;
+            decimal sumStar = (decimal)lstRating_book.Sum(x => x.Stars);
+            ViewBag.sumStar = sumStar;
+            decimal averageStars = sumStar / countStar;
+            ViewBag.AverageStars = averageStars;
+            var lstSelectRating = lstRating_book.OrderByDescending(x => x.RatingDate).Take(4).ToList();
+            ViewBag.lstSelectRating = lstSelectRating;
+
+
             var urlBook = $"https://localhost:7079/api/Book/get-all-book";
             var responBook = await _httpClient.GetAsync(urlBook);
             string apiDataBook = await responBook.Content.ReadAsStringAsync();
@@ -41,6 +68,9 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             else
             {
                 ViewBag.BookDetail = Book;
+
+                
+
                 var urlImage = $"https://localhost:7079/api/Image/getAll_Image";
                 var responImage = await _httpClient.GetAsync(urlImage);
                 string apiDataImage = await responImage.Content.ReadAsStringAsync();
@@ -79,7 +109,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             var responCart = await _httpClient.GetAsync(urlCart);
             string apiDataCart = await responCart.Content.ReadAsStringAsync();
             var ListCart = JsonConvert.DeserializeObject<List<Cart>>(apiDataCart);
-            // Kiểm tra xem nếu không có giỏ hàng nào thì sẽ tạo 1 giỏ hàng rỗng cho người dùng:
+            
             if (ListCart.Count() == 0)
             {
                 Cart cart = new Cart();
@@ -438,6 +468,76 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                 return RedirectToAction("GetAllBill", "Bill");
             }
             
+        }
+        [HttpGet]
+
+        public async Task<IActionResult> Book_AllRating(Guid id)
+        {
+
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+
+            var url = $"https://localhost:7079/api/user/GetAllUser";
+            var response = await _httpClient.GetAsync(url);
+            string apiDataUser = await response.Content.ReadAsStringAsync();
+            var ListUser = JsonConvert.DeserializeObject<List<User>>(apiDataUser);
+            ViewBag.listUser = ListUser;
+
+
+            var urlRating = $"https://localhost:7079/api/Rating/GetAllRating";
+            var httpClient = new HttpClient();
+            var responRating = await _httpClient.GetAsync(urlRating);
+            string apiDataRating = await responRating.Content.ReadAsStringAsync();
+            var lstRating = JsonConvert.DeserializeObject<List<Rating>>(apiDataRating);
+            var Rating = lstRating.FirstOrDefault(x => x.IdBook == id);
+            if (Rating == null)
+            {
+                return BadRequest("Sản phẩm này ko có bình luận nào");
+            }
+            else
+            {
+                ViewBag.lstRating = lstRating;
+                return View(lstRating);
+            }
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> CreateRating(Guid id)
+        {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var urlBook = $"https://localhost:7079/api/Book/get-all-book";
+            var responBook = await _httpClient.GetAsync(urlBook);
+            string apiDataBook = await responBook.Content.ReadAsStringAsync();
+            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            var Book = lstBook.FirstOrDefault(x => x.BookID == id);
+            ViewBag.Book = Book;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateRating(Rating bk,Guid id)
+        {
+            var UserId = Request.Cookies["UserID"];
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            bk.ID = Guid.NewGuid();
+            bk.IdBook = id;
+            bk.IdNguoiDung = UserId;
+            bk.RatingDate = DateTime.Now;
+            bk.Status = 0;
+
+            var urlBook = $"https://localhost:7079/api/Rating/CreateRating?idbook={id}&iduser={UserId}&comment={bk.Comment}&stars={bk.Stars}";
+            var httpClient = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(bk), Encoding.UTF8, "application/json");
+            var respon = await httpClient.PostAsync(urlBook, content);
+            if (respon.IsSuccessStatusCode)
+            {
+                return RedirectToAction("deTail", "Cart", new { Area = "Customer", id = id });
+            }
+            TempData["erro message"] = "thêm thất bại";
+            return View();
         }
     }
 }

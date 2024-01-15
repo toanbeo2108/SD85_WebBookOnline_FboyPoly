@@ -18,6 +18,7 @@ namespace SD85_WebBookOnline.Share.Models
         public int? Status { get; set; } // trạng thái : 0 == Ko còn hoạt động, ẩn nick ,....
 
         // Set Quan hệ
+        public virtual IEnumerable<Rating>? Ratings { get; set; }
         public virtual IEnumerable<DeliveryAddress>? DeliveryAddress { get; set;}
         public virtual IEnumerable<Cart>? Cart { get; set; }
         public virtual IEnumerable<Bill>? Bills { get; set; }
