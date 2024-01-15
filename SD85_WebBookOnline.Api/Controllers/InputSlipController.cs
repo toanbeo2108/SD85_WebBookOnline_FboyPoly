@@ -16,7 +16,7 @@ namespace SD85_WebBookOnline.Api.Controllers
         public InputSlipController()
         {
             _context = new AppDbContext();
-            _irespon = new AllResponsitories<InputSlip>(_context, _context.InputSlip);
+            _irespon = new AllResponsitories<InputSlip>(_context, _context.InputSlips);
         }
         [HttpGet("[Action]")]
         public async Task<IEnumerable<InputSlip>> GetAllInputSlip()
@@ -24,22 +24,31 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await _irespon.GetAll();
         }
         [HttpPost("[Action]")]
-        public async Task<bool> CreateInputSlip(Guid? idNhanVienNhap, Guid? idSachNhap, int soLuong, DateTime ngayNhap,decimal giaNhap)
+        public async Task<bool> CreateInputSlip(Guid? idNhanVienNhap, Guid? idSachNhap, decimal giaban, int soLuong, DateTime ngayNhap, decimal giaNhap)
         {
-            //var lstauthor = await _irespon.GetAll();
-            //var insp = lstauthor.FirstOrDefault(x => x.AuthorName == authorName);
-            //if (insp != null)
-            //{
-            //    return false;
-            //}
             InputSlip insp = new InputSlip();
-            insp.InputSlipID = Guid.NewGuid();
-            insp.IdNhanVienNhap = idNhanVienNhap;
-            insp.IdSachNhap = idSachNhap;
-            insp.SoLuong = soLuong;
-            insp.NgayNhap = ngayNhap;
-            insp.GiaNhap = giaNhap;
-            return await _irespon.CreateItem(insp);
+            var book = await _context.Book.FindAsync(idSachNhap);
+            if (book == null)
+            {
+                return false;
+
+            }
+            else
+            {
+
+                insp.InputSlipID = Guid.NewGuid();
+                insp.IdNhanVienNhap = idNhanVienNhap;
+                insp.IdSachNhap = idSachNhap;
+                insp.SoLuong = soLuong;
+                insp.NgayNhap = ngayNhap;
+                insp.GiaNhap = giaNhap;
+                insp.GiaBan = giaban;
+                book.QuantityExists += insp.SoLuong ?? 0;
+                book.TotalQuantity += insp.SoLuong ?? 0;
+                book.Price = giaban;
+                book.EntryPrice = giaNhap;
+                return await _irespon.CreateItem(insp);
+            }
         }
 
         [HttpDelete("[Action]/{id}")]

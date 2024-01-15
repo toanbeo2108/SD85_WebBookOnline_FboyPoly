@@ -16,6 +16,7 @@ namespace SD85_WebBookOnline.Share.Models
         public Guid? ComboID { get; set; }
         public string ItemName { get; set; } // Tên sản phẩm
         public decimal Price { get; set; } // Giá cả
+        public decimal GiaNhap { get; set; } // Giá nhập
         public int Quantity { get; set; } // Số lượng mua
         public decimal ToTal { get; set; } // Tổng tiền
         public int Status { get; set; } 

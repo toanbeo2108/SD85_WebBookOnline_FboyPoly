@@ -37,6 +37,7 @@ namespace SD85_WebBookOnline.Api.Data
         public virtual DbSet<DeliveryAddress> DeliveryAddress { get; set; }
         public virtual DbSet<CategoryParent> CategoryParents { get; set; }
         public virtual DbSet<Rating> Ratings { get; set; }
+        public virtual DbSet<InputSlip> InputSlips { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -55,8 +56,8 @@ namespace SD85_WebBookOnline.Api.Data
 			if (!optionsBuilder.IsConfigured)
 			{
 
-				optionsBuilder.UseSqlServer("Data Source=LAPTOP-DAV1LO0Q\\SQLEXPRESS;Initial Catalog=WebBookOnline_DATN;Integrated Security=True;");
-			}
+                optionsBuilder.UseSqlServer("Data Source=DESKTOP-T0CSGCJ\\SQLEXPRESS;Initial Catalog=WebBookOnline_DATN;Integrated Security=True;");
+            }
 		}
 	}
 }
