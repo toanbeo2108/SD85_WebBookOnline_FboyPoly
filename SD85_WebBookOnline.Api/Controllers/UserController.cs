@@ -110,5 +110,26 @@ namespace SD85_WebBookOnline.Api.Controllers
                 return true;
             }
         }
+
+        [HttpPost]
+        public async Task<bool> plusPoint(string UserId,int point)
+        {
+            var user = await _userManager.FindByIdAsync(UserId);
+            if (user == null)
+            {
+                return false;
+            }
+            user.Point += point;
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 }
