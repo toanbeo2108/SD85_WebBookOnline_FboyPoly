@@ -56,8 +56,9 @@ namespace SD85_WebBookOnline.Api.Data
 			if (!optionsBuilder.IsConfigured)
 			{
 
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-T0CSGCJ\\SQLEXPRESS;Initial Catalog=WebBookOnline_DATN;Integrated Security=True;");
-            }
+
+				optionsBuilder.UseSqlServer("Data Source=DESKTOP-3A6J796\\SQLEXPRESS;Initial Catalog=WebBookOnline_DATN;Integrated Security=True;");
+			}
 		}
 	}
 }
