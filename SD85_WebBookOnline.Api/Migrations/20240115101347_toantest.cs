@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SD85_WebBookOnline.Api.Migrations
 {
-    public partial class addDbBill : Migration
+    public partial class toantest : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -35,6 +35,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CardNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Point = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -77,17 +78,16 @@ namespace SD85_WebBookOnline.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "CategoryParents",
                 columns: table => new
                 {
-                    CategoryID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    CategoryParentID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryParentName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.CategoryID);
+                    table.PrimaryKey("PK_CategoryParents", x => x.CategoryParentID);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,6 +191,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     CreateByID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DeletByID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -331,6 +333,26 @@ namespace SD85_WebBookOnline.Api.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CategoryID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryParentID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CategoryID);
+                    table.ForeignKey(
+                        name: "FK_Categories_CategoryParents_CategoryParentID",
+                        column: x => x.CategoryParentID,
+                        principalTable: "CategoryParents",
+                        principalColumn: "CategoryParentID");
                 });
 
             migrationBuilder.CreateTable(
@@ -552,6 +574,35 @@ namespace SD85_WebBookOnline.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Ratings",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdBook = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IdNguoiDung = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Stars = table.Column<int>(type: "int", nullable: true),
+                    RatingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true),
+                    BookID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ratings", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Ratings_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Ratings_Book_BookID",
+                        column: x => x.BookID,
+                        principalTable: "Book",
+                        principalColumn: "BookID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BillItems",
                 columns: table => new
                 {
@@ -623,12 +674,17 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "9f4244eb-356e-4fdc-86f6-81bfbbbe1bc0", "e2e83bff-3f65-4c79-bcea-2bcc2b65a6dd", "Admin", "ADMIN" });
+                values: new object[] { "0e8a5e5c-43de-4255-921c-db0b92a69b47", "180cd263-2c72-475a-bf59-f6297800bafd", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "d1901214-92eb-4186-8988-d684a7f304dd", "b552bac8-4fc7-48bd-8125-677412570876", "User", "USER" });
+                values: new object[] { "b27fcb03-ecf4-4f11-8ad9-c5c983db2b1f", "707d7339-dbb4-48e0-bed9-9e3c1b126b8a", "User", "USER" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "d0b34527-2528-4215-b5e0-425a7840fc42", "be1a42f0-07c1-4893-93b6-bf65bb20cb4d", "Empolyee", "EMPLOYEE" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -755,6 +811,11 @@ namespace SD85_WebBookOnline.Api.Migrations
                 column: "ComboID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Categories_CategoryParentID",
+                table: "Categories",
+                column: "CategoryParentID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ComboItem_BookID",
                 table: "ComboItem",
                 column: "BookID");
@@ -782,6 +843,16 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_InputSlip_UserId",
                 table: "InputSlip",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ratings_BookID",
+                table: "Ratings",
+                column: "BookID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ratings_UserId",
+                table: "Ratings",
                 column: "UserId");
         }
 
@@ -827,6 +898,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                 name: "PostBanner");
 
             migrationBuilder.DropTable(
+                name: "Ratings");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -849,6 +923,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Book");
+
+            migrationBuilder.DropTable(
+                name: "CategoryParents");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

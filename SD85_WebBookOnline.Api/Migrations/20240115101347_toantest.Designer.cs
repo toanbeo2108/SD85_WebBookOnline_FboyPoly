@@ -12,8 +12,8 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240112023700_hiepupdate11-12")]
-    partial class hiepupdate1112
+    [Migration("20240115101347_toantest")]
+    partial class toantest
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,17 +53,24 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e4d66196-15eb-4bd4-99da-6dc9a61e1af8",
-                            ConcurrencyStamp = "d347f029-b774-46b4-8787-0166eeaf85f0",
+                            Id = "0e8a5e5c-43de-4255-921c-db0b92a69b47",
+                            ConcurrencyStamp = "180cd263-2c72-475a-bf59-f6297800bafd",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "94c2d461-9822-492e-be39-10c6c4ba2f37",
-                            ConcurrencyStamp = "fdd4a8aa-32ac-4dbc-8cef-5c1bc3e1b077",
+                            Id = "b27fcb03-ecf4-4f11-8ad9-c5c983db2b1f",
+                            ConcurrencyStamp = "707d7339-dbb4-48e0-bed9-9e3c1b126b8a",
                             Name = "User",
                             NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "d0b34527-2528-4215-b5e0-425a7840fc42",
+                            ConcurrencyStamp = "be1a42f0-07c1-4893-93b6-bf65bb20cb4d",
+                            Name = "Empolyee",
+                            NormalizedName = "EMPLOYEE"
                         });
                 });
 
@@ -295,6 +302,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -303,6 +313,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.Property<decimal?>("PriceBeforeVoucher")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ReceiverName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Shipmoney")
                         .HasColumnType("decimal(18,2)");
@@ -905,6 +918,45 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.ToTable("PostBanner");
                 });
 
+            modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Rating", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BookID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("IdBook")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("IdNguoiDung")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RatingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Stars")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BookID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Ratings");
+                });
+
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Voucher", b =>
                 {
                     b.Property<Guid>("VoucherID")
@@ -933,11 +985,18 @@ namespace SD85_WebBookOnline.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("VoucherID");
 
@@ -962,6 +1021,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.Property<Guid?>("DeliveryAddressID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Point")
+                        .HasColumnType("int");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
@@ -1200,6 +1262,21 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Rating", b =>
+                {
+                    b.HasOne("SD85_WebBookOnline.Share.Models.Book", "Book")
+                        .WithMany("Ratings")
+                        .HasForeignKey("BookID");
+
+                    b.HasOne("SD85_WebBookOnline.Share.Models.User", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Book");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Author", b =>
                 {
                     b.Navigation("BookDetails");
@@ -1223,6 +1300,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("InputSlip");
+
+                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("SD85_WebBookOnline.Share.Models.Cart", b =>
@@ -1283,6 +1362,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("DeliveryAddress");
+
+                    b.Navigation("Ratings");
                 });
 #pragma warning restore 612, 618
         }
