@@ -121,28 +121,15 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 var respon = await _httpClient.PostAsync(urlBook, content);
                 if (respon.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-
-                    InputSlip ip = new InputSlip();
-                    ip.InputSlipID = Guid.NewGuid();
-                    ip.IdNhanVienNhap = null;
-                    ip.IdSachNhap = bk.BookID;
-                    ip.NgayNhap = DateTime.Now;
-                    ip.SoLuong = bk.TotalQuantity;
-                    ip.GiaNhap = bk.EntryPrice;
-                    var urlInputSlip = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";
-                    var contentIP = new StringContent(JsonConvert.SerializeObject(ip), Encoding.UTF8, "application/json");
-                    var responIP = await _httpClient.PostAsync(urlInputSlip, contentIP);
-                    if (responIP.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
                         _stt = true;
                         _mess = "Thêm thành công!"; 
-                    }
-                    else
-                    {
-                        _stt = true;
-                        _mess = "Thêm thất bại!"; 
-                    }
-                }                
+                    
+                }
+                else
+                {
+                    _stt = false;
+                    _mess = "Lỗi ! Thêm thất bại";
+                }
             }
             else
             {
@@ -328,5 +315,44 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return false;
             }
         }
+
+        [HttpPost, Route("UpdateStatus/{id}")]
+        public async Task<IActionResult> UpdateBookStatus(Guid id, int newStatus)
+        {
+            try
+            {
+                var token = Request.Cookies["Token"];
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var urlUpdateStatus = $"https://localhost:7079/api/Book/UpdateStatus/{id}?newStatus={newStatus}";
+                var response = await _httpClient.PutAsync(urlUpdateStatus, null);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _stt = true;
+                    _mess = "Cập nhật trạng thái thành công!";
+                }
+                else
+                {
+                    _stt = false;
+                    _mess = "Cập nhật trạng thái thất bại!";
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi nếu có
+                _stt = false;
+                _mess = ex.Message;
+            }
+            return Json(new
+            {
+                status = _stt,
+                message = _mess
+            });
+        }
+
+
     }
 }

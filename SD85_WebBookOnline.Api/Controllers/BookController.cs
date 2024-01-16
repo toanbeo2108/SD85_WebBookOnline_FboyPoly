@@ -164,5 +164,37 @@ namespace SD85_WebBookOnline.Api.Controllers
 
             return await ires.UpdateItem(book);
         }
+        [HttpPut("UpdateStatus/{id}")]
+        public async Task<IActionResult> UpdateStatus(Guid id, int newStatus)
+        {
+            try
+            {
+                var listBook = await ires.GetAll();
+                var book = listBook.FirstOrDefault(c => c.BookID == id);
+
+                if (book == null)
+                {
+                    return NotFound();
+                }
+
+                if (newStatus == 0 || newStatus == 1)
+                {
+                    book.Status = newStatus;
+                    await ires.UpdateItem(book);
+
+                    return Ok(new { status = true, message = "Cập nhật trạng thái thành công." });
+                }
+                else
+                {
+                    return BadRequest(new { status = false, message = "Giá trị trạng thái không hợp lệ." });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi nếu có
+                return StatusCode(StatusCodes.Status500InternalServerError, new { status = false, message = "Có lỗi xảy ra khi cập nhật trạng thái." });
+            }
+        }
+
     }
 }
