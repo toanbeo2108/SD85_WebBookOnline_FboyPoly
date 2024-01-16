@@ -31,7 +31,7 @@ $(document).ready(function () {
             ngay_den = (' đến ngày ' + ngayden);
         }
         InitPage3();
-        $('#tittle').text('Thống kê doanh thu bán lẻ sách ' + ten_sach + ngay_tu + ngay_den)
+        $('#tittle').text('Thống kê doanh thu bán lẻ ' + ten_sach + ngay_tu + ngay_den)
         $('#thongke-options').val('')
         $('#modal-filter').modal('hide');
 
@@ -250,6 +250,50 @@ function excel(data) {
         'Chi phí gốc',
         'Số sách còn lại'
     ]);
+
+    for (var i = 1; i <= 6; i++) {
+        headerRow.getCell(i).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FF008000' }
+        };
+    }
+
+    data.forEach(function (item) {
+        var dataRow = worksheet.addRow([
+            item.tensach,
+            item.tongSoSachBanDuoc,
+            item.tongDoanhThusach,
+            item.loiNhuansach,
+            item.chiPhiGocsach,
+            item.soSachConLai != 0 ? item.soSachConLai : ''
+        ]);
+    });
+
+    workbook.xlsx.writeBuffer().then(buffer => {
+        var blob = new Blob([buffer], { type: 'application/octet-stream' });
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'ThongKe.xlsx';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+}
+
+
+
+function excel_(data) {
+    var workbook = new ExcelJS.Workbook();
+    var worksheet = workbook.addWorksheet('ThongKeSheet');
+    var headerRow = worksheet.addRow([
+        'Tên sách',
+        'Tổng số sách bán được',
+        'Tổng doanh thu',
+        'Lợi nhuận',
+        'Chi phí gốc',
+        'Số sách còn lại'
+    ]);
     for (var i = 1; i <= 6; i++) {
         headerRow.getCell(i).fill = {
             type: 'pattern',
@@ -266,21 +310,21 @@ function excel(data) {
                 item.soSachConLai != 0 ? item.soSachConLai : ''
             ]);
         });
-        var footerRow = worksheet.addRow([
-            'Tổng cộng',
-            data.reduce((sum, item) => sum + item.tongSoSachBanDuoc, 0),
-            data.reduce((sum, item) => sum + item.tongDoanhThusach, 0),
-            data.reduce((sum, item) => sum + item.loiNhuansach, 0),
-            data.reduce((sum, item) => sum + item.chiPhiGocsach, 0),
-            ''
-        ]);
-        for (var i = 1; i <= 6; i++) {
-            footerRow.getCell(i).fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: 'FFFFD700' }
-            };
-        }
+        //var footerRow = worksheet.addRow([
+        //    'Tổng cộng',
+        //    data.reduce((sum, item) => sum + item.tongSoSachBanDuoc, 0),
+        //    data.reduce((sum, item) => sum + item.tongDoanhThusach, 0),
+        //    data.reduce((sum, item) => sum + item.loiNhuansach, 0),
+        //    data.reduce((sum, item) => sum + item.chiPhiGocsach, 0),
+        //    ''
+        //]);
+        //for (var i = 1; i <= 6; i++) {
+        //    footerRow.getCell(i).fill = {
+        //        type: 'pattern',
+        //        pattern: 'solid',
+        //        fgColor: { argb: 'FFFFD700' }
+        //    };
+        //}
         workbook.xlsx.writeBuffer().then(buffer => {
             var blob = new Blob([buffer], { type: 'application/octet-stream' });
             var link = document.createElement('a');

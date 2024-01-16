@@ -84,9 +84,37 @@
 
         })
     })
+    $(document).ready(function () {
+        // Thêm sự kiện cho sự thay đổi của công tắc
+        $('body').on('change', 'input[type="checkbox"][id^="statusToggle_"]', function () {
+            // Lấy ID của sách từ id của công tắc
+            var bookID = $(this).attr('id').replace('statusToggle_', '');
 
+            // Gọi phương thức cập nhật trạng thái
+            updateBookStatus(bookID, $(this).prop('checked'));
+        });
+    });
 })
-
+function updateBookStatus(bookID, newStatus) {
+    // Gọi API để cập nhật trạng thái
+    $.ajax({
+        url: '/UpdateStatus/' + bookID,
+        type: 'POST',
+        data: { newStatus: newStatus ? 1 : 0 },
+        success: function (response) {
+            if (response.status) {
+                // Cập nhật trạng thái thành công
+                console.log(response.message);
+            } else {
+                // Cập nhật trạng thái thất bại
+                console.error(response.message);
+            }
+        },
+        error: function () {
+            console.error('Có lỗi xảy ra. Vui lòng thử lại sau.');
+        }
+    });
+}
 function setData(data) {
 
     if (data == null || data == undefined || data == '') {
@@ -109,7 +137,7 @@ function setData(data) {
         $('#btn_Weight').val('');
         $('#btn_Volume').val('');
         $('#btn_TransactionStatus').val('');
-        $('#btn_Status').val('');
+        $('#btn_Status').val('0');
         $('#btn_File').val('');
         $('#file_name').text('');
     }

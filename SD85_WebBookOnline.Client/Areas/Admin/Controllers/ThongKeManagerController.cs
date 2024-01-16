@@ -61,7 +61,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 
             thongKeData.AddRange(from bi in billItems
                                  join b in books on bi.BookID equals b.BookID
-                                 where bi.Status == 1
+                                 where bi.Status == 3
                                  group new { bi, b } by new { bi.BookID, b.BookName, b.QuantityExists } into g
                                  select new ThongKeViewModel
                                  {
@@ -141,7 +141,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                           join b in books on bi.BookID equals b.BookID
                           join bill in Bills on bi.BillID equals bill.BillID into gBill
                           from subBill in gBill.DefaultIfEmpty() // Left Join with Bills
-                          where bi.Status == 1 && subBill != null && subBill.OrderDate != null && subBill.OrderDate.Value.Date == today
+                          where bi.Status == 3 && subBill != null && subBill.OrderDate != null && subBill.OrderDate.Value.Date == today
                           group new { bi, b } by new { bi.BookID, b.BookName, b.QuantityExists } into g
                           select new ThongKeViewModel
                           {
@@ -216,7 +216,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 {
                   var result = (from bi in billItems
                                          join b in books on bi.BookID equals b.BookID join c in Bills on bi.BillID equals c.BillID 
-                                         where bi.Status == 1
+                                         where bi.Status == 3
                                          group new { bi, b,c } by new { bi.BookID, b.BookName, b.QuantityExists,c.OrderDate } into g
                                          select new 
                                          {
@@ -310,6 +310,13 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 data = _data
             });
 
-        }       
+        }
+
+
+        public IActionResult Chart()
+        {
+           
+            return View();
+        }
     }
 }

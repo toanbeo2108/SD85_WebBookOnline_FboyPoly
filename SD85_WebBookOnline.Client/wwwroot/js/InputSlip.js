@@ -1,10 +1,13 @@
-﻿$(document).ready(function () {
+﻿
+
+$(document).ready(function () {
     ///
 
 
 
     $('body').on('click', '#themmoi', function () {
         setData('');
+
         $('#exampleModal').modal('show');
 
     })
@@ -77,6 +80,7 @@ function setData(data) {
 
 
     } else {
+        
         $('#btn_inpID').val('');
         $('#cb_bookname').val('');
         $('#cb_nv').val('');
@@ -84,6 +88,8 @@ function setData(data) {
         $('#btn_gianhap').val('');
         $('#btn_ban').val('');
         $('#btn_ngaynhap').val('');
+
+
 
     }
 }

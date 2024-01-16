@@ -43,8 +43,8 @@ namespace SD85_WebBookOnline.Api.Controllers
                 insp.NgayNhap = ngayNhap;
                 insp.GiaNhap = giaNhap;
                 insp.GiaBan = giaban;
-                book.QuantityExists += insp.SoLuong ?? 0;
-                book.TotalQuantity += insp.SoLuong ?? 0;
+                book.QuantityExists += soLuong ;
+                book.TotalQuantity += soLuong ;
                 book.Price = giaban;
                 book.EntryPrice = giaNhap;
                 return await _irespon.CreateItem(insp);
