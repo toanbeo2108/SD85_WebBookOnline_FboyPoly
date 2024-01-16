@@ -24,7 +24,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await _irespon.GetAll();
         }
         [HttpPost("[Action]")]
-        public async Task<bool> CreateInputSlip(Guid? idNhanVienNhap, Guid? idSachNhap, decimal giaban, int soLuong, DateTime ngayNhap, decimal giaNhap)
+        public async Task<bool> CreateInputSlip(string? idNhanVienNhap, Guid? idSachNhap, decimal giaban, int soLuong, DateTime ngayNhap, decimal giaNhap)
         {
             InputSlip insp = new InputSlip();
             var book = await _context.Book.FindAsync(idSachNhap);
@@ -52,7 +52,7 @@ namespace SD85_WebBookOnline.Api.Controllers
         }
 
         [HttpDelete("[Action]/{id}")]
-        public async Task<bool> UpdateInputSlip(Guid id, Guid? idNhanVienNhap, Guid? idSachNhap, int soLuong, DateTime ngayNhap)
+        public async Task<bool> UpdateInputSlip(Guid id, string? idNhanVienNhap, Guid? idSachNhap, int soLuong, DateTime ngayNhap)
         {
             var lstauthor = await _irespon.GetAll();
             var insp = lstauthor.FirstOrDefault(x => x.InputSlipID == id);
