@@ -12,8 +12,6 @@
     List<Bill> bill0 = bills.Where(p => p.Status == 0).ToList();
 }
 
-<h1>GetAllBill</h1>
-
 <ul class="nav nav-tabs container" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
         <button class="nav-link active" id="TatCa-tab" data-bs-toggle="tab" data-bs-target="#TatCa" type="button" role="tab" aria-controls="TatCa" aria-selected="true">Tất cả</button>
@@ -130,26 +128,7 @@
                                 }
                             </td>
                             <td>
-                                @if (item.Status == 1)
-                                {
-                                    <a asp-area="Admin" asp-controller="BillManager" asp-action="XacNhanBill_admin" asp-route-id="@item.BillID" class="btn btn-primary">Xác nhận đơn</a>
-                                }
-                                else if (item.Status == 2)
-                                {
-                                    <a asp-area="Admin" asp-controller="BillManager" asp-action="HoanthanhBill_admin" asp-route-id="@item.BillID" class="btn btn-primary">Hoàn thành đơn</a>
-                                }
-                                else if (item.Status == 3)
-                                {
-                                    <p></p>
-                                }
-                                else if (item.Status == 4)
-                                {
-                                    <p></p>
-                                }
-                                else if (item.Status == 0)
-                                {
-                                    <p></p>
-                                }
+                                <a asp-area="Admin" asp-controller="BillManager" asp-action="DetailBill_admin" asp-route-id="@item.BillID" class="btn btn-primary">Chi tiết hóa đơn</a>
                             </td>
                         </tr>
                     }
@@ -252,7 +231,7 @@
                                 }
                             </td>
                             <td>
-                                <a asp-area="Admin" asp-controller="BillManager" asp-action="XacNhanBill_admin" asp-route-id="@item.BillID" class="btn btn-primary">Xác nhận đơn</a>
+                                <a asp-area="Admin" asp-controller="BillManager" asp-action="DetailBill_admin" asp-route-id="@item.BillID" class="btn btn-primary">Chi tiết hóa đơn</a>
                             </td>
                         </tr>
                     }
@@ -356,7 +335,7 @@
                                 }
                             </td>
                             <td>
-                                <a asp-area="Admin" asp-controller="BillManager" asp-action="HoanthanhBill_admin" asp-route-id="@item.BillID" class="btn btn-primary">Hoàn thành đơn</a>
+                                <a asp-area="Admin" asp-controller="BillManager" asp-action="DetailBill_admin" asp-route-id="@item.BillID" class="btn btn-primary">Chi tiết hóa đơn</a>
                             </td>
                         </tr>
                     }
@@ -460,7 +439,7 @@
                                 }
                             </td>
                             <td>
-                                <a class="btn btn-primary">Chi tiết đơn hàng</a>
+                                <a asp-area="Admin" asp-controller="BillManager" asp-action="DetailBill_admin" asp-route-id="@item.BillID" class="btn btn-primary">Chi tiết hóa đơn</a>
                             </td>
                         </tr>
                     }
@@ -564,7 +543,7 @@
                                 }
                             </td>
                             <td>
-                                <a class="btn btn-primary">Chi tiết đơn hàng</a>
+                                <a asp-area="Admin" asp-controller="BillManager" asp-action="DetailBill_admin" asp-route-id="@item.BillID" class="btn btn-primary">Chi tiết hóa đơn</a>
                             </td>
                         </tr>
                     }
@@ -659,7 +638,7 @@
                                 }
                                 else if (item.Status == 0)
                                 {
-                                    <p> Đã hủy</p>
+                                    <a class="btn btn-primary">Chi tiết đơn hàng</a>
                                 }
                             </td>
                         </tr>
