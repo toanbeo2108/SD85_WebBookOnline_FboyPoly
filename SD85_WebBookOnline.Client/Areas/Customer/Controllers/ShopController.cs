@@ -13,6 +13,52 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
         {
             _httpClient = new HttpClient();
         }
+        [HttpGet]
+        public async Task<IActionResult> All_Pro()
+        {
+
+            // Đọc cookie
+            var urlBook = $"https://localhost:7079/api/Book/get-all-book";
+            var responBook = await _httpClient.GetAsync(urlBook);
+            string apiDataBook = await responBook.Content.ReadAsStringAsync();
+            var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            if (lstBook == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var lstBookOk = lstBook.Where(x => x.Status == 1).ToList();
+                if (lstBookOk == null)
+                {
+                    return NotFound();
+                }
+                var lstSelect = lstBookOk.Take(18).ToList();
+                ViewBag.lstSelect = lstSelect;
+
+            }
+
+            var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+            var httpClient = new HttpClient();
+            var responCombo = await _httpClient.GetAsync(urlCombo);
+            string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+            var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+            if (lstCombo == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var lstComboOk = lstCombo.Where(x => x.Status == 1).ToList();
+                if (lstComboOk == null)
+                {
+                    return NotFound();
+                }
+                var lstcomboSelectdown100 = lstComboOk.Take(18).ToList();
+                ViewBag.lstComboSelect = lstcomboSelectdown100;
+            }
+            return View();
+        }
         #region Price
         public async Task<IActionResult> usePricedown_100()
         {

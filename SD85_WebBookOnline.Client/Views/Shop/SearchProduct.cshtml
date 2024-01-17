@@ -1,8 +1,8 @@
 ﻿@using SD85_WebBookOnline.Share.Models
 
 @{
-    Layout = "~/Areas/Customer/Views/Shared/_LayoutShopCus.cshtml";
-    IEnumerable<Book> lstBook = ViewBag.lstBookFilterLanguage as IEnumerable<Book>;
+    Layout = "~/Views/Shared/_LayoutShop.cshtml";
+    IEnumerable<Book> lstBook = ViewBag.lstSelect as IEnumerable<Book>;
 }
 @if (lstBook != null)
 {
@@ -17,7 +17,7 @@
                     <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                         <h6 class="text-truncate mb-3">@item.BookName</h6>
                         <div class="d-flex justify-content-center">
-                            <h6>@item.Price</h6><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
+                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
@@ -29,20 +29,3 @@
         </a>
     }
 }
-else
-{
-    <div class="container-fluid py-5">
-        <div class="text-center mb-4">
-            <h2 class="section-title px-5"><span class="px-2">Sản Phẩm tạm thời hết hàng</span></h2>
-        </div>
-        <div class="row px-xl-5">
-            <div class="col">
-                <div class="owl-carousel related-carousel">
-                </div>
-            </div>
-        </div>
-    </div>
-
-}
-
-
