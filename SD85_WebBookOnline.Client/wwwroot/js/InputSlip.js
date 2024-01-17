@@ -23,11 +23,12 @@ $(document).ready(function () {
             }
         })
     })
-
+    // đi ngủ đi 
     $('body').on('click', '#btn-them', function () {
         var send = getData();
 
         if ($('#btn_inpID').val() == null || $('#btn_inpID').val() == '' || $('#btn_inpID').val() == undefined) {
+
             if ($('#cb_bookname').val() == '' || $('#cb_bookname').val() == null || $('#cb_bookname').val() == undefined) {
                 alert('Bạn phải nhập tên sách');
                 $('#cb_bookname').focus();

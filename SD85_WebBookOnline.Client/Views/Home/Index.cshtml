@@ -293,9 +293,9 @@ else if (User.IsInRole("User"))
                             <img class="img-fluid w-100" src="~/photoBooks/@item.MainPhoto" alt="">
                         </div>
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                            <h6 class="text-truncate mb-3">@item.BookName</h6>
+                            <h4 class="text-truncate mb-3">@item.BookName</h4>
                             <div class="d-flex justify-content-center">
-                                <h6>@item.Price</h6><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
+                                <h6>@item.Price</h6>
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-between bg-light border">
@@ -318,7 +318,7 @@ else if (User.IsInRole("User"))
                             <img class="img-fluid w-100" src="~/images/@item.Image" alt="">
                         </div>
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                            <h6 class="text-truncate mb-3">@item.ComboName</h6>
+                            <h4 class="text-truncate mb-3">@item.ComboName</h4>
                             <div class="d-flex justify-content-center">
                                 <h6>@item.Price</h6><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
                             </div>
@@ -346,13 +346,13 @@ else if (User.IsInRole("User"))
                             <img class="img-fluid w-100" src="~/images/@item.Image" alt="">
                         </div>
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                            <h6 class="text-truncate mb-3">@item.ComboName</h6>
+                            <h4 class="text-truncate mb-3">@item.ComboName</h4>
                             <div class="d-flex justify-content-center">
-                                <h6>@item.Price</h6><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
+                                <h6>@item.Price</h6>
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-between bg-light border">
-                            <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                            <a asp-action="Detail_cb" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.ComboID" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                             <a asp-action="deTailCombo" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.ComboID" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                         </div>
                     </div>
@@ -529,9 +529,9 @@ else
                             <img class="img-fluid w-100" src="~/photoBooks/@item.MainPhoto" alt="">
                         </div>
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                            <h6 class="text-truncate mb-3">@item.BookName</h6>
+                            <h4 class="text-truncate mb-3">@item.BookName</h4>
                             <div class="d-flex justify-content-center">
-                                <h6>@item.Price</h6><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
+                                <h6>@item.Price</h6>
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-between bg-light border">
@@ -554,9 +554,9 @@ else
                             <img class="img-fluid w-100" src="~/images/@item.Image" alt="">
                         </div>
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                            <h6 class="text-truncate mb-3">@item.ComboName</h6>
+                            <h4 class="text-truncate mb-3">@item.ComboName</h4>
                             <div class="d-flex justify-content-center">
-                                <h6>@item.Price</h6><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
+                                <h6>@item.Price</h6>
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-between bg-light border">
@@ -568,7 +568,28 @@ else
             }
         </div>
     </div>
+    <script>
+        // Lấy tất cả các thẻ h6 trong trang
+        var h6Elements = document.querySelectorAll('h6');
 
+        // Duyệt qua từng phần tử h6 và thực hiện thay đổi giá trị
+        h6Elements.forEach(function (h6Element) {
+            // Lấy giá trị từ phần tử
+            var amount = parseFloat(h6Element.innerText);
+
+            // Chuyển đổi giá trị thành định dạng tiền tệ và gán lại vào phần tử
+            var formatted_amount = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+            h6Element.innerText = formatted_amount;
+
+            // Hiển thị kết quả trong console
+            console.log(formatted_amount);
+        });
+    </script>
+   <style>
+       h6{
+           color : orangered;
+       }
+   </style>
 }
 
 

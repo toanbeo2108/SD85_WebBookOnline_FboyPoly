@@ -16,9 +16,9 @@
                         <a asp-action="deTail" asp-controller="Home" asp-route-id="@item.BookID"><img class="img-fluid w-100" src="~/photoBooks/@item.MainPhoto" alt=""></a>
                     </div>
                     <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">@item.BookName</h6>
+                        <h4 class="text-truncate mb-3">@item.BookName</h4>
                         <div class="d-flex justify-content-center">
-                            <h6>@item.Price</h6><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
+                            <h5>@item.Price</h5><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
@@ -52,9 +52,9 @@
                         <a asp-action="deTail" asp-controller="Home" asp-route-id="@item.ComboID"><img class="img-fluid w-100" src="~/photoBooks/@item.Image" alt=""></a>
                     </div>
                     <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">@item.ComboName</h6>
+                        <h4 class="text-truncate mb-3">@item.ComboName</h4>
                         <div class="d-flex justify-content-center">
-                            <h6>@item.Price</h6><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
+                            <h5>@item.Price</h5>
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
