@@ -1,0 +1,219 @@
+﻿@using SD85_WebBookOnline.Share.Models
+
+@{
+    ViewData["Title"] = "DSVoucher";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    IEnumerable<Voucher> lstvcFreeShip = ViewBag.lstvcFreeShip as IEnumerable<Voucher>;
+    IEnumerable<Voucher> lstvcGiamGia = ViewBag.lstvcGiamGia as IEnumerable<Voucher>;
+}
+<style>
+    .container {
+        background-color: white;
+        text-align: center;
+        min-width: 100%;
+    }
+
+    .formvr {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .bannervr img {
+        width: 1000px;
+    }
+
+    .voucher {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .itemvoucher {
+        margin: 0 auto;
+        width: 500px;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 0;
+    }
+
+    .image_voucher {
+        flex-grow: 3;
+        padding: 0px;
+        width: 150px;
+    }
+
+    .bgvr {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(251, 116, 5, 0.741);
+        height: 100%;
+        width: 100%;
+    }
+
+    .contenvr {
+        flex-grow: 7;
+    }
+
+    .thongtinvr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+        .thongtinvr h4 {
+            text-align: left;
+        }
+
+    .hsdvr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .giatrivr {
+        flex-grow: 8;
+        text-align: left;
+        padding-left: 40px;
+    }
+
+    .btn-click {
+        flex-grow: 2;
+    }
+
+        .btn-click button {
+            background-color: rgb(255, 102, 0);
+            padding: 0 30px;
+            border: 0;
+            color: aliceblue;
+        }
+
+    .datevr {
+        text-align: left;
+        flex-grow: 8;
+        padding: 0 40px;
+    }
+
+
+
+    .timeve label {
+        font-size: 15px;
+    }
+
+    .chitietvr {
+        flex-grow: 2;
+    }
+</style>
+
+<div class="container">
+
+    <div class="container">
+
+        <div class="formvr">
+            <div class="voucher">
+                <h3>Voucher Free Ship</h3>
+                @foreach (var vrsf in lstvcFreeShip)
+                {
+
+
+                    <div class="itemvoucher flex-container">
+                        <div class="image_voucher">
+                            <div class="bgvr">
+                                <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico_freeship.svg?q=10428" alt="">
+                            </div>
+                        </div>
+                        <div class="contenvr">
+                            <div class="thongtinvr flex-container">
+                                <div class="giatrivr ">
+                                    <h4>@vrsf.Name</h4>
+                                    <label id="myLabel" style="display:none">@vrsf.code</label>
+                                    <label for="">@vrsf.Description</label>
+                                </div>
+                                <div class="btn-click">
+                                    <button onclick="copyText()">Copy</button>
+                                </div>
+                            </div>
+                            <div class="hsdvr">
+
+                                <div class="datevr flex-container">
+                                    <div class="quantity">
+                                        <small>@vrsf.Quantity</small>
+                                    </div>
+                                    <div class="timeve">
+                                        <label for="">@vrsf.EndDate</label>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="voucher">
+                <h3>Voucher giảm giá</h3>
+                @foreach (var vrsf in lstvcGiamGia)
+                {
+
+
+                    <div class="itemvoucher flex-container">
+                        <div class="image_voucher">
+                            <div class="bgvr">
+                                <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico_promotion.svg?q=10294" alt="">
+                            </div>
+                        </div>
+                        <div class="contenvr">
+                            <div class="thongtinvr flex-container">
+                                <div class="giatrivr ">
+                                    <h4>@vrsf.Name</h4>
+                                    <label id="myLabel" style="display:none">@vrsf.code</label>
+                                    <label for="">@vrsf.Description</label>
+                                </div>
+                                <div class="btn-click">
+                                    <button onclick="copyText()">Copy</button>
+                                </div>
+                            </div>
+                            <div class="hsdvr">
+
+                                <div class="datevr flex-container">
+                                    <div class="quantity">
+                                        <small>@vrsf.Quantity</small>
+                                    </div>
+                                    <div class="timeve">
+                                        <label for="">@vrsf.EndDate</label>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function copyText() {
+        var labelElement = document.getElementById("myLabel");
+
+        var tempInput = document.createElement("input");
+        tempInput.value = labelElement.innerText;
+
+        document.body.appendChild(tempInput);
+
+        tempInput.select();
+
+        document.execCommand("copy");
+
+        document.body.removeChild(tempInput);
+
+        alert("Đã sao chép: " + labelElement.innerText);
+    }
+
+</script>

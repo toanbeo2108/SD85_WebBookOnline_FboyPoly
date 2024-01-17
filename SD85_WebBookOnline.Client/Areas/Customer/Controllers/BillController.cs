@@ -43,6 +43,14 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             var responeBill = await _httpClient.GetAsync(urlBill);
             string apiBill = await responeBill.Content.ReadAsStringAsync();
             var Bill = JsonConvert.DeserializeObject<Bill>(apiBill);
+
+            var UrlVoucher = $"https://localhost:7079/api/Voucher/GetAllVoucher";
+            var responeVoucher = await _httpClient.GetAsync(UrlVoucher);
+            string apiDataVoucher = await responeVoucher.Content.ReadAsStringAsync();
+            var lstVoucher = JsonConvert.DeserializeObject<List<Voucher>>(apiDataVoucher);
+            var voucher = lstVoucher.FirstOrDefault(p => p.VoucherID == Bill.VoucherID);
+
+            ViewBag.Voucher = voucher;
             ViewBag.Bill = Bill;
             ViewBag.User = User;
             return View(ListBillItems);
@@ -87,7 +95,23 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                 }
                 else
                 {
+                    // cập nhật lại sl bán được và sl tồn của combo
+                    var UrlUpdateBook = $"https://localhost:7079/api/Combo/CancelBill/?id={item.ComboID}&quantityBuy={item.Quantity}";
+                    var contentUpdateBook = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+                    var responseUpdateBook = await _httpClient.PostAsync(UrlUpdateBook, contentUpdateBook);
+                    if (!responseUpdateBook.IsSuccessStatusCode)
+                    {
+                        return BadRequest("Lỗi cập nhật lại số lượng tồn của sản phẩm");
+                    }
 
+                    // Xóa BillItem
+                    var UrlDeleteBillItem = $"https://localhost:7079/api/BillItem/DeleteBillItem/{item.BillItemID}";
+                    var responseDeleteBillItem = await _httpClient.DeleteAsync(UrlDeleteBillItem);
+                    var ApiDeleteBillItem = await responseDeleteBillItem.Content.ReadAsStringAsync();
+                    if (!responseDeleteBillItem.IsSuccessStatusCode)
+                    {
+                        return BadRequest("Lỗi xóa billItems");
+                    }
                 }
             }
 

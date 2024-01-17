@@ -143,5 +143,32 @@ namespace SD85_WebBookOnline.Api.Controllers
 
             return await irespon.UpdateItem(combo);
         }
+        [HttpPut("CancelBill")]
+        public async Task<bool> CancelBill(Guid id, int quantityBuy)
+        {
+            var combo = await irespon.GetByID(id);
+            var listcomboItem = await irespon_comboitem.GetAll();
+            var comboitems = listcomboItem.Where(p => p.ComboID == id).ToList();
+            var listbook = await irespon_book.GetAll();
+            foreach (var comboItem in comboitems)
+            {
+                foreach (var book in listbook)
+                {
+                    if (comboItem.BookID == book.BookID)
+                    {
+                        book.QuantitySold -= quantityBuy;
+                        await irespon_book.UpdateItem(book);
+                    }
+                }
+            }
+
+            if (combo == null)
+            {
+                return false;
+            }
+            combo.Quantity += quantityBuy;
+
+            return await irespon.UpdateItem(combo);
+        }
     }
 }

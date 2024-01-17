@@ -139,6 +139,7 @@ namespace SD85_WebBookOnline.Client.Controllers
                 var lstselectTopquantitysold = lstBookOk.OrderByDescending(x => x.QuantitySold).Take(8).ToList();
                 ViewBag.lstTopquantitySold = lstselectTopquantitysold;
             }
+
             //	
             var totalQuantityPro = JsonConvert.SerializeObject(TotalQuantityPro);
             Response.Cookies.Append("ToTalQuantityPro", totalQuantityPro);

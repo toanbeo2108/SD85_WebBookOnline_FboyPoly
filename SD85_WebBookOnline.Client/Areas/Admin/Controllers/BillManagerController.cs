@@ -31,6 +31,16 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var users = JsonConvert.DeserializeObject<List<User>>(apiDataUser);
             ViewBag.Users = users;
 
+            var Voucher_code = Request.Cookies["Voucher_id"];
+            if (Voucher_code!= null)
+            {
+                var UrlVoucher = $"https://localhost:7079/api/Voucher/GetVoucherByVoucherCode?VoucherCode={Voucher_code}";
+                var responeVoucher = await _httpClient.GetAsync(UrlVoucher);
+                string apiDataVoucher = await responeVoucher.Content.ReadAsStringAsync();
+                var voucher = JsonConvert.DeserializeObject<Voucher>(apiDataVoucher);
+                ViewBag.Voucher = voucher;
+            }
+
             return View(Bills);
         }
 

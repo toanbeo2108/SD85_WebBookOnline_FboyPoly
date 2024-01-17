@@ -1,117 +1,82 @@
-﻿@model IEnumerable<SD85_WebBookOnline.Share.Models.BillItems>
+﻿@model List<SD85_WebBookOnline.Share.Models.BillItems>;
 @using SD85_WebBookOnline.Share.Models;
 @{
-    ViewData["Title"] = "GetBillDetails";
-    Bill bill = ViewBag.Bill;
     User user = ViewBag.User;
-    List<BillItems> billItems = Model.ToList();
-    decimal subtotal = 0;
-    foreach (BillItems items in billItems)
-    {
-        subtotal += items.ToTal;
-    }
+    Bill bill = ViewBag.Bill;
+    Voucher voucher = ViewBag.Voucher;
 }
 
-<div class="web-container">
-    <div class="page-container">
-        Page
-        <span class="page"></span>
-        of
-        <span class="pages"></span>
+<header class="clearfix">
+    @if (bill.Status == 1)
+    {
+        <h1> Đơn chờ xác nhận</h1>
+    }
+    else if (bill.Status == 2)
+    {
+        <h1> Đơn đang giao</h1>
+    }
+    else if (bill.Status == 3)
+    {
+        <h1> Đơn đã hoàn thành</h1>
+    }
+    <div id="company" class="clearfix">
+        <div>FpolyBook</div>
+        <div>TDP 12 , Phố Kiều Mai<br /> BTL HN, VN</div>
+        <div>0869 055 623</div>
+        <div><a href="mailto:toannkph27888@fpt.edu.vn">toannkph27888@fpt.edu.vn</a></div>
     </div>
-
-    <table class="invoice-info-container">
-        <tr>
-            <td rowspan="2" class="client-name">
-                @user.UserName
-            </td>
-            <td>
-                Địa chỉ nhận
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Người nhận: @bill.ReceiverName
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Invoice Date: <strong>@bill.OrderDate</strong>
-            </td>
-            <td>
-                @bill.AddressUser
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Invoice code: <strong>@bill.BillID</strong>
-            </td>
-            <td>
-                @bill.Email
-            </td>
-        </tr>
-    </table>
-
-
-    <table class="line-items-container">
+    <div id="project">
+        <div><span>BILLID</span>@bill.BillID</div>
+        <div><span>ĐỊA CHỈ</span> @bill.AddressUser</div>
+        <div><span>EMAIL</span> <a href="mailto:john@example.com">@bill.Email</a></div>
+        <div><span>NGÀY ĐẶT</span> @bill.OrderDate</div>
+        <div><span>NGƯỜI NHẬN</span> @bill.ReceiverName</div>
+    </div>
+</header>
+<main>
+    <table>
         <thead>
             <tr>
-                <th class="heading-quantity">Qty</th>
-                <th class="heading-description">ProductName</th>
-                <th class="heading-price">Price</th>
-                <th class="heading-subtotal">Subtotal</th>
+                <th></th>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Tổng</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Quantity</td>
-                    <td>@item.ItemName</td>
-                    <td class="right">@item.Price</td>
-                    <td class="bold">@item.ToTal</td>
+                    <td></td>
+                    <td class="desc">@item.ItemName</td>
+                    <td class="unit">@item.Price đ</td>
+                    <td class="qty">@item.Quantity</td>
+                    <td class="total">@item.ToTal đ</td>
                 </tr>
             }
-        </tbody>
-    </table>
-
-
-    <table class="line-items-container has-bottom-border">
-        <thead>
             <tr>
-                <th>Payment Info</th>
-                <th>Due By</th>
-                <th>Total Due</th>
+                <td colspan="4">SHIP</td>
+                <td class="total">@bill.Shipmoney</td>
             </tr>
-        </thead>
-        <tbody>
             <tr>
-                <td class="payment-info">
-                    <div>
-                        Account : <strong>@user.UserName</strong>
-                    </div>
-                    <div>
-                        Routing No: <strong>120000547</strong>
-                    </div>
-                </td>
-                <td class="large">@bill.OrderDate</td>
-                <td class="large total">@bill.Total</td>
+                <td colspan="4">SUBTOTAL</td>
+                <td class="total">@bill.PriceBeforeVoucher</td>
+            </tr>
+            @if (bill.VoucherID != null)
+            {
+                <tr>
+                    <td colspan="4">VOUCHER</td>
+                    <td class="total">- @voucher.DiscountAmount</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="4" class="grand total">GRAND TOTAL</td>
+                <td class="grand total">@bill.Total</td>
             </tr>
         </tbody>
     </table>
-
-    <div class="footer">
-        <div class="footer-info">
-            <span>Toannkph2788@fpt.edu.vn</span> |
-            <span>0869055623</span> |
-            <span>FpolyBoy.com</span>
-        </div>
-        <div class="footer-thanks">
-            <img src="https://github.com/anvilco/html-pdf-invoice-template/raw/main/img/heart.png" alt="heart">
-            <span>Thank you!</span>
-        </div>
-    </div>
-</div>
+</main>
 
 @if (bill.Status == 1)
 {
@@ -121,6 +86,9 @@
 
 <link rel="stylesheet" href="./web/modern-normalize.css">
 <link rel="stylesheet" href="./web/web-base.css">
-<link rel="stylesheet" href="~/css/invoice.css">
 <script type="text/javascript" src="./web/scripts.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="~/css/BillDetailsAdmin.css" />
 
