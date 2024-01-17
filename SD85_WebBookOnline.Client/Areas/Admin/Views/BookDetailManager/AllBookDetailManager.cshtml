@@ -11,7 +11,7 @@
     IEnumerable<BookDetail> lstBookDetail = ViewBag.lstBookDetail as IEnumerable<BookDetail>;
 }
 
-<h1>AllBookDetailManager</h1>
+<h1>Quản Lý Chi Tiết Sách</h1>
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -20,9 +20,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
 <script src="~/js/BookDetail.js"></script>
-<p>
+@*<p>
     <button type="button" class="btn btn-primary" id="btn_add">Thêm mới</button>
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -66,7 +66,7 @@
                 @lstLanguge.FirstOrDefault(c=>c.LangugeID == item.LagugeID).Name
             </td>
             <td>
-                   <button id="btn_chitiet" class="btn btn-primary" type="button" data-id="@item.BookDetailID">Xem chi tiết</button>
+                   <button id="btn_chitiet_detail" class="btn btn-primary" type="button" data-id="@item.BookDetailID">Xem chi tiết</button>
             </td>
         </tr>
             i++;
@@ -80,7 +80,7 @@
 
 
 
-<div class="modal fade" id="pp_Modal">
+<div class="modal fade" id="pp_Modal_detail">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

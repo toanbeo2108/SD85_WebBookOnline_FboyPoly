@@ -4,7 +4,8 @@
     ViewData["Title"] = "DSVoucher";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    IEnumerable<Voucher> lstVoucher = ViewBag.lstVoucher as IEnumerable<Voucher>;
+    IEnumerable<Voucher> lstvcFreeShip = ViewBag.lstvcFreeShip as IEnumerable<Voucher>;
+    IEnumerable<Voucher> lstvcGiamGia = ViewBag.lstvcGiamGia as IEnumerable<Voucher>;
 }
 <style>
     .container {
@@ -96,19 +97,7 @@
         padding: 0 40px;
     }
 
-    .quantity {
-        width: 100%;
-        height: 4px;
-        background-color: antiquewhite;
-        border-radius: 25px;
-    }
-
-        .quantity hr {
-            height: 4px;
-            margin: 0;
-            background-color: blue;
-            border-radius: 25px;
-        }
+    
 
     .timeve label {
         font-size: 15px;
@@ -124,148 +113,90 @@
         <div class="container">
 
             <div class="formvr">
-
-
-                @foreach (var itemvr in lstVoucher)
+                <div class="voucher">
+                <h3>Voucher Free Ship</h3>
+                @foreach (var vrsf in lstvcFreeShip)
                 {
-                    @if (itemvr.EndDate > DateTime.Now)
-                    {
-                    @if (itemvr.Status == 1)
-                    {
-                        <div class="voucher">
-                            <h3>Voucher </h3>
-                            <div class="itemvoucher flex-container">
-                                <div class="image_voucher">
-                                    <div class="bgvr">
-                                        <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico_freeship.svg?q=10428" alt="">
-                                    </div>
+
+
+                    <div class="itemvoucher flex-container">
+                        <div class="image_voucher">
+                            <div class="bgvr">
+                                <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico_freeship.svg?q=10428" alt="">
+                            </div>
+                        </div>
+                        <div class="contenvr">
+                            <div class="thongtinvr flex-container">
+                                <div class="giatrivr ">
+                                    <h4>@vrsf.Name</h4>
+                                    <label id="myLabel" style="display:none">@vrsf.code</label>
+                                    <label for="">@vrsf.Description</label>
                                 </div>
-                                <div class="contenvr">
-                                    <div class="thongtinvr flex-container">
-                                        <div class="giatrivr ">
-                                            <h4>@itemvr.Name</h4>
-                                            <label id="myLabel" style="display:none">@itemvr.code</label>
-                                            <label for="">@itemvr.Description</label>
-                                        </div>
-                                        <div class="btn-click">
-                                            <button onclick="copyText()">Copy</button>
-                                        </div>
+                                <div class="btn-click">
+                                    <button onclick="copyText()">Copy</button>
+                                </div>
+                            </div>
+                            <div class="hsdvr">
+
+                                <div class="datevr flex-container">
+                                    <div class="quantity">
+                                        <small>@vrsf.Quantity</small>
                                     </div>
-                                    <div class="hsdvr">
-
-                                        <div class="datevr flex-container">
-                                            <div class="quantity">
-                                                <hr>
-                                            </div>
-                                            <div class="timeve">
-                                                <label for="">@itemvr.EndDate</label>
-                                            </div>
-
-                                        </div>
-                                        <div class="chitietvr">
-                                            <a asp-action="VoucherDetail" asp-controller="Cart" asp-area="Customer" asp-route-id="@itemvr.VoucherID">Chi Tiết</a>
-                                        </div>
+                                    <div class="timeve">
+                                        <label for="">@vrsf.EndDate</label>
                                     </div>
 
                                 </div>
+
                             </div>
 
                         </div>
-                    }
-                    @if (itemvr.Status == 2)
-                    {
-                        <div class="voucher">
+                    </div>
+                }
+            </div>
+            <div class="voucher">
+                <h3>Voucher giảm giá</h3>
+                @foreach (var vrsf in lstvcGiamGia)
+                {
 
-                            <div class="itemvoucher flex-container">
-                                <div class="image_voucher">
-                                    <div class="bgvr">
-                                        <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico_promotion.svg?q=10294" alt="">
-                                    </div>
+
+                    <div class="itemvoucher flex-container">
+                        <div class="image_voucher">
+                            <div class="bgvr">
+                                <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico_promotion.svg?q=10294" alt="">
+                            </div>
+                        </div>
+                        <div class="contenvr">
+                            <div class="thongtinvr flex-container">
+                                <div class="giatrivr ">
+                                    <h4>@vrsf.Name</h4>
+                                    <label id="myLabel" style="display:none">@vrsf.code</label>
+                                    <label for="">@vrsf.Description</label>
                                 </div>
-                                <div class="contenvr">
-                                    <div class="thongtinvr flex-container">
-                                        <div class="giatrivr ">
-                                            <h4>@itemvr.Name</h4>
-                                            <label id="myLabel" style="display:none">@itemvr.code</label>
-                                            <label for="">@itemvr.Description</label>
-                                        </div>
-                                        <div class="btn-click">
-                                            <button onclick="copyText()">Copy</button>
-                                        </div>
+                                <div class="btn-click">
+                                    <button onclick="copyText()">Copy</button>
+                                </div>
+                            </div>
+                            <div class="hsdvr">
+
+                                <div class="datevr flex-container">
+                                    <div class="quantity">
+                                        <small>@vrsf.Quantity</small>
                                     </div>
-                                    <div class="hsdvr">
-
-                                        <div class="datevr flex-container">
-                                            <div class="quantity">
-                                                <hr>
-                                            </div>
-                                            <div class="timeve">
-                                                <label for="">@itemvr.EndDate</label>
-                                            </div>
-
-                                        </div>
-                                        <div class="chitietvr">
-                                            <a asp-action="VoucherDetail" asp-controller="Cart" asp-area="Customer" asp-route-id="@itemvr.VoucherID">Chi Tiết</a>
-                                        </div>
+                                    <div class="timeve">
+                                        <label for="">@vrsf.EndDate</label>
                                     </div>
 
                                 </div>
+
                             </div>
 
                         </div>
-                    }
-                    @if (itemvr.Status == 3)
-                    {
-                        <div class="voucher">
-                            
-                            <div class="itemvoucher flex-container">
-                                <div class="image_voucher">
-                                    <div class="bgvr">
-                                        <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico_ewallet.svg?q=10428" alt="">
-                                    </div>
-                                </div>
-                                <div class="contenvr">
-                                    <div class="thongtinvr flex-container">
-                                        <div class="giatrivr ">
-                                            <h4>@itemvr.Name</h4>
-                                            <label id="myLabel" style="display:none">@itemvr.code</label>
-                                            <label for="">@itemvr.Description</label>
-                                        </div>
-                                        <div class="btn-click">
-                                            <button onclick="copyText()">Copy</button>
-                                        </div>
-                                    </div>
-                                    <div class="hsdvr">
-
-                                        <div class="datevr flex-container">
-                                            <div class="quantity">
-                                                <hr>
-                                            </div>
-                                            <div class="timeve">
-                                                <label for="">@itemvr.EndDate</label>
-                                            </div>
-
-                                        </div>
-                                        <div class="chitietvr">
-                                            <a asp-action="VoucherDetail" asp-controller="Cart" asp-area="Customer" asp-route-id="@itemvr.VoucherID">Chi Tiết</a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    }
-
-                    }
-                   
-            }
-            
+                    </div>
+                }
+            </div>
         </div>
-
-
     </div>
-    
 </div>
 <script>
     function copyText() {

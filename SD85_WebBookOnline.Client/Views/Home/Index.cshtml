@@ -4,39 +4,67 @@
     ViewData["Title"] = "Home Page";
     IEnumerable<Book> lsttopBookTime = ViewBag.lstSelectNew as IEnumerable<Book>;
     IEnumerable<Book> lsttopBookTopQuantitySold = ViewBag.lstTopquantitySold as IEnumerable<Book>;
-    IEnumerable<Combo> lstCombo = ViewBag.lstCombo as IEnumerable<Combo>;
+
+    IEnumerable<Combo> listCombo = ViewBag.listCombo as IEnumerable<Combo>;
+
 }
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Thêm thư viện Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
+
+<script src="~/js/chart.js">
+   
+</script>
+
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor context
 @using Newtonsoft.Json
 @using SD85_WebBookOnline.Share.Models
+
 
 @if (User.IsInRole("Admin"))
 {
     <div class="details">
         <div class="recentOrder">
             <div class="cardHeader">
-                <h2>Khách Hàng Tiềm Năng</h2>
-                <a href="#" class="btn">View All</a>
+               
+              <h2>Biểu đồ doanh thu</h2>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <td>Họ Tên</td>
-                        <td>Số Điện Thoai</td>
-                        <td>Email</td>
-                        <td>Trạng Thái</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Nguyễn Tiến Hiệp</td>
-                        <td>0339414711</td>
-                        <td>Hiepdepzai2k3@gmail.com</td>
-                        <td><span class="status delivered">Đang Hoạt Động</span></td>
-                    </tr>
-                   
-                </tbody>
-            </table>
+
+          <div style="margin: auto;" class="container">
+    <div class="row">
+        <div class="col-md-4"><label for="yearSelector">Chọn năm:</label>
+            <select id="yearSelector" class="form-control">
+                  
+                @for (int year = DateTime.Now.Year; year >= 2020; year--)
+                {
+                    <option value="@year">@year</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label for="monthSelector">Chọn tháng:</label>
+            <select id="monthSelector" class="form-control">
+              
+                @for (int month = 1; month <= 12; month++)
+                {
+                    <option value="@month">@month</option>
+                }
+            </select>
+        </div>
+    </div>
+    
+
+    
+
+    <canvas id="myBarChart" width="400" height="150"></canvas>
+</div>
+
         </div>
         <!--Danh sách nhân viên-->
         <div class="recentEmpolyees">
@@ -115,7 +143,7 @@ else if (User.IsInRole("User"))
                             <a asp-action="Index" asp-controller="Home" class="nav-item nav-link active">Trang Chủ</a>
                             <a asp-action="All_Pro" asp-controller="Shop" asp-area="Customer" class="nav-item nav-link">Shop</a>
                             <a asp-action="MyCart" asp-controller="Cart" asp-area="Customer" class="nav-item nav-link">Giỏ Hàng</a>
-                            <a asp-action="Index" asp-controller="Home" class="nav-item nav-link">Chương Trình Khuyến Mãi</a>
+                            <a asp-action="DSVoucher" asp-controller="Voucher" asp-area="Customer" class="nav-item nav-link">Chương Trình Khuyến Mãi</a>
 
                         </div>
 
@@ -282,7 +310,7 @@ else if (User.IsInRole("User"))
             <h2 class="section-title px-5"><span class="px-2">Combo Hot</span></h2>
         </div>
         <div class="row px-xl-5 pb-3">
-            @foreach (var item in lstCombo)
+            @foreach (var item in listCombo)
             {
                 <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
                     <div class="card product-item border-0 mb-4">
@@ -298,6 +326,34 @@ else if (User.IsInRole("User"))
                         <div class="card-footer d-flex justify-content-between bg-light border">
                             <a asp-action="Detail_cb" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.ComboID" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                             <a asp-action="AddToCart" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.ComboID" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="container-fluid pt-5">
+        <div class="text-center mb-4">
+            <h2 class="section-title px-5"><span class="px-2">Combo mới</span></h2>
+        </div>
+        <div class="row px-xl-5 pb-3">
+            @foreach (var item in listCombo)
+            {
+                <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                    <div class="card product-item border-0 mb-4">
+                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                            <img class="img-fluid w-100" src="~/images/@item.Image" alt="">
+                        </div>
+                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                            <h6 class="text-truncate mb-3">@item.ComboName</h6>
+                            <div class="d-flex justify-content-center">
+                                <h6>@item.Price</h6><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between bg-light border">
+                            <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                            <a asp-action="deTailCombo" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.ComboID" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                         </div>
                     </div>
                 </div>
@@ -490,7 +546,7 @@ else
             <h2 class="section-title px-5"><span class="px-2">Combo Hot</span></h2>
         </div>
         <div class="row px-xl-5 pb-3">
-            @foreach (var item in lstCombo)
+            @foreach (var item in listCombo)
             {
                 <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
                     <div class="card product-item border-0 mb-4">

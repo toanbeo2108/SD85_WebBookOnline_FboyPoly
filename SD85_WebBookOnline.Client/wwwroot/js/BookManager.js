@@ -1,11 +1,11 @@
 ﻿$(document).ready(function () {
     $('body').on('click', '#btn_add', function () {
         document.getElementById("div_anh").style.display = "none";
-        setData(null)
+        setData_(null)
         $('#pp_Modal').modal('show');
     })
     $('body').on('click', '#btn_save', function () {
-        var data = getData();
+        var data = getData_();
 
         var formData = new FormData();
         formData.append('imageFile', $('#btn_File')[0].files[0]);
@@ -13,9 +13,53 @@
         for (var key in data) {
             formData.append(key, data[key]);
         }
-
+        //$('#btn_IdBoook').val('');
+        //;
+        //
+        //;
+        //;
+        //$('#btn_ttqtt').val('');
+        //$('#btn_qttsold').val('');
+        //$('#btn_qttexit').val('');
+        //$('#btn_entryprice').val('');
+        //$('#btn_price').val('');
+        //$('#btn_in4').val('');
+        //$('#btn_Description').val('');
+        //$('#btn_ISBN').val('');
+        //$('#btn_Y_release').val('');
+        //$('#btn_Weight').val('');
+        //$('#btn_Volume').val('');
+        //$('#btn_TransactionStatus').val('');
+        //$('#btn_Status').val('0');
+        //
+        //$('#btn_createdate').val(moment().format('YYYY-MM-DD'));
+        //$('#file_name').text('');
 
         if ($('#btn_IdBoook').val() == null || $('#btn_IdBoook').val() == undefined || $('#btn_IdBoook').val() == '') {
+           
+            if ($('#cb_manu').val() == '' || $('#cb_manu').val() == null || $('#cb_manu').val() == undefined ) {
+               
+                        alert("Bạn cần chọn nhà sản xuất! ")
+                         $('#cb_manu').focus();
+                        return;
+            }
+            
+            if ($('#cb_form').val() == '' || $('#cb_form').val() == null || $('#cb_form').val()== undefined) {
+                 alert("Bạn cần nhập hình thức! ")
+                $('#cb_coupon').focus();
+                        return;
+            }
+            if ($('#btn_bookName').val() == null || $('#btn_bookName').val() == '' || $('#btn_bookName').val() == undefined) {
+                alert("Bạn cần nhập  tên sách! ")
+                $('#btn_bookName').focus();
+                return;
+            }
+            if ($('#btn_File').val() == '' || $('#btn_File').val() == null || $('#btn_File').val() == undefined) {
+                alert("Bạn cần chọn file! ")
+                $('#btn_File').focus();
+                return;
+            }
+
             $.ajax({
                 url: '/Add-Book',
                 type: 'POST',
@@ -69,7 +113,7 @@
                 // Hiển thị lại div
                 document.getElementById("div_anh").style.display = "block";
 
-                setData(re.data)
+                setData_(re.data)
                 $('#pp_Modal').modal('show');
             }
         })
@@ -84,16 +128,16 @@
 
         })
     })
-    $(document).ready(function () {
-        // Thêm sự kiện cho sự thay đổi của công tắc
-        $('body').on('change', 'input[type="checkbox"][id^="statusToggle_"]', function () {
-            // Lấy ID của sách từ id của công tắc
-            var bookID = $(this).attr('id').replace('statusToggle_', '');
+   
+     // Thêm sự kiện cho sự thay đổi của công tắc
+     $('body').on('change', 'input[type="checkbox"][id^="statusToggle_"]', function (){
+         // Lấy ID của sách từ id của công tắc
+         var bookID = $(this).attr('id').replace('statusToggle_', '');
 
-            // Gọi phương thức cập nhật trạng thái
-            updateBookStatus(bookID, $(this).prop('checked'));
-        });
-    });
+         // Gọi phương thức cập nhật trạng thái
+         updateBookStatus(bookID, $(this).prop('checked'));
+     });
+    
 })
 function updateBookStatus(bookID, newStatus) {
     // Gọi API để cập nhật trạng thái
@@ -115,7 +159,7 @@ function updateBookStatus(bookID, newStatus) {
         }
     });
 }
-function setData(data) {
+function setData_(data) {
 
     if (data == null || data == undefined || data == '') {
 
@@ -139,7 +183,10 @@ function setData(data) {
         $('#btn_TransactionStatus').val('');
         $('#btn_Status').val('0');
         $('#btn_File').val('');
+        $('#btn_createdate').val(moment().format('YYYY-MM-DD'));
         $('#file_name').text('');
+       
+       
     }
     else {
 
@@ -157,7 +204,7 @@ function setData(data) {
         $('#btn_Description').val(data.description);
         $('#btn_ISBN').val(data.isbn);
         $('#btn_Y_release').val(data.yearOfRelease);
-
+        $('#btn_createdate').val() != null ? moment($('#btn_createdate').val()).format('DD-MM-YYYY') : null
         $('#btn_TransactionStatus').val(data.transactionStatus);
         $('#btn_Status').val(data.status);
         $('#btn_Weight').val(data.weight);
@@ -172,7 +219,7 @@ function setData(data) {
     }
 }
 
-function getData() {
+function getData_() {
     return {
         BookID: $('#btn_IdBoook').val(),
         ManufacturerID: $('#cb_manu').val(),
@@ -193,7 +240,7 @@ function getData() {
         /*DeleteDate        : $('#btn_IdBoook').val(),*/
         TransactionStatus: $('#btn_TransactionStatus').val(),
         Status: $('#btn_Status').val(),
-        Weight: $('#btn_IdBoook').val(),
+        Weight: $('#btn_Weight').val(),
         Volume: $('#btn_Volume').val()
     }
 

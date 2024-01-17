@@ -1,4 +1,4 @@
-﻿//using ClosedXML.Excel;
+﻿
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -59,39 +59,31 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 
             var thongKeData = new List<ThongKeViewModel>(); // Sử dụng List thay vì IEnumerable
 
-            thongKeData.AddRange(from bi in billItems
-                                 join b in books on bi.BookID equals b.BookID
-                                 where bi.Status == 3
-                                 group new { bi, b } by new { bi.BookID, b.BookName, b.QuantityExists } into g
-                                 select new ThongKeViewModel
-                                 {
-                                     tensach = g.Key.BookName,
-                                     TongSoSachBanDuoc = g.Sum(x => x.bi.Quantity),
-                                     SoSachConLai = g.Key.QuantityExists,
-                                     TongDoanhThusach = g.Sum(x => x.bi.Price * x.bi.Quantity),
-                                     LoiNhuansach = g.Sum(x => (x.bi.Price - x.bi.GiaNhap) * x.bi.Quantity),
-                                     ChiPhiGocsach = g.Sum(x => x.bi.GiaNhap * x.bi.Quantity)
-                                 });
+            thongKeData.AddRange(
+                                    (from bi in billItems
+                                     join b in books on bi.BookID equals b.BookID
+                                     join c in Bills on bi.BillID equals c.BillID
+                                     where c.Status == 3 && b.BookName != null && bi.Price != null
+                                     group new { bi, b, c } by new { b.BookName } into g
+                                     select new ThongKeViewModel
+                                     {
+                                         tensach = g.Key.BookName,
+                                         TongSoSachBanDuoc = g.Sum(x => x.bi.Quantity),
+                                         SoSachConLai = g.First().b.QuantityExists,
+                                         TongDoanhThusach = g.Sum(x => x.bi.Price * x.bi.Quantity),
+                                         LoiNhuansach = g.Sum(x => (x.bi.Price - x.bi.GiaNhap) * x.bi.Quantity),
+                                         ChiPhiGocsach = g.Sum(x => x.bi.GiaNhap * x.bi.Quantity)
+                                     }).OrderByDescending(x => x.TongDoanhThusach));
 
-            var tongTongSoSachBanDuoctrongNgay = thongKeData.Sum(c => c.TongSoSachBanDuoc);
-            var tongTongdoanhThutrongNgay = thongKeData.Sum(c => c.TongDoanhThusach);
-            var tongTongLoiNhuantrongNgay = thongKeData.Sum(c => c.LoiNhuansach);
-            var tongTongChiPhigoctrongNgay = thongKeData.Sum(c => c.ChiPhiGocsach);
+           
 
-            thongKeData.Add(new ThongKeViewModel
-            {
-                tensach = "Tổng cộng",
-                TongSoSachBanDuoc = tongTongSoSachBanDuoctrongNgay,
-                TongDoanhThusach = tongTongdoanhThutrongNgay,
-                LoiNhuansach = tongTongLoiNhuantrongNgay,
-                ChiPhiGocsach = tongTongChiPhigoctrongNgay,
-            });
 
             return Json(new
             {
                 status = true,
                 message = _mess,
-                data = thongKeData
+                data = thongKeData,
+               
             }); 
         }
         //  thống kê trong ngày hôm nay
@@ -137,35 +129,24 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 
             //var thongKeData = new List<ThongKeViewModel>(); // Sử dụng List thay vì IEnumerable
 
-            thongKeSachList.AddRange( from bi in billItems
-                          join b in books on bi.BookID equals b.BookID
-                          join bill in Bills on bi.BillID equals bill.BillID into gBill
-                          from subBill in gBill.DefaultIfEmpty() // Left Join with Bills
-                          where bi.Status == 3 && subBill != null && subBill.OrderDate != null && subBill.OrderDate.Value.Date == today
-                          group new { bi, b } by new { bi.BookID, b.BookName, b.QuantityExists } into g
-                          select new ThongKeViewModel
-                          {
-                              tensach = g.Key.BookName,
-                              TongSoSachBanDuoc = g.Sum(x => x.bi.Quantity),
-                              SoSachConLai = g.Key.QuantityExists,
-                              TongDoanhThusach = g.Sum(x => x.bi.Price * x.bi.Quantity),
-                              LoiNhuansach = g.Sum(x => (x.bi.Price - x.bi.GiaNhap) * x.bi.Quantity),
-                              ChiPhiGocsach = g.Sum(x => x.bi.GiaNhap * x.bi.Quantity),
-                          });
+            thongKeSachList.AddRange(from bi in billItems
+                                     join b in books on bi.BookID equals b.BookID
+                                     join bill in Bills on bi.BillID equals bill.BillID into gBill
+                                     from subBill in gBill.DefaultIfEmpty() // Left Join with Bills
+                                     where subBill != null && subBill.OrderDate != null && subBill.OrderDate.Value.Date == today
+                                           && subBill.Status == 3  // Updated condition for bill status
+                                     group new { bi, b } by new { bi.BookID, b.BookName, b.QuantityExists } into g
+                                     select new ThongKeViewModel
+                                     {
+                                         tensach = g.Key.BookName,
+                                         TongSoSachBanDuoc = g.Sum(x => x.bi.Quantity),
+                                         SoSachConLai = g.Key.QuantityExists,
+                                         TongDoanhThusach = g.Sum(x => x.bi.Price * x.bi.Quantity),
+                                         LoiNhuansach = g.Sum(x => (x.bi.Price - x.bi.GiaNhap) * x.bi.Quantity),
+                                         ChiPhiGocsach = g.Sum(x => x.bi.GiaNhap * x.bi.Quantity),
+                                     });
 
-            var tongTongSoSachBanDuoctrongNgay = thongKeSachList.Sum(c => c.TongSoSachBanDuoc);
-            var tongTongdoanhThutrongNgay = thongKeSachList.Sum(c => c.TongDoanhThusach);
-            var tongTongLoiNhuantrongNgay = thongKeSachList.Sum(c => c.LoiNhuansach);
-            var tongTongChiPhigoctrongNgay = thongKeSachList.Sum(c => c.ChiPhiGocsach);
 
-            thongKeSachList.Add(new ThongKeViewModel
-            {
-                tensach = "Tổng cộng",
-                TongSoSachBanDuoc = tongTongSoSachBanDuoctrongNgay,
-                TongDoanhThusach = tongTongdoanhThutrongNgay,
-                LoiNhuansach = tongTongLoiNhuantrongNgay,
-                ChiPhiGocsach = tongTongChiPhigoctrongNgay,
-            });
 
             return Json(new
             {
@@ -216,7 +197,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 {
                   var result = (from bi in billItems
                                          join b in books on bi.BookID equals b.BookID join c in Bills on bi.BillID equals c.BillID 
-                                         where bi.Status == 3
+                                         where c.Status == 3
                                          group new { bi, b,c } by new { bi.BookID, b.BookName, b.QuantityExists,c.OrderDate } into g
                                          select new 
                                          {
@@ -247,7 +228,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                         if (filter._search != null)
                         {
                             result = result.Where(c => c.tensach.ToLower() == filter._search.ToLower().ToString()).ToList();
-                           
+                            
                         }
                     }
 
@@ -261,21 +242,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                               LoiNhuansach = group.Sum(c => c.LoiNhuansach),
                               ChiPhiGocsach = group.Sum(c => c.ChiPhiGocsach)
                           }).ToList();
-
-                    // Tính toán tổng cộng
-                    var tongSoSachBanDuocTongCong = groupedResult.Sum(c => c.TongSoSachBanDuoc);
-                    var tongDoanhThuTongCong = groupedResult.Sum(c => c.TongDoanhThusach);
-                    var loiNhuanTongCong = groupedResult.Sum(c => c.LoiNhuansach);
-                    var chiPhiGocTongCong = groupedResult.Sum(c => c.ChiPhiGocsach);
-
-                    groupedResult.Add(new ThongKeViewModel
-                    {
-                        tensach = "Tổng cộng",
-                        TongSoSachBanDuoc = tongSoSachBanDuocTongCong,
-                        TongDoanhThusach = tongDoanhThuTongCong,
-                        LoiNhuansach = loiNhuanTongCong,
-                        ChiPhiGocsach = chiPhiGocTongCong
-                    });
+                  
+                   
 
                     _status = true;
                     _message = "lỌC DỮ LIỆU THÀNH CÔNG";
@@ -311,12 +279,64 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             });
 
         }
-
-
-        public IActionResult Chart()
+        [HttpGet, Route("GetComBo")]
+        public async Task<IActionResult> GetComBo()
         {
+
+
+            var urlBill = "https://localhost:7079/api/Bill/GetAllBill";
+            var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+            var urlBillitem = "https://localhost:7079/api/BillItem/GetAllBillItem";
            
-            return View();
+
+            var BillksResponse = await _httpClient.GetAsync(urlBill);
+          
+            var billItemsResponse = await _httpClient.GetAsync(urlBillitem);
+            var ComBoResponse = await _httpClient.GetAsync(urlCombo);
+
+            BillksResponse.EnsureSuccessStatusCode();
+            ComBoResponse.EnsureSuccessStatusCode();
+            billItemsResponse.EnsureSuccessStatusCode();
+            
+
+            var billContent = await BillksResponse.Content.ReadAsStringAsync();
+            var ComboContent = await ComBoResponse.Content.ReadAsStringAsync();
+            var billItemsContent = await billItemsResponse.Content.ReadAsStringAsync();
+           
+
+            var ComBos = JsonConvert.DeserializeObject<IEnumerable<Combo>>(ComboContent);
+            var billItems = JsonConvert.DeserializeObject<IEnumerable<BillItems>>(billItemsContent);
+            var Bills = JsonConvert.DeserializeObject<IEnumerable<Bill>>(billContent);
+           
+
+            // Thống kê cho từng sách
+
+            var thongKeData = new List<ThongKeViewModel>(); // Sử dụng List thay vì IEnumerable
+
+            thongKeData.AddRange(
+                                    (from bi in billItems
+                                     join cb in ComBos on bi.ComboID equals cb.ComboID
+                                     join c in Bills on bi.BillID equals c.BillID
+                                     where c.Status == 3 && cb.ComboID != null && bi.Price != null
+                                     group new { bi, cb, c } by new { cb.ComboName
+                                     } into g
+                                     select new ThongKeViewModel
+                                     {
+                                         tensach = g.Key.ComboName,
+                                         TongSoSachBanDuoc = g.Sum(x => x.bi.Quantity),                                        
+                                         TongDoanhThusach = g.Sum(x => x.bi.Price * x.bi.Quantity),
+                                     }).OrderByDescending(x => x.TongDoanhThusach));
+
+
+
+
+            return Json(new
+            {
+                status = true,
+                message = _mess,
+                data = thongKeData,
+
+            });
         }
     }
 }

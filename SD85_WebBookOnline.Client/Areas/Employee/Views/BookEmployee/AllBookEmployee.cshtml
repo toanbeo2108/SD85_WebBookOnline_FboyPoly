@@ -1,0 +1,277 @@
+﻿@using SD85_WebBookOnline.Share.Models
+@model IEnumerable<SD85_WebBookOnline.Share.Models.Book>
+
+@{
+    ViewData["Title"] = "AllBookEmployee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IEnumerable<Manufacturer> lstManu = ViewBag.lstManufacturer as IEnumerable<Manufacturer>;
+    IEnumerable<Form> lstForm = ViewBag.lstForm as IEnumerable<Form>;
+    IEnumerable<Coupon> lstCoupon = ViewBag.lstCoupon as IEnumerable<Coupon>;
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
+
+<script src="~/js/BookManager.js"></script>
+<style>
+    .modal {
+        --bs-modal-width: 900px;
+    }
+</style>
+<div class="details" style="width : 100%">
+    <div class="recentOrder">
+        <div class="cardHeader">
+            <h2>Danh Sách Book</h2>
+            <p>
+                <button class="btn btn-primary" id="btn_add">Thêm mới</button>
+            </p>
+        </div>
+        <table class="table" id="page">
+            <thead>
+                <tr>
+
+                    <th style="text-align : center;">
+                        Tên Sách
+                    </th>
+
+                    <th style="text-align : center;">
+                        Ảnh đại diện
+                    </th>
+                    <th style="text-align : center;">
+                        Số lượng tồn
+                    </th>
+                    <th style="text-align : center;">
+                        Giá đầu vào
+                    </th>
+                    <th style="text-align : center;">
+                        Giá bán
+                    </th>
+                    <th style="text-align : center;">
+                        Mô tả
+                    </th>
+                    <th style="text-align : center;">
+                        Mã định danh
+                    </th>
+                    <th style="text-align : center;">
+                        Năm phát hành
+                    </th>
+                    <th style="text-align : center;">
+                        trạng thái sách
+                    </th>
+                    <th></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.BookName)
+                        </td>
+                        <td style="text-align: center;">
+                            <img src="~/photoBooks/@item.MainPhoto" alt="Combo Image" width="100" height="100" />
+                            @*<img src="~/photoBooks/@item.MainPhoto" class="rounded float-start" alt="...">*@
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.QuantityExists)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.EntryPrice)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.ISBN)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            @Html.DisplayFor(modelItem => item.YearOfRelease)
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="statusToggle_@item.BookID" @(item.Status == 1 ? "checked" : "") onchange="toggleStatus('@item.BookID')">
+                                <label class="form-check-label" for="statusToggle_@item.BookID">
+
+                                </label>
+                            </div>
+                        </td>
+                        <td style="text-align : center; margin-bottom : 20px">
+                            <button class="btn btn-primary" type="button" id="btn_chitiet" data-id="@item.BookID">Xem chi tiết</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <!--Danh sách nhân viên-->
+</div>
+
+
+<div class="modal fade" id="pp_Modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <input class="form-control" type="text" id="btn_IdBoook" style="display:none" />
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Manufacture Name</label>
+
+                        <select id="cb_manu" class="form-select" aria-label="Default select example">
+
+                            @foreach (var item in lstManu)
+                            {
+
+                                <option value="@item.ManufactureID">@item.ManufactureName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Coupon Name</label>
+
+                        <select id="cb_coupon" class="form-select" aria-label="Default select example">
+
+                            @foreach (var item in lstCoupon)
+                            {
+
+                                <option value="@item.CouponID">@item.CouponName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Form Name</label>
+
+                        <select id="cb_form" class="form-select" aria-label="Default select example">
+
+                            @foreach (var item in lstForm)
+                            {
+
+                                <option value="@item.FormId">@item.FormName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Tên sách</label>
+                        <input id="btn_bookName" type="text" class="form-control" />
+                    </div>
+                    @*<div class="col-md-6">
+                    <label >Total Quantity</label>
+                    <input id="btn_ttqtt" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                    <label>Quantity Sold</label>
+                    <input id="btn_qttsold" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                    <label>Quantity Exit</label>
+                    <input id="btn_qttexit" type="number" class="form-control" />
+                    </div>*@
+                    @*<div class="col-md-6">
+                    <label> Entry Price</label>
+                    <input id="btn_entryprice" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                    <label for="btn_price">  Price</label>
+                    <input id="btn_price" type="number" class="form-control" />
+                    </div>*@
+                    <div class="col-md-6">
+                        <label for="btn_in4">Thông tin</label>
+                        <input id="btn_in4" type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="btn_Description">Mô tả</label>
+                        <input id="btn_Description" type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Mã định danh</label>
+                        <input id="btn_ISBN" type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Năm phát hành</label>
+                        <input id="btn_Y_release" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Create Date</label>
+                        <input id="btn_createdate" type="date" class="form-control" />
+                    </div>
+                    @* <div class="col-md-6">
+                    <label>Delete date</label>
+                    <input id="btn_Deletedate" type="date" class="form-control" />
+                    </div>*@
+                    <div class="col-md-6">
+                        <label>Cân nặng</label>
+                        <input id="btn_Weight" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Thể tích</label>
+                        <input id="btn_Volume" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Trạng thái giao dịch</label>
+                        <input id="btn_TransactionStatus" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Trạng thái</label>
+                        @*// <input id="btn_Status" type="number" class="form-control" />*@
+                        <select id="btn_Status" class="form-select">
+                            <option value="0" selected>Ngưng bán</option>
+                            <option value="1">Đang bán</option>
+
+                        </select>
+                    </div>
+                    <div class="col-md-6" id="div_anh" style="display:none;">
+                        <label>Ảnh</label>
+                        <input id="file_name" type="text" class="form-control" disabled="disabled" />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="btn_File">Chọn ảnh mới</label>
+                        <input id="btn_File" type="file" class="form-control" name="imageFile" />
+
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btn_save" class="btn btn-primary">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@*Link datatable*@
+<link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+@section scripts
+    {
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Khởi tạo DataTable
+            var dataTable = $('#page').DataTable();
+            // Chuyển datatable thành JSON
+            var data = table.toJSON();
+
+            // In dữ liệu JSON ra console
+            console.log(data);
+        });
+    </script>
+}

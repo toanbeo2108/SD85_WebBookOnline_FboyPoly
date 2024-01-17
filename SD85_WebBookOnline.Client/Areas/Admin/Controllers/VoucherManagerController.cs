@@ -32,6 +32,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var responVoucher = await _httpClient.GetAsync(urlVoucher);
             string apiDataVoucher = await responVoucher.Content.ReadAsStringAsync();
             var lstVoucher = JsonConvert.DeserializeObject<List<Voucher>>(apiDataVoucher);
+            ViewBag.lstVoucher = lstVoucher;
+
             return View(lstVoucher);
         }
         public IActionResult CreateVoucher()
@@ -44,8 +46,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             vc.VoucherID = Guid.NewGuid();
-            vc.StartDate = DateTime.Now;
-            var urlVoucher = $"https://localhost:7079/api/Voucher/CreateVoucher?name={vc.Name}&quantity={vc.Quantity}&code={vc.code}&description={vc.Description}&endDate={vc.EndDate}&discountCondition={vc.DiscountCondition}&discountAmount={vc.DiscountAmount}&status={1}";
+            
+            var urlVoucher = $"https://localhost:7079/api/Voucher/CreateVoucher?name={vc.Name}&quantity={vc.Quantity}&code={vc.code}&description={vc.Description}&starDate={vc.StartDate}&endDate={vc.EndDate}&discountCondition={vc.DiscountCondition}&discountAmount={vc.DiscountAmount}&status={vc.Status}";
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8,"application/json");
             var respon = await httpClient.PostAsync(urlVoucher, content);
@@ -171,12 +173,17 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             });
         }
         [HttpGet,Route("Xoa_Voucher/{id}")]
-        public async Task<IActionResult> DeleteVoucher(Guid id)
+        public async Task<IActionResult> DeleteVoucher(Guid id,Voucher vc)
         {
+            var urlVoucher = $"https://localhost:7079/api/Voucher/DeleteVoucher/{id}";
+            var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8, "application/json");
+            var respon = await _httpClient.PutAsync(urlVoucher, content);
+            //if (!respon.IsSuccessStatusCode)
+            //{
+            //    return BadRequest();
+            //}
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var urlVoucher = $"https://localhost:7079/api/Voucher/DeleteVoucher/{id}";
-            var respon =  await _httpClient.DeleteAsync(urlVoucher);
             //if (!respon.IsSuccessStatusCode)
             //{
             //    return BadRequest();

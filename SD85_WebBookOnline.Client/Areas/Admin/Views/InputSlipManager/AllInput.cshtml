@@ -5,6 +5,7 @@
     ViewData["Title"] = "AllInput";
      Layout = "~/Views/Shared/_Layout.cshtml";
      IEnumerable<Book> lstBook = ViewBag.lstBook as IEnumerable<Book>;
+    IEnumerable<User> ListUser = ViewBag.ListUser as IEnumerable<User>;
 }
 
 <h1>Quản lý phiếu nhập</h1>
@@ -59,7 +60,8 @@
                 @stt
             </td>
             <td>
-                @item.IdNhanVienNhap
+                @(item.IdNhanVienNhap != null 
+                ? ListUser.FirstOrDefault(c => c.Id == item.IdNhanVienNhap)?.UserName : "")
             </td>
              <td>
                  @(item.IdSachNhap != null 
@@ -113,16 +115,7 @@
             
            
           </div>
-           <div class="mb-3">
-            <label for="cb_nv" class="form-label">Nhân viên nhập</label>
-           
-             <select id="cb_nv" class="form-select" aria-label="Default select example">
-                <option value="">Tên nhân viên??</option>
-            </select>
-                    
-            
-           
-          </div>
+          
 
           <div class="mb-3">
             <label for="btn_soluong" class="form-label">Số lượng</label>
@@ -137,10 +130,6 @@
             <input type="number" class="form-control" id="btn_ban" value="">
           </div> 
 
-          <div class="mb-3">
-            <label for="btn_ngaynhap" class="form-label">Ngày nhập</label>
-            <input type="date" class="form-control" id="btn_ngaynhap" value="">
-          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

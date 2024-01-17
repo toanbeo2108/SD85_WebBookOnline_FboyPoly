@@ -51,23 +51,23 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6adaa781-c759-448a-bc36-7ef4431bc3f7",
-                            ConcurrencyStamp = "8d382d68-b7f0-4550-a473-fda28bc4eb63",
+                            Id = "8579f0b6-c6e5-49ff-a0cd-74d47926e1f0",
+                            ConcurrencyStamp = "73fd8342-2124-4201-b8f4-4487e7a818cb",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "c088cb0e-ea2f-41a9-b0a0-4a473347550f",
-                            ConcurrencyStamp = "dac29592-09ae-410a-bd50-ea5798eaccf4",
+                            Id = "c26d6a61-b923-47fd-9e19-cae8e1095208",
+                            ConcurrencyStamp = "7ccb0a91-358a-4e81-a64f-e46d9590f01b",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "9baa8d3e-b643-4922-98a7-54a0c796e596",
-                            ConcurrencyStamp = "810dd295-79de-42f5-b3cc-a65c96d7dd9f",
-                            Name = "Empolyee",
+                            Id = "ddad87d6-4557-4c40-ae48-6bb41857f7ee",
+                            ConcurrencyStamp = "9e094a91-27ca-4e62-b67c-e884a1cabada",
+                            Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
                 });
@@ -450,8 +450,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<decimal>("Volume")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
 
                     b.Property<int>("YearOfRelease")
                         .HasColumnType("int");
@@ -826,8 +826,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<decimal?>("GiaNhap")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("IdNhanVienNhap")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("IdNhanVienNhap")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("IdSachNhap")
                         .HasColumnType("uniqueidentifier");

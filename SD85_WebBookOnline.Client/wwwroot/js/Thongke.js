@@ -1,7 +1,7 @@
 ﻿
 
 $(document).ready(function () {
-
+    InitComBo();
     InitPage()
     $('#tittle').text('Thống kê doanh thu sách bán lẻ')
 
@@ -69,6 +69,62 @@ $(document).ready(function () {
     })
 })
 
+function InitPage() {
+    $.get('/GetThongKe', function (re) {
+        if (re.status) {
+            // Hủy DataTable hiện tại (nếu có)
+            if ($.fn.DataTable.isDataTable('#table-thongke')) {
+                $('#table-thongke').DataTable().destroy();
+            }
+
+            let header = `
+                <thead>
+                    <tr>
+                        <th>Tên sách</th>
+                        <th>Tổng số sách bán được</th>
+                        <th>Tổng doanh thu</th>
+                        <th>Lợi nhuận</th>
+                        <th>Chi phí gốc</th>
+                        <th>Số sách còn lại</th>
+                    </tr>
+                </thead>`;
+            let body = '';
+
+            // Log dữ liệu từ server
+            console.log("Dữ liệu từ server:", re.data);
+
+            if (re.data.length > 0) {
+                re.data.forEach(row => {
+                    let tr = `<tr>
+                                <td>${row.tensach}</td>
+                                <td>${row.tongDoanhThusach}</td>
+                                <td>${row.tongSoSachBanDuoc}</td>
+                                <td>${row.loiNhuansach}</td>
+                                <td>${row.chiPhiGocsach}</td>
+                                <td>${row.soSachConLai != 0 ? row.soSachConLai : ''}</td>
+                              </tr>`;
+                    body += tr;
+
+                });
+            }
+
+            // Thêm table vào HTML
+            $('#table-thongke').html(header + body);
+
+            // Khởi tạo DataTable
+            $('#table-thongke').DataTable({
+                "pageLength": 5,
+                "searching": false
+            });
+
+            
+        } else {
+            alert(re.message);
+        }
+    });
+}
+
+
 
 
 function getBindFormFilter() {
@@ -78,52 +134,18 @@ function getBindFormFilter() {
         _search: $('#btn_search').val(),
     }
 }
-function InitPage() {
-    $.get('/GetThongKe', function (re) {
-        if (re.status) {
-            let header = `
-                <thead>
-                    <tr>
-                        <th>Tên sách</th>
-                        <th>Tổng số sách bán được</th>
-                        <th>Tổng doanh thu</th>
-                        <th>Lợi nhuận</th>
-                        <th>Chi phí gốc</th>
-                        <th>Số sách còn lại</th>
-                    </tr>
-                </thead>`;
-            let body = '';
-            re.data.forEach(row => {
-                let tr = `<tr>
-                           
-                            <td>${row.tensach}</td>
-                            <td>${row.tongSoSachBanDuoc}</td>
-                            <td>${row.tongDoanhThusach}</td>
-                            <td>${row.loiNhuansach}</td>
-                            <td>${row.chiPhiGocsach}</td>
-                            <td>${row.soSachConLai != 0 ? row.soSachConLai : ''}</td>
-                          </tr>`;
-                body += tr;
-            });
 
-            // Cập nhật hoặc tạo mới table
-            if ($('#table-thongke').length > 0) {
-                $('#table-thongke').empty();
-                $('#table-thongke').append(header);
-                $('#table-thongke').append(body);
-            }
-        } else {
-            alert(re.message);
-        }
-    });
-}
 function InitPage2() {
     $.get('/ThongkeNgay', function (re) {
         if (re.status) {
+            // Hủy DataTable hiện tại (nếu có)
+            if ($.fn.DataTable.isDataTable('#table-thongke')) {
+                $('#table-thongke').DataTable().destroy();
+            }
+
             let header = `
                 <thead>
                     <tr>
-                       
                         <th>Tên sách</th>
                         <th>Tổng số sách bán được</th>
                         <th>Tổng doanh thu</th>
@@ -133,25 +155,34 @@ function InitPage2() {
                     </tr>
                 </thead>`;
             let body = '';
-            re.data.forEach(row => {
-                let tr = `<tr>
-                         
-                            <td>${row.tensach}</td>
-                            <td>${row.tongSoSachBanDuoc}</td>
-                            <td>${row.tongDoanhThusach}</td>
-                            <td>${row.loiNhuansach}</td>
-                            <td>${row.chiPhiGocsach}</td>
-                            <td>${row.soSachConLai != 0 ? row.soSachConLai : ''}</td>
-                          </tr>`;
-                body += tr;
+
+            // Log dữ liệu từ server
+            console.log("Dữ liệu từ server:", re.data);
+
+            if (re.data.length > 0) {
+                re.data.forEach(row => {
+                    let tr = `<tr>
+                                <td>${row.tensach}</td>
+                                <td>${row.tongSoSachBanDuoc}</td>
+                                <td>${row.tongDoanhThusach}</td>
+                                <td>${row.loiNhuansach}</td>
+                                <td>${row.chiPhiGocsach}</td>
+                                <td>${row.soSachConLai != 0 ? row.soSachConLai : ''}</td>
+                              </tr>`;
+                    body += tr;
+                });
+            }
+
+            // Thêm table vào HTML
+            $('#table-thongke').html(header + body);
+
+            // Khởi tạo DataTable
+            $('#table-thongke').DataTable({
+                "pageLength": 4,
+                "searching": false
             });
 
-            // Cập nhật hoặc tạo mới table
-            if ($('#table-thongke').length > 0) {
-                $('#table-thongke').empty();
-                $('#table-thongke').append(header);
-                $('#table-thongke').append(body);
-            }
+            
         } else {
             alert(re.message);
         }
@@ -161,10 +192,14 @@ function InitPage2() {
 function InitPage3() {
     $.post('/load-data-thongke', { filter: getBindFormFilter() }, function (re) {
         if (re.status) {
+            // Hủy DataTable hiện tại (nếu có)
+            if ($.fn.DataTable.isDataTable('#table-thongke')) {
+                $('#table-thongke').DataTable().destroy();
+            }
+
             let header = `
                 <thead>
                     <tr>
-                       
                         <th>Tên sách</th>
                         <th>Tổng số sách bán được</th>
                         <th>Tổng doanh thu</th>
@@ -174,30 +209,91 @@ function InitPage3() {
                     </tr>
                 </thead>`;
             let body = '';
-            re.data.forEach(row => {
-                let tr = `<tr>
-                         
-                            <td>${row.tensach}</td>
-                            <td>${row.tongSoSachBanDuoc}</td>
-                            <td>${row.tongDoanhThusach}</td>
-                            <td>${row.loiNhuansach}</td>
-                            <td>${row.chiPhiGocsach}</td>
-                            <td>${row.soSachConLai != 0 ? row.soSachConLai : ''}</td>
-                          </tr>`;
-                body += tr;
+
+            // Log dữ liệu từ server
+            console.log("Dữ liệu từ server:", re.data);
+
+            if (re.data.length > 0) {
+                re.data.forEach(row => {
+                    let tr = `<tr>
+                                <td>${row.tensach}</td>
+                                <td>${row.tongSoSachBanDuoc}</td>
+                                <td>${row.tongDoanhThusach}</td>
+                                <td>${row.loiNhuansach}</td>
+                                <td>${row.chiPhiGocsach}</td>
+                                <td>${row.soSachConLai != 0 ? row.soSachConLai : ''}</td>
+                              </tr>`;
+                    body += tr;
+                });
+            }
+
+            // Thêm table vào HTML
+            $('#table-thongke').html(header + body);
+
+            // Khởi tạo DataTable
+            $('#table-thongke').DataTable({
+                "pageLength": 4,
+                "searching": false
             });
 
-            // Cập nhật hoặc tạo mới table
-            if ($('#table-thongke').length > 0) {
-                $('#table-thongke').empty();
-                $('#table-thongke').append(header);
-                $('#table-thongke').append(body);
-            }
+           
         } else {
             alert(re.message);
         }
     });
 }
+
+function InitComBo() {
+    $.get('/GetComBo', function (re) {
+        if (re.status) {
+            // Hủy DataTable hiện tại (nếu có)
+            if ($.fn.DataTable.isDataTable('#thong_keCombo')) {
+                $('#thong_keCombo').DataTable().destroy();
+            }
+
+            let header = `
+                <thead>
+                    <tr>
+                        <th>Tên sách</th>
+                        <th>Tổng Combo bán được</th>
+                        <th>Tổng doanh thu</th>
+                       
+                    </tr>
+                </thead>`;
+            let body = '';
+
+            // Log dữ liệu từ server
+            console.log("Dữ liệu từ server:", re.data);
+
+            if (re.data.length > 0) {
+                re.data.forEach(row => {
+                    let tr = `<tr>
+                                <td>${row.tensach}</td>
+                                <td>${row.tongDoanhThusach}</td>
+                                <td>${row.tongSoSachBanDuoc}</td>
+                               
+                              </tr>`;
+                    body += tr;
+
+                });
+            }
+
+            // Thêm table vào HTML
+            $('#thong_keCombo').html(header + body);
+
+            // Khởi tạo DataTable
+            $('#thong_keCombo').DataTable({
+                "pageLength": 5,
+                "searching": false
+            });
+
+
+        } else {
+            alert(re.message);
+        }
+    });
+}
+
 
 function generateExcel() {
     if ($('#thongke-options').val() == 1) {
@@ -279,60 +375,4 @@ function excel(data) {
         link.click();
         document.body.removeChild(link);
     });
-}
-
-
-
-function excel_(data) {
-    var workbook = new ExcelJS.Workbook();
-    var worksheet = workbook.addWorksheet('ThongKeSheet');
-    var headerRow = worksheet.addRow([
-        'Tên sách',
-        'Tổng số sách bán được',
-        'Tổng doanh thu',
-        'Lợi nhuận',
-        'Chi phí gốc',
-        'Số sách còn lại'
-    ]);
-    for (var i = 1; i <= 6; i++) {
-        headerRow.getCell(i).fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            fgColor: { argb: 'FF008000' }
-        }
-        data.forEach(function (item) {
-            var dataRow = worksheet.addRow([
-                item.tensach,
-                item.tongSoSachBanDuoc,
-                item.tongDoanhThusach,
-                item.loiNhuansach,
-                item.chiPhiGocsach,
-                item.soSachConLai != 0 ? item.soSachConLai : ''
-            ]);
-        });
-        //var footerRow = worksheet.addRow([
-        //    'Tổng cộng',
-        //    data.reduce((sum, item) => sum + item.tongSoSachBanDuoc, 0),
-        //    data.reduce((sum, item) => sum + item.tongDoanhThusach, 0),
-        //    data.reduce((sum, item) => sum + item.loiNhuansach, 0),
-        //    data.reduce((sum, item) => sum + item.chiPhiGocsach, 0),
-        //    ''
-        //]);
-        //for (var i = 1; i <= 6; i++) {
-        //    footerRow.getCell(i).fill = {
-        //        type: 'pattern',
-        //        pattern: 'solid',
-        //        fgColor: { argb: 'FFFFD700' }
-        //    };
-        //}
-        workbook.xlsx.writeBuffer().then(buffer => {
-            var blob = new Blob([buffer], { type: 'application/octet-stream' });
-            var link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = 'ThongKe.xlsx';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-    }
 }

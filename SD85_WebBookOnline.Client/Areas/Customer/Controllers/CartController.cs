@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SD85_WebBookOnline.Client.Controllers;
+using SD85_WebBookOnline.Client.Models;
 using SD85_WebBookOnline.Client.Services;
 using SD85_WebBookOnline.Share.Models;
 using SD85_WebBookOnline.Share.ViewModels;
 using System.Globalization;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Helpers;
@@ -86,6 +88,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
         }
         [HttpGet]
         public async Task<IActionResult> Detail_cb(Guid id)
+
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -109,6 +112,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             ViewBag.combo = combo;
             return View();
         }
+
         public async Task<IActionResult> AddToCart(Guid id, int quantity)
         {
             // lấy list book
@@ -167,6 +171,15 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                     cartItems.Quantity = quantity;
                     cartItems.ToTal = cartItems.Price * cartItems.Quantity;
                     cartItems.Status = 1;
+                    // Dùng API thêm vào database
+                    var urlCreateCartItems = $"https://localhost:7079/api/CartItem/Add-CartItem?CartID={cart.CartId}&BookID={cartItems.BookID}&image={cartItems.Image}&ItemName={cartItems.ItemName}&Price={cartItems.Price}&Quantity={cartItems.Quantity}&ToTal={cartItems.ToTal}&Status={cartItems.Status}";
+                    var contentCreateCartItems = new StringContent(JsonConvert.SerializeObject(cartItems), Encoding.UTF8, "application/json");
+                    var responCreateCartItems = await _httpClient.PostAsync(urlCreateCartItems, contentCreateCartItems);
+                    if (!responCreateCartItems.IsSuccessStatusCode)
+                    {
+                        return BadRequest("Lỗi thêm vào chi tiết giỏ hàng ( CartItems )");
+                    }
+
                 }
                 if (combo != null)
                 {
@@ -178,15 +191,16 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                     cartItems.Quantity = quantity;
                     cartItems.ToTal = cartItems.Price * cartItems.Quantity;
                     cartItems.Status = 1;
+                    // Dùng API thêm vào database
+                    var urlCreateCartItems = $"https://localhost:7079/api/CartItem/Add-CartItem?CartID={cart.CartId}&ComboID={cartItems.ComboID}&image={cartItems.Image}&ItemName={cartItems.ItemName}&Price={cartItems.Price}&Quantity={cartItems.Quantity}&ToTal={cartItems.ToTal}&Status={cartItems.Status}";
+                    var contentCreateCartItems = new StringContent(JsonConvert.SerializeObject(cartItems), Encoding.UTF8, "application/json");
+                    var responCreateCartItems = await _httpClient.PostAsync(urlCreateCartItems, contentCreateCartItems);
+                    if (!responCreateCartItems.IsSuccessStatusCode)
+                    {
+                        return BadRequest("Lỗi thêm vào chi tiết giỏ hàng ( CartItems )");
+                    }
                 }
-                // Dùng API thêm vào database
-                var urlCreateCartItems = $"https://localhost:7079/api/CartItem/Add-CartItem?CartID={cart.CartId}&BookID={cartItems.BookID}&image={cartItems.Image}&ItemName={cartItems.ItemName}&Price={cartItems.Price}&Quantity={cartItems.Quantity}&ToTal={cartItems.ToTal}&Status={cartItems.Status}";
-                var contentCreateCartItems = new StringContent(JsonConvert.SerializeObject(cartItems), Encoding.UTF8, "application/json");
-                var responCreateCartItems = await _httpClient.PostAsync(urlCreateCartItems, contentCreateCartItems);
-                if (!responCreateCartItems.IsSuccessStatusCode)
-                {
-                    return BadRequest("Lỗi thêm vào chi tiết giỏ hàng ( CartItems )");
-                }
+               
             }
 
             // Lấy được danh sách CartItems dựa theo những Cart chưa thanh toán kia :
@@ -196,61 +210,141 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                 var responCartItems = await _httpClient.GetAsync(urlCartItems);
                 string apiDataCartItems = await responCartItems.Content.ReadAsStringAsync();
                 var ListCartItems = JsonConvert.DeserializeObject<List<CartItems>>(apiDataCartItems);
-
-                // Kiểm tra xem sản phẩm tồn tại trong giỏ hàng chưa
-                CartItems existingItem = ListCartItems.FirstOrDefault(x => x.BookID == book.BookID);
-                if (existingItem != null)
+                if (combo != null)
                 {
-                    // Nếu sách đã có, tăng số lượng lên 
-                    existingItem.Quantity += quantity;
-                    existingItem.ToTal = existingItem.Price * existingItem.Quantity;
-
-                    // Cập nhật lại trong database
-                    var urlUpdateCartItems = $"https://localhost:7079/api/CartItem/Update-CartItem/{existingItem.CartItemID}";
-                    var contentUpdateCartItems = new StringContent(JsonConvert.SerializeObject(existingItem), Encoding.UTF8, "application/json");
-                    var responeUpdateCartItems = await _httpClient.PutAsync(urlUpdateCartItems, contentUpdateCartItems);
-                    if (!responeUpdateCartItems.IsSuccessStatusCode)
+                    // Kiểm tra xem sản phẩm tồn tại trong giỏ hàng chưa
+                    CartItems existingItem = ListCartItems.FirstOrDefault(x => x.ComboID == combo.ComboID);
+                    // Kiểm tra xem sản phẩm tồn tại trong giỏ hàng chưa
+                    if (existingItem != null)
                     {
-                        return BadRequest("Lỗi ko thể cập nhật lại số lượng sản phẩm");
+                        // Nếu sách đã có, tăng số lượng lên 
+                        existingItem.Quantity += quantity;
+                        existingItem.ToTal = existingItem.Price * existingItem.Quantity;
+
+                        // Cập nhật lại trong database
+                        var urlUpdateCartItems = $"https://localhost:7079/api/CartItem/Update-CartItem/{existingItem.CartItemID}";
+                        var contentUpdateCartItems = new StringContent(JsonConvert.SerializeObject(existingItem), Encoding.UTF8, "application/json");
+                        var responeUpdateCartItems = await _httpClient.PutAsync(urlUpdateCartItems, contentUpdateCartItems);
+                        if (!responeUpdateCartItems.IsSuccessStatusCode)
+                        {
+                            return BadRequest("Lỗi ko thể cập nhật lại số lượng sản phẩm");
+                        }
+                    }
+                    else
+                    {
+                        CartItems cartItems = new CartItems();
+                        cartItems.CartItemID = Guid.NewGuid();
+                        cartItems.CartID = null;
+                        if (book != null)
+                        {
+                            cartItems.BookID = book.BookID;
+                            cartItems.ComboID = null;
+                            cartItems.ItemName = book.BookName;
+                            cartItems.Image = book.MainPhoto;
+                            cartItems.Price = book.Price;
+                            cartItems.Quantity = quantity;
+                            cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                            cartItems.Status = 1;
+                            // Dùng API thêm vào database
+                            var urlCreateCartItems = $"https://localhost:7079/api/CartItem/Add-CartItem?CartID={Cart.CartId}&BookID={cartItems.BookID}&image={cartItems.Image}&ItemName={cartItems.ItemName}&Price={cartItems.Price}&Quantity={cartItems.Quantity}&ToTal={cartItems.ToTal}&Status={cartItems.Status}";
+                            var contentCreateCartItems = new StringContent(JsonConvert.SerializeObject(cartItems), Encoding.UTF8, "application/json");
+                            var responCreateCartItems = await _httpClient.PostAsync(urlCreateCartItems, contentCreateCartItems);
+                            if (!responCreateCartItems.IsSuccessStatusCode)
+                            {
+                                return BadRequest("Lỗi thêm vào chi tiết giỏ hàng ( CartItems )");
+                            }
+
+                        }
+                        if (combo != null)
+                        {
+                            cartItems.BookID = null;
+                            cartItems.ComboID = combo.ComboID;
+                            cartItems.ItemName = combo.ComboName;
+                            cartItems.Image = combo.Image;
+                            cartItems.Price = combo.Price;
+                            cartItems.Quantity = quantity;
+                            cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                            cartItems.Status = 1;
+
+                            // Dùng API thêm vào database
+                            var urlCreateCartItems = $"https://localhost:7079/api/CartItem/Add-CartItem?CartID={Cart.CartId}&ComboID={cartItems.ComboID}&image={cartItems.Image}&ItemName={cartItems.ItemName}&Price={cartItems.Price}&Quantity={cartItems.Quantity}&ToTal={cartItems.ToTal}&Status={cartItems.Status}";
+                            var contentCreateCartItems = new StringContent(JsonConvert.SerializeObject(cartItems), Encoding.UTF8, "application/json");
+                            var responCreateCartItems = await _httpClient.PostAsync(urlCreateCartItems, contentCreateCartItems);
+                            if (!responCreateCartItems.IsSuccessStatusCode)
+                            {
+                                return BadRequest("Lỗi thêm vào chi tiết giỏ hàng ( CartItems )");
+                            }
+                        }
+
                     }
                 }
                 else
                 {
-                    CartItems cartItems = new CartItems();
-                    cartItems.CartItemID = Guid.NewGuid();
-                    cartItems.CartID = null;
-                    if (book != null)
+                    CartItems existingItem = ListCartItems.FirstOrDefault(x => x.BookID == book.BookID);
+                    // Kiểm tra xem sản phẩm tồn tại trong giỏ hàng chưa
+                    if (existingItem != null)
                     {
-                        cartItems.BookID = book.BookID;
-                        cartItems.ComboID = null;
-                        cartItems.ItemName = book.BookName;
-                        cartItems.Image = book.MainPhoto;
-                        cartItems.Price = book.Price;
-                        cartItems.Quantity = quantity;
-                        cartItems.ToTal = cartItems.Price * cartItems.Quantity;
-                        cartItems.Status = 1;
+                        // Nếu sách đã có, tăng số lượng lên 
+                        existingItem.Quantity += quantity;
+                        existingItem.ToTal = existingItem.Price * existingItem.Quantity;
+
+                        // Cập nhật lại trong database
+                        var urlUpdateCartItems = $"https://localhost:7079/api/CartItem/Update-CartItem/{existingItem.CartItemID}";
+                        var contentUpdateCartItems = new StringContent(JsonConvert.SerializeObject(existingItem), Encoding.UTF8, "application/json");
+                        var responeUpdateCartItems = await _httpClient.PutAsync(urlUpdateCartItems, contentUpdateCartItems);
+                        if (!responeUpdateCartItems.IsSuccessStatusCode)
+                        {
+                            return BadRequest("Lỗi ko thể cập nhật lại số lượng sản phẩm");
+                        }
                     }
-                    if (combo != null)
+                    else
                     {
-                        cartItems.BookID = null;
-                        cartItems.ComboID = combo.ComboID;
-                        cartItems.ItemName = combo.ComboName;
-                        cartItems.Image = combo.Image;
-                        cartItems.Price = combo.Price;
-                        cartItems.Quantity = quantity;
-                        cartItems.ToTal = cartItems.Price * cartItems.Quantity;
-                        cartItems.Status = 1;
-                    }
-                    // Dùng API thêm vào database
-                    var urlCreateCartItems = $"https://localhost:7079/api/CartItem/Add-CartItem?CartID={Cart.CartId}&BookID={cartItems.BookID}&image={cartItems.Image}&ItemName={cartItems.ItemName}&Price={cartItems.Price}&Quantity={cartItems.Quantity}&ToTal={cartItems.ToTal}&Status={cartItems.Status}";
-                    var contentCreateCartItems = new StringContent(JsonConvert.SerializeObject(cartItems), Encoding.UTF8, "application/json");
-                    var responCreateCartItems = await _httpClient.PostAsync(urlCreateCartItems, contentCreateCartItems);
-                    if (!responCreateCartItems.IsSuccessStatusCode)
-                    {
-                        return BadRequest("Lỗi thêm vào chi tiết giỏ hàng ( CartItems )");
+                        CartItems cartItems = new CartItems();
+                        cartItems.CartItemID = Guid.NewGuid();
+                        cartItems.CartID = null;
+                        if (book != null)
+                        {
+                            cartItems.BookID = book.BookID;
+                            cartItems.ComboID = null;
+                            cartItems.ItemName = book.BookName;
+                            cartItems.Image = book.MainPhoto;
+                            cartItems.Price = book.Price;
+                            cartItems.Quantity = quantity;
+                            cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                            cartItems.Status = 1;
+                            // Dùng API thêm vào database
+                            var urlCreateCartItems = $"https://localhost:7079/api/CartItem/Add-CartItem?CartID={Cart.CartId}&BookID={cartItems.BookID}&image={cartItems.Image}&ItemName={cartItems.ItemName}&Price={cartItems.Price}&Quantity={cartItems.Quantity}&ToTal={cartItems.ToTal}&Status={cartItems.Status}";
+                            var contentCreateCartItems = new StringContent(JsonConvert.SerializeObject(cartItems), Encoding.UTF8, "application/json");
+                            var responCreateCartItems = await _httpClient.PostAsync(urlCreateCartItems, contentCreateCartItems);
+                            if (!responCreateCartItems.IsSuccessStatusCode)
+                            {
+                                return BadRequest("Lỗi thêm vào chi tiết giỏ hàng ( CartItems )");
+                            }
+
+                        }
+                        if (combo != null)
+                        {
+                            cartItems.BookID = null;
+                            cartItems.ComboID = combo.ComboID;
+                            cartItems.ItemName = combo.ComboName;
+                            cartItems.Image = combo.Image;
+                            cartItems.Price = combo.Price;
+                            cartItems.Quantity = quantity;
+                            cartItems.ToTal = cartItems.Price * cartItems.Quantity;
+                            cartItems.Status = 1;
+
+                            // Dùng API thêm vào database
+                            var urlCreateCartItems = $"https://localhost:7079/api/CartItem/Add-CartItem?CartID={Cart.CartId}&ComboID={cartItems.ComboID}&image={cartItems.Image}&ItemName={cartItems.ItemName}&Price={cartItems.Price}&Quantity={cartItems.Quantity}&ToTal={cartItems.ToTal}&Status={cartItems.Status}";
+                            var contentCreateCartItems = new StringContent(JsonConvert.SerializeObject(cartItems), Encoding.UTF8, "application/json");
+                            var responCreateCartItems = await _httpClient.PostAsync(urlCreateCartItems, contentCreateCartItems);
+                            if (!responCreateCartItems.IsSuccessStatusCode)
+                            {
+                                return BadRequest("Lỗi thêm vào chi tiết giỏ hàng ( CartItems )");
+                            }
+                        }
+
                     }
                 }
-
             }
             return RedirectToAction("MyCart", "Cart", new { area = "Customer" });
 
@@ -293,7 +387,6 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                     {
                         ViewBag.Subtotal = subtotal;
                     }
-
                 }
             }
             return View();
@@ -306,7 +399,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             var responCartItems = await _httpClient.GetAsync(urlCartItems);
             string apiDataCartItems = await responCartItems.Content.ReadAsStringAsync();
             List<CartItems> ListCartItems = JsonConvert.DeserializeObject<List<CartItems>>(apiDataCartItems);
-            CartItems CartItemDelete = ListCartItems.FirstOrDefault(p => p.BookID == id);
+            CartItems CartItemDelete = ListCartItems.FirstOrDefault(p => p.BookID == id || p.ComboID == id);
 
             // Gọi API Xóa CartItem :
             var url = $"https://localhost:7079/api/CartItem/Delete-CartItem/{CartItemDelete.CartItemID}";
@@ -316,8 +409,18 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
         }
 
         [HttpGet] // Mở Form
-        public async Task<IActionResult> Checkout()
+        public async Task<IActionResult> Checkout(string? Voucher_code)
         {
+           
+            if (Voucher_code != null)
+            {
+                Response.Cookies.Append("Voucher_id", Voucher_code);
+            }
+            var UrlVoucher = $"https://localhost:7079/api/Voucher/GetVoucherByVoucherCode?VoucherCode={Voucher_code}";
+            var responeVoucher = await _httpClient.GetAsync(UrlVoucher);
+            string apiDataVoucher = await responeVoucher.Content.ReadAsStringAsync();
+            var voucher = JsonConvert.DeserializeObject<Voucher>(apiDataVoucher);
+            ViewBag.Voucher = voucher;
             string UserId = Request.Cookies["UserID"];
             if (UserId == null)
             {
@@ -358,27 +461,21 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             }
             return View();
         }
-        public async Task<IActionResult> Test()
-        {
-            return View();
-        }
 
         [HttpPost] // Gửi
-        public async Task<IActionResult> Checkout_saveBill(SaveBillViewModel ModelBill, decimal Total)
+        public async Task<IActionResult> Checkout_saveBill(SaveBillViewModel ModelBill, decimal Total, int to_district_id, int to_ward_code)
         {
             // Authorize
             var UserId = Request.Cookies["UserID"];
+            var Voucher_code = Request.Cookies["Voucher_code"];
 
-            var UrlLocation = "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
-            var responseLocation = await _httpClient.GetAsync(UrlLocation);
-            var jsonLocation = await responseLocation.Content.ReadAsStringAsync();
-            List<SD85_WebBookOnline.Share.ViewModels.Location.City> dataLocation = JsonConvert.DeserializeObject<List<SD85_WebBookOnline.Share.ViewModels.Location.City>>(jsonLocation);
-            var city = dataLocation.FirstOrDefault(c => c.Id == ModelBill.City);
-            var district = city?.Districts.FirstOrDefault(d => d.Id == ModelBill.District);
-            var ward = district?.Wards.FirstOrDefault(w => w.Id == ModelBill.Ward);
+            var UrlVoucher = $"https://localhost:7079/api/Voucher/GetVoucherByVoucherCode?VoucherCode={Voucher_code}";
+            var responeVoucher = await _httpClient.GetAsync(UrlVoucher);
+            string apiDataVoucher = await responeVoucher.Content.ReadAsStringAsync();
+            var voucher = JsonConvert.DeserializeObject<Voucher>(apiDataVoucher);
 
             // đầu tiên cần check xem số lượng trong giỏ hàng có đủ trong db không
-
+            int weight = 5000;
             // Lấy tất cả CartItems của User
             var urlCart = $"https://localhost:7079/api/Cart/GetCartByIdUser/{UserId}?status=1";
             var responCart = await _httpClient.GetAsync(urlCart);
@@ -394,24 +491,70 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 
                 foreach (var item in ListCartItems)
                 {
-                    var UrlCheck = $"https://localhost:7079/api/CartItem/CheckQuantity?IdCartItems={item.CartItemID}&QuantityCartItem={item.Quantity}";
-                    var contentCheck = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
-                    var responseCheck = await _httpClient.PostAsync(UrlCheck, contentCheck);
-                    if (responseCheck.IsSuccessStatusCode)
+                    if (item.ComboID != null)
                     {
-                        string result = await responseCheck.Content.ReadAsStringAsync();
-                        var KqCheck = JsonConvert.DeserializeObject<bool>(result);
-                        if (KqCheck != true)
+                        var UrlCheck = $"https://localhost:7079/api/Combo/CheckQuantity?ComboID={item.ComboID}&Quantity={item.Quantity}";
+                        var contentCheck = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+                        var responseCheck = await _httpClient.PostAsync(UrlCheck, contentCheck);
+
+                        // Lấy sách ra để cộng thêm vào tổng cân nặng của sách
+
+                        if (responseCheck.IsSuccessStatusCode)
                         {
-                            return BadRequest("Số lượng sản phẩm không đáp ứng đủ, Hãy thử xóa sản phẩm '" + item.ItemName + "' ra khỏi giỏ hàng");
+                            string result = await responseCheck.Content.ReadAsStringAsync();
+                            var KqCheck = JsonConvert.DeserializeObject<bool>(result);
+                            if (KqCheck != true)
+                            {
+                                return BadRequest("Số lượng sản phẩm không đáp ứng đủ, Hãy thử xóa sản phẩm '" + item.ItemName + "' ra khỏi giỏ hàng");
+                            }
+                        }
+                        else
+                        {
+                            return BadRequest("Lỗi kiểm tra số lượng sản phẩm trong giỏ");
                         }
                     }
-                    else
+
+                    if (item.BookID != null)
                     {
-                        return BadRequest("Lỗi kiểm tra số lượng sản phẩm trong giỏ");
+                        var UrlCheck = $"https://localhost:7079/api/CartItem/CheckQuantity?IdCartItems={item.CartItemID}&QuantityCartItem={item.Quantity}";
+                        var contentCheck = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+                        var responseCheck = await _httpClient.PostAsync(UrlCheck, contentCheck);
+
+                        if (responseCheck.IsSuccessStatusCode)
+                        {
+                            string result = await responseCheck.Content.ReadAsStringAsync();
+                            var KqCheck = JsonConvert.DeserializeObject<bool>(result);
+                            if (KqCheck != true)
+                            {
+                                return BadRequest("Số lượng sản phẩm không đáp ứng đủ, Hãy thử xóa sản phẩm '" + item.ItemName + "' ra khỏi giỏ hàng");
+                            }
+                        }
+                        else
+                        {
+                            return BadRequest("Lỗi kiểm tra số lượng sản phẩm trong giỏ");
+                        }
                     }
+                    
                 }
             }
+
+            // TÍnh giá tiền Ship :
+            var feeShipUrl = $"https://localhost:7079/api/GhnApi/get-feeShip?to_district_id={to_district_id}&to_ward_code={to_ward_code}&weight={weight}";
+            var responseFeeShip = await _httpClient.GetAsync(feeShipUrl);
+            if (!responseFeeShip.IsSuccessStatusCode)
+            {
+                return BadRequest("Error getting shipping fee from GHN API");
+            }
+            var contentFeeShip = await responseFeeShip.Content.ReadAsStringAsync();
+            var feeShipData = JsonConvert.DeserializeObject<feeShipGhnViewModel>(contentFeeShip);
+
+            if (feeShipData == null && feeShipData.code != 200)
+            {
+                return BadRequest("Error getting shipping fee from GHN API");
+            }
+            decimal shippingFee = feeShipData.data.total;
+            decimal? voucher_amount = voucher.DiscountAmount;
+
             // Tạo 1 Bill :
             var newBillId = Guid.NewGuid();
             Bill newBill = new Bill();
@@ -420,21 +563,27 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             newBill.Email = ModelBill.Email;
             newBill.ReceiverName = ModelBill.firstName + " " + ModelBill.lastName;
             newBill.UserPhone = ModelBill.UserPhone;
+            // Sử dụng giá trị tên của tỉnh, quận, và xã/phường
+            newBill.AddressUser = ModelBill.ProvinceName + "," + ModelBill.DistrictName + "," + ModelBill.WardName;
             if (ModelBill.Street != null)
             {
-                newBill.AddressUser = city.Name + "," + district.Name + "," + ward.Name + "," + ModelBill.Street;
+                newBill.AddressUser += "," + ModelBill.Street;
+            }
+            newBill.Shipmoney = shippingFee;
+            newBill.PriceBeforeVoucher = shippingFee + Total;
+            if (voucher_amount == null)
+            {
+                newBill.Total = Total + shippingFee;
             }
             else
             {
-                newBill.AddressUser = city.Name + "," + district.Name + "," + ward.Name;
+                newBill.Total = Total + shippingFee - voucher_amount;
             }
-            newBill.Total = Total;
-            newBill.Shipmoney = 10;
             newBill.PaymentMethod = ModelBill.PaymentMethod;
             newBill.Status = 1;
 
             // Lưu Bill vào cơ sở dữ liệu :
-            var urlBill = $"https://localhost:7079/api/Bill/CreateBillWithManualBillId?priceBeforeVoucher={newBill.Total}&ReceiverName={newBill.ReceiverName}&Email={newBill.Email}&BillID={newBill.BillID}&UserID={newBill.UserID}&shipmoney={newBill.Shipmoney}&userPhone={newBill.UserPhone}&addressUser={newBill.AddressUser}&orderDate={DateTime.Today}&deliveryDate={DateTime.Today.AddDays(5)}&total={newBill.Total}&paymentMethod={newBill.PaymentMethod}&status={newBill.Status}";
+            var urlBill = $"https://localhost:7079/api/Bill/CreateBillWithManualBillId?priceBeforeVoucher={newBill.Total}&ReceiverName={newBill.ReceiverName}&Email={newBill.Email}&BillID={newBill.BillID}&UserID={newBill.UserID}&shipmoney={newBill.Shipmoney}&userPhone={newBill.UserPhone}&addressUser={newBill.AddressUser}&orderDate={DateTime.Now}&deliveryDate={DateTime.Today.AddDays(5)}&total={newBill.Total}&paymentMethod={newBill.PaymentMethod}&status={newBill.Status}";
             var content = new StringContent(JsonConvert.SerializeObject(newBill), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(urlBill, content);
             if (!response.IsSuccessStatusCode)
@@ -454,54 +603,118 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 
                     foreach (var item in ListCartItems)
                     {
-                        var urlBook = $"https://localhost:7079/api/Book/GetBookByID/{item.BookID}";
-                        var responseGetBookInfo = await _httpClient.GetAsync(urlBook);
-                        string apiDataBookInfo = await responseGetBookInfo.Content.ReadAsStringAsync();
-                        var bookInfo = JsonConvert.DeserializeObject<Book>(apiDataBookInfo);
-                        // Tạo các BillItems từ các CartItem đã lưu :
-                        BillItems billItems = new BillItems();
-                        billItems.BillItemID = Guid.NewGuid();
-                        billItems.BillID = newBillId;
-                        billItems.BookID = item.BookID;
-                        billItems.ItemName = item.ItemName;
-                        billItems.Price = item.Price;
-                        billItems.GiaNhap = bookInfo.EntryPrice;
-                        billItems.Quantity = item.Quantity;
-                        billItems.ToTal = billItems.Quantity * billItems.Price;
-                        billItems.Status = 1;
-
-                        // Sau khi tạo xong thì lưu nó vô database
-                        var urlSaveBillItems = $"https://localhost:7079/api/BillItem/CreateBillItem?bookid={billItems.BookID}&billid={billItems.BillID}&itemname={billItems.ItemName}&price={billItems.Price}&quantity={billItems.Quantity}&total={billItems.ToTal}&giaNhap={billItems.GiaNhap}";
-                        var contentBillItem = new StringContent(JsonConvert.SerializeObject(billItems), Encoding.UTF8, "application/json");
-                        var responseCBIT = await _httpClient.PostAsync(urlSaveBillItems, contentBillItem);
-                        if (!responseCBIT.IsSuccessStatusCode)
+                        if (item.BookID != null)
                         {
-                            return BadRequest("Thêm không thành công");
+                            var urlBook = $"https://localhost:7079/api/Book/GetBookByID/{item.BookID}";
+                            var responseGetBookInfo = await _httpClient.GetAsync(urlBook);
+                            string apiDataBookInfo = await responseGetBookInfo.Content.ReadAsStringAsync();
+                            var bookInfo = JsonConvert.DeserializeObject<Book>(apiDataBookInfo);
+                            // Tạo các BillItems từ các CartItem đã lưu :
+                            BillItems billItems = new BillItems();
+                            billItems.BillItemID = Guid.NewGuid();
+                            billItems.BillID = newBillId;
+                            billItems.BookID = item.BookID;
+                            billItems.ItemName = item.ItemName;
+                            billItems.Price = item.Price;
+                            billItems.GiaNhap = bookInfo.EntryPrice;
+                            billItems.Quantity = item.Quantity;
+                            billItems.ToTal = billItems.Quantity * billItems.Price;
+                            billItems.Status = 1;
+
+                            // Sau khi tạo xong thì lưu nó vô database
+                            var urlSaveBillItems = $"https://localhost:7079/api/BillItem/CreateBillItem?bookid={billItems.BookID}&billid={billItems.BillID}&itemname={billItems.ItemName}&price={billItems.Price}&quantity={billItems.Quantity}&total={billItems.ToTal}&giaNhap={billItems.GiaNhap}";
+                            var contentBillItem = new StringContent(JsonConvert.SerializeObject(billItems), Encoding.UTF8, "application/json");
+                            var responseCBIT = await _httpClient.PostAsync(urlSaveBillItems, contentBillItem);
+                            if (!responseCBIT.IsSuccessStatusCode)
+                            {
+                                return BadRequest("Thêm không thành công");
+                            }
+
+                            // Cập nhật lại số lượng sản phẩm trong database
+                            var urlUpdateQuantity = $"https://localhost:7079/api/Book/BuyBook?id={item.BookID}&quantityBuy={item.Quantity}";
+                            var contentUpdateQuantity = new StringContent(JsonConvert.SerializeObject(billItems), Encoding.UTF8, "application/json");
+                            var responseUpdateQuantity = await _httpClient.PutAsync(urlUpdateQuantity, contentUpdateQuantity);
+                            if (!responseUpdateQuantity.IsSuccessStatusCode)
+                            {
+                                return BadRequest("Lỗi cập nhật lại số lượng sản phẩm");
+                            }
+                            // Xóa sản phẩm ra khỏi giỏ hàng 
+                            var urlDelete = $"https://localhost:7079/api/CartItem/Delete-CartItem/{item.CartItemID}";
+                            var responDelete = await _httpClient.DeleteAsync(urlDelete);
+                            if (!responDelete.IsSuccessStatusCode)
+                            {
+                                return BadRequest("Lỗi xóa sản phẩm khỏi giỏ hàng");
+                            }
                         }
 
-                        // Cập nhật lại số lượng sản phẩm trong database
-                        var urlUpdateQuantity = $"https://localhost:7079/api/Book/BuyBook?id={item.BookID}&quantityBuy={item.Quantity}";
-                        var contentUpdateQuantity = new StringContent(JsonConvert.SerializeObject(billItems), Encoding.UTF8, "application/json");
-                        var responseUpdateQuantity = await _httpClient.PutAsync(urlUpdateQuantity, contentBillItem);
-                        if (!responseUpdateQuantity.IsSuccessStatusCode)
+                        if (item.ComboID != null)
                         {
-                            return BadRequest("Lỗi cập nhật lại số lượng sản phẩm");
-                        }
-                        // Xóa sản phẩm ra khỏi giỏ hàng 
-                        var urlDelete = $"https://localhost:7079/api/CartItem/Delete-CartItem/{item.CartItemID}";
-                        var responDelete = await _httpClient.DeleteAsync(urlDelete);
-                        if (!responDelete.IsSuccessStatusCode)
-                        {
-                            return BadRequest("Lỗi xóa sản phẩm khỏi giỏ hàng");
+                            var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+                            var responCombo = await _httpClient.GetAsync(urlCombo);
+                            string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+                            var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+                            Combo combo = lstCombo.FirstOrDefault(p => p.ComboID == item.ComboID);
+                            // Tạo các BillItems từ các CartItem đã lưu :
+                            BillItems billItems = new BillItems();
+                            billItems.BillItemID = Guid.NewGuid();
+                            billItems.BillID = newBillId;
+                            billItems.ComboID = item.ComboID;
+                            billItems.ItemName = item.ItemName;
+                            billItems.Price = item.Price;
+                            billItems.Quantity = item.Quantity;
+                            billItems.ToTal = billItems.Quantity * billItems.Price;
+                            billItems.Status = 1;
+
+                            // Sau khi tạo xong thì lưu nó vô database
+                            var urlSaveBillItems = $"https://localhost:7079/api/BillItem/CreateBillItem?comboid={billItems.ComboID}&billid={billItems.BillID}&itemname={billItems.ItemName}&price={billItems.Price}&quantity={billItems.Quantity}&total={billItems.ToTal}";
+                            var contentBillItem = new StringContent(JsonConvert.SerializeObject(billItems), Encoding.UTF8, "application/json");
+                            var responseCBIT = await _httpClient.PostAsync(urlSaveBillItems, contentBillItem);
+                            if (!responseCBIT.IsSuccessStatusCode)
+                            {
+                                return BadRequest("Thêm không thành công");
+                            }
+
+                            // Cập nhật lại số lượng sản phẩm trong database
+                            var urlUpdateQuantity = $"https://localhost:7079/api/Combo/BuyCombo?id={item.ComboID}&quantityBuy={item.Quantity}";
+                            var contentUpdateQuantity = new StringContent(JsonConvert.SerializeObject(billItems), Encoding.UTF8, "application/json");
+                            var responseUpdateQuantity = await _httpClient.PutAsync(urlUpdateQuantity, contentUpdateQuantity);
+                            if (!responseUpdateQuantity.IsSuccessStatusCode)
+                            {
+                                return BadRequest("Lỗi cập nhật lại số lượng sản phẩm");
+                            }
+                            // Xóa sản phẩm ra khỏi giỏ hàng 
+                            var urlDelete = $"https://localhost:7079/api/CartItem/Delete-CartItem/{item.CartItemID}";
+                            var responDelete = await _httpClient.DeleteAsync(urlDelete);
+                            if (!responDelete.IsSuccessStatusCode)
+                            {
+                                return BadRequest("Lỗi xóa sản phẩm khỏi giỏ hàng");
+                            }
                         }
                     }
                 }
-                return RedirectToAction("GetAllBill", "Bill");
+                return RedirectToAction("GetAllBill");
             }
             
         }
-        [HttpGet]
+        public async Task<IActionResult> FormCheckBill(Guid id)
+        {
+            var urlBill = $"https://localhost:7079/api/Bill/GetBillByBillId/{id}";
+            var responeBill = await _httpClient.GetAsync(urlBill);
+            string apiDataBill = await responeBill.Content.ReadAsStringAsync();
+            Bill bill = JsonConvert.DeserializeObject<Bill>(apiDataBill);
 
+            var urlBillItems = $"https://localhost:7079/api/BillItem/GetAllBillItemByBillID/{id}";
+            var responBillItems = await _httpClient.GetAsync(urlBillItems);
+            string apiDataBillItems = await responBillItems.Content.ReadAsStringAsync();
+            List<BillItems> ListBillItems = JsonConvert.DeserializeObject<List<BillItems>>(apiDataBillItems);
+
+            ViewBag.Bill = bill;
+            ViewBag.BillItems = ListBillItems;
+            return View();
+        }
+
+
+        [HttpGet]
         public async Task<IActionResult> Book_AllRating(Guid id)
         {
 
