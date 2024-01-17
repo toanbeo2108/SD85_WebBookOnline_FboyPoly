@@ -105,7 +105,11 @@ namespace SD85_WebBookOnline.Client.Controllers
             var lstManuOk = JsonConvert.SerializeObject(lstManufacturer);
             Response.Cookies.Append("lstManu", lstManuOk);
             //
-
+            var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+            var responCombo = await _httpClient.GetAsync(urlCombo);
+            string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+            var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+            ViewBag.listCombo = lstCombo;
 
             var urlBook = $"https://localhost:7079/api/Book/get-all-book";
             var responBook = await _httpClient.GetAsync(urlBook);
@@ -333,7 +337,7 @@ namespace SD85_WebBookOnline.Client.Controllers
                 myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
             }
 
-            var existingItem = myListCartItem.FirstOrDefault(x => x.BookID == book.BookID);
+            var existingItem = myListCartItem.FirstOrDefault(x => x.BookID == id || x.ComboID == id);
             if (existingItem != null)
             {
                 // Nếu sách đã có, tăng số lượng lên

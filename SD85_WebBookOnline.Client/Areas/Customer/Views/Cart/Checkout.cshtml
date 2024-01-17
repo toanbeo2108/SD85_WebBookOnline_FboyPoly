@@ -13,6 +13,9 @@
     {
         subtotal = ViewBag.Subtotal;
     }
+
+    Voucher voucher = ViewBag.Voucher;
+    decimal? GiamGIa = voucher.DiscountAmount;
 }
 <form asp-action="Checkout_saveBill" asp-controller="Cart" asp-area="Customer" asp-route-Total="@subtotal" method="post">
     <div class="container-fluid pt-5">
@@ -90,6 +93,13 @@
                             <h6 class="font-weight-medium">Subtotal</h6>
                             <h6 class="font-weight-medium">@subtotal</h6>
                         </div>
+                        @if (GiamGIa != null)
+                        {
+                            <div class="d-flex justify-content-between">
+                                <h6 class="font-weight-medium">Voucher</h6>
+                                <h6 class="font-weight-medium voucher">-@voucher.DiscountAmount</h6>
+                            </div>
+                        }
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Ship</h6>
                             <h6 class="font-weight-medium feeShip">0</h6>
@@ -228,36 +238,7 @@
             .catch(error => console.error("Error fetching wards:", error));
     });
 
-    // // Lắng nghe sự kiện khi chọn xã
-    // document.getElementById("wardSelect").addEventListener("change", function () {
-    //     const selectedWardCode = this.value;
-    //     document.getElementById("wardCode").value = selectedWardCode;
-    // });
-
-    // document.getElementById("wardSelect").addEventListener("change", async function () {
-    //     const wardSelectId = this.value;
-    //     const selectedDistrictId = document.getElementById("districtSelect").value;
-
-    //     const response = await fetch(`https://localhost:7079/api/GhnApi/get-feeShip?to_district_id=${selectedDistrictId}&to_ward_code=${wardSelectId}&weight=5000`);
-
-    //     if (!response.ok) {
-    //         console.error(`Lỗi: ${response.status}`);
-    //         return;
-    //     }
-
-    //     const result = await response.json();
-    //     if (result.code === 200) {
-    //         // Cập nhật phần tử feeShip trong HTML
-    //         document.querySelector('.feeShip').innerText = `${result.data.total}`;
-    //         // Lưu wardCode vào trường ẩn
-    //         document.getElementById("wardCode").value = wardSelectId;
-    //     } else {
-    //         console.error('Phản hồi từ máy chủ không hợp lệ');
-    //     }
-    // });
-    // Lắng nghe sự kiện khi chọn xã
-
-
+  
     // Lắng nghe sự kiện khi chọn xã
     document.getElementById("wardSelect").addEventListener("change", async function () {
         const wardSelectId = this.value;
@@ -277,14 +258,14 @@
             // Lưu wardCode vào trường ẩn
             document.getElementById("wardCode").value = wardSelectId;
             // Cập nhật tổng
-            updateTotal(@subtotal, result.data.total);
+            updateTotal(@subtotal, result.data.total,@GiamGIa);
         } else {
             console.error('Phản hồi từ máy chủ không hợp lệ');
         }
     });
 
     // Hàm cập nhật tổng giá trị
-    const updateTotal = (subtotal, feeShip) => {
+    const updateTotal = (subtotal, feeShip, discountAmount) => {
         // Kiểm tra nếu subtotal không phải là số, không thực hiện cập nhật
         if (isNaN(subtotal)) {
             console.error('subtotal không phải là số');
@@ -300,8 +281,17 @@
             return;
         }
 
-        // Thực hiện phép cộng
-        const total = subtotal + feeShipDecimal;
+        // Chuyển giảm giá sang decimal hoặc mặc định là 0 nếu discountAmount là null
+        const discountDecimal = parseFloat(discountAmount) || 0;
+
+        // Kiểm tra nếu discountAmount không phải là số, không thực hiện cập nhật
+        if (isNaN(discountDecimal)) {
+            console.error('discountAmount không phải là số');
+            return;
+        }
+
+        // Thực hiện phép cộng và trừ
+        const total = subtotal - discountDecimal + feeShipDecimal;
 
         // Cập nhật tổng giá trị trong HTML với đơn vị "đ"
         document.querySelector('.Total').innerText = `${total.toLocaleString()} đ`;
