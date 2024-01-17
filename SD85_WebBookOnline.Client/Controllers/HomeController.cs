@@ -20,7 +20,7 @@ namespace SD85_WebBookOnline.Client.Controllers
         private readonly HttpClient _httpClient;
         private readonly HttpClient _HttpClient;
         public List<CartItems> CartItemss { get; set; } = new List<CartItems>();
-        public int? TotalQuantitySold { get; set; } =0;
+        public int? TotalQuantitySold { get; set; } = 0;
         public decimal? DoanhThu { get; set; } = 0;
         public int? TotalQuantityPro { get; set; } = 0;
         public int TotalQuantityUser { get; set; } = 0;
@@ -140,10 +140,19 @@ namespace SD85_WebBookOnline.Client.Controllers
             Response.Cookies.Append("ToTalQuantityPro", totalQuantityPro);
 
             var totalQuantitySold = JsonConvert.SerializeObject(TotalQuantitySold);
-            Response.Cookies.Append("ToTalQuantityPro", totalQuantitySold);
+            Response.Cookies.Append("totalQuantitySold", totalQuantitySold);
 
             //
-
+            var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+            var httpClient = new HttpClient();
+            var responCombo = await _httpClient.GetAsync(urlCombo);
+            string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+            var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+            if(lstCombo == null)
+            {
+                return NotFound();
+            }
+            ViewBag.lstCombo = lstCombo;
             var url = $"https://localhost:7079/api/user/GetUsersByRole?roleName=User";
             var response = await _httpClient.GetAsync(url);
             string apiDataUser = await response.Content.ReadAsStringAsync();

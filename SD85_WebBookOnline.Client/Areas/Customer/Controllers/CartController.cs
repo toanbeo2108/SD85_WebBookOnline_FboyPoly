@@ -84,6 +84,31 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                 return View(Book);
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> Detail_cb(Guid id)
+        {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+            var httpClient = new HttpClient();
+            var responCombo = await _httpClient.GetAsync(urlCombo);
+            string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+            var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+            var combo = lstCombo.FirstOrDefault(x => x.ComboID == id);
+            if (combo == null)
+            {
+                return NotFound("Combo này đang null, kiểm tra lại dùm");
+            }
+            string json = Request.Cookies["lstComboItem"];
+            if (json != null)
+            {
+                List<ComboItem> myList = JsonConvert.DeserializeObject<List<ComboItem>>(json);
+                ViewBag.ListComboItem = myList;
+
+            }
+            ViewBag.combo = combo;
+            return View();
+        }
         public async Task<IActionResult> AddToCart(Guid id, int quantity)
         {
             // lấy list book
