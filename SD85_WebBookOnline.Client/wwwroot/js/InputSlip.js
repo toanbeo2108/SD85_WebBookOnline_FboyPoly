@@ -23,12 +23,12 @@ $(document).ready(function () {
             }
         })
     })
-
+    // đi ngủ đi 
     $('body').on('click', '#btn-them', function () {
         var send = getData();
 
         if ($('#btn_inpID').val() == null || $('#btn_inpID').val() == '' || $('#btn_inpID').val() == undefined) {
-            $.post('/themm-inputslipelp', { ip: send }, function (re) {
+            $.post('/themm-inputslip', { ip: send }, function (re) {
 
                 if (re.status) {
 
