@@ -105,16 +105,12 @@
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="statusToggle_@item.BookID" @(item.Status == 1 ? "checked" : "") onchange="toggleStatus('@item.BookID')">
                             <label class="form-check-label" for="statusToggle_@item.BookID">
-                               
                             </label>
                         </div>
                     </td>
                         <td style="text-align : center; margin-bottom : 20px">
-                            
-                            <button class="btn btn-primary" style="margin-bottom: 5px;" type="button" id="btn_chitiet" data-id="@item.BookID">Xem chi tiết</button> 
-                            
-                             <button type="button" class="btn btn-primary" id="btn_add_detail" data-id="@item.BookID">Thêm chi tiết sách</button>
-
+                            <button class="btn btn-primary" type="button" id="btn_chitiet" data-id="@item.BookID">Xem chi tiết</button>
+                            <a asp-action="Book_AllRating" asp-controller="RatingManager" asp-area="Admin" class="btn btn-primary" asp-route-idbookrt="@item.BookID">danh giá</a>
                         </td>
                     </tr>
                 }

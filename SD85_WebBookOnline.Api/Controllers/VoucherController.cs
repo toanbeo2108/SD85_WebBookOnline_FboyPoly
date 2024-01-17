@@ -39,7 +39,7 @@ namespace SD85_WebBookOnline.Api.Controllers
         }
 
         [HttpPost("[Action]")]
-        public async Task<bool> CreateVoucher(Guid createByID, Guid deletByID, string name,decimal quantity,string code, string description, DateTime endDate, decimal discountCondition, decimal discountAmount, int status)
+        public async Task<bool> CreateVoucher(Guid createByID, Guid deletByID, string name,decimal quantity,string code, string description, DateTime starDate, DateTime endDate, decimal discountCondition, decimal discountAmount, int status)
         {
             Voucher v = new Voucher();
             v.VoucherID = Guid.NewGuid();
@@ -49,12 +49,16 @@ namespace SD85_WebBookOnline.Api.Controllers
             v.Quantity = quantity;
             v.code = code;
             v.Description = description;
-            v.StartDate = DateTime.Now;
+            v.StartDate = starDate;
             v.EndDate = endDate;
             v.DiscountCondition = discountCondition;
             v.DiscountAmount = discountAmount;
             v.DeletByID = deletByID;
-            v.Status = 1;
+            v.Status = status;
+            if (v.Quantity == 0 || v.StartDate > DateTime.Now)
+            {
+                v.Status = 0;
+            }
             return await irespon.CreateItem(v);
         }
         [HttpPut("[Action]/{id}")]
@@ -80,6 +84,10 @@ namespace SD85_WebBookOnline.Api.Controllers
                 v.DiscountAmount = dm.DiscountAmount;
                 v.DeletByID = dm.DeletByID;
                 v.Status = dm.Status;
+                if (v.Quantity==0 || v.StartDate > DateTime.Now)
+                {
+                    v.Status = 0;
+                }
                 return await irespon.UpdateItem(v);
             }
 
