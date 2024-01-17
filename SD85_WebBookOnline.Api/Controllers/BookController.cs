@@ -31,7 +31,7 @@ namespace SD85_WebBookOnline.Api.Controllers
             return await ires.GetByID(id);
         }
         [HttpPost("add-book")]
-        public async Task<bool> addbook(Guid bookid, Guid? ManufacturerID, Guid? FormID, Guid? CouponID, string BookName, int TotalQuantity, string MainPhoto, int QuantitySold, int QuantityExists, decimal EntryPrice, decimal Price, string Information, string Description, string ISBN, int YearOfRelease, DateTime? DeleteDate, int TransactionStatus, int Status, decimal weight, decimal volume)
+        public async Task<bool> addbook(Guid bookid, Guid? ManufacturerID, Guid? FormID, Guid? CouponID, string BookName, int TotalQuantity, string MainPhoto, int QuantitySold, int QuantityExists, decimal EntryPrice, decimal Price, string Information, string Description, string ISBN, int YearOfRelease, DateTime? DeleteDate, int TransactionStatus, int Status, int weight, decimal volume)
         {
             Book b = new Book();
             b.BookID = bookid;

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SD85_WebBookOnline.Client.Controllers;
+using SD85_WebBookOnline.Client.Models;
 using SD85_WebBookOnline.Client.Services;
 using SD85_WebBookOnline.Share.Models;
 using SD85_WebBookOnline.Share.ViewModels;
 using System.Globalization;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Helpers;
@@ -333,27 +335,15 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             }
             return View();
         }
-        public async Task<IActionResult> Test()
-        {
-            return View();
-        }
 
         [HttpPost] // Gửi
-        public async Task<IActionResult> Checkout_saveBill(SaveBillViewModel ModelBill, decimal Total)
+        public async Task<IActionResult> Checkout_saveBill(SaveBillViewModel ModelBill, decimal Total, int to_district_id, int to_ward_code)
         {
             // Authorize
             var UserId = Request.Cookies["UserID"];
 
-            var UrlLocation = "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
-            var responseLocation = await _httpClient.GetAsync(UrlLocation);
-            var jsonLocation = await responseLocation.Content.ReadAsStringAsync();
-            List<SD85_WebBookOnline.Share.ViewModels.Location.City> dataLocation = JsonConvert.DeserializeObject<List<SD85_WebBookOnline.Share.ViewModels.Location.City>>(jsonLocation);
-            var city = dataLocation.FirstOrDefault(c => c.Id == ModelBill.City);
-            var district = city?.Districts.FirstOrDefault(d => d.Id == ModelBill.District);
-            var ward = district?.Wards.FirstOrDefault(w => w.Id == ModelBill.Ward);
-
             // đầu tiên cần check xem số lượng trong giỏ hàng có đủ trong db không
-
+            int weight = 5000;
             // Lấy tất cả CartItems của User
             var urlCart = $"https://localhost:7079/api/Cart/GetCartByIdUser/{UserId}?status=1";
             var responCart = await _httpClient.GetAsync(urlCart);
@@ -372,6 +362,9 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                     var UrlCheck = $"https://localhost:7079/api/CartItem/CheckQuantity?IdCartItems={item.CartItemID}&QuantityCartItem={item.Quantity}";
                     var contentCheck = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
                     var responseCheck = await _httpClient.PostAsync(UrlCheck, contentCheck);
+
+                    // Lấy sách ra để cộng thêm vào tổng cân nặng của sách
+                    
                     if (responseCheck.IsSuccessStatusCode)
                     {
                         string result = await responseCheck.Content.ReadAsStringAsync();
@@ -387,6 +380,23 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                     }
                 }
             }
+
+            // TÍnh giá tiền Ship :
+            var feeShipUrl = $"https://localhost:7079/api/GhnApi/get-feeShip?to_district_id={to_district_id}&to_ward_code={to_ward_code}&weight={weight}";
+            var responseFeeShip = await _httpClient.GetAsync(feeShipUrl);
+            if (!responseFeeShip.IsSuccessStatusCode)
+            {
+                return BadRequest("Error getting shipping fee from GHN API");
+            }
+            var contentFeeShip = await responseFeeShip.Content.ReadAsStringAsync();
+            var feeShipData = JsonConvert.DeserializeObject<feeShipGhnViewModel>(contentFeeShip);
+
+            if (feeShipData == null && feeShipData.code != 200)
+            {
+                return BadRequest("Error getting shipping fee from GHN API");
+            }
+            decimal shippingFee = feeShipData.data.total;
+
             // Tạo 1 Bill :
             var newBillId = Guid.NewGuid();
             Bill newBill = new Bill();
@@ -395,21 +405,19 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             newBill.Email = ModelBill.Email;
             newBill.ReceiverName = ModelBill.firstName + " " + ModelBill.lastName;
             newBill.UserPhone = ModelBill.UserPhone;
+            // Sử dụng giá trị tên của tỉnh, quận, và xã/phường
+            newBill.AddressUser = ModelBill.ProvinceName + "," + ModelBill.DistrictName + "," + ModelBill.WardName;
             if (ModelBill.Street != null)
             {
-                newBill.AddressUser = city.Name + "," + district.Name + "," + ward.Name + "," + ModelBill.Street;
+                newBill.AddressUser += "," + ModelBill.Street;
             }
-            else
-            {
-                newBill.AddressUser = city.Name + "," + district.Name + "," + ward.Name;
-            }
-            newBill.Total = Total;
-            newBill.Shipmoney = 10;
+            newBill.Shipmoney = shippingFee;
+            newBill.Total = Total + shippingFee;
             newBill.PaymentMethod = ModelBill.PaymentMethod;
             newBill.Status = 1;
 
             // Lưu Bill vào cơ sở dữ liệu :
-            var urlBill = $"https://localhost:7079/api/Bill/CreateBillWithManualBillId?priceBeforeVoucher={newBill.Total}&ReceiverName={newBill.ReceiverName}&Email={newBill.Email}&BillID={newBill.BillID}&UserID={newBill.UserID}&shipmoney={newBill.Shipmoney}&userPhone={newBill.UserPhone}&addressUser={newBill.AddressUser}&orderDate={DateTime.Today}&deliveryDate={DateTime.Today.AddDays(5)}&total={newBill.Total}&paymentMethod={newBill.PaymentMethod}&status={newBill.Status}";
+            var urlBill = $"https://localhost:7079/api/Bill/CreateBillWithManualBillId?priceBeforeVoucher={newBill.Total}&ReceiverName={newBill.ReceiverName}&Email={newBill.Email}&BillID={newBill.BillID}&UserID={newBill.UserID}&shipmoney={newBill.Shipmoney}&userPhone={newBill.UserPhone}&addressUser={newBill.AddressUser}&orderDate={DateTime.Now}&deliveryDate={DateTime.Today.AddDays(5)}&total={newBill.Total}&paymentMethod={newBill.PaymentMethod}&status={newBill.Status}";
             var content = new StringContent(JsonConvert.SerializeObject(newBill), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(urlBill, content);
             if (!response.IsSuccessStatusCode)
@@ -457,7 +465,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                         // Cập nhật lại số lượng sản phẩm trong database
                         var urlUpdateQuantity = $"https://localhost:7079/api/Book/BuyBook?id={item.BookID}&quantityBuy={item.Quantity}";
                         var contentUpdateQuantity = new StringContent(JsonConvert.SerializeObject(billItems), Encoding.UTF8, "application/json");
-                        var responseUpdateQuantity = await _httpClient.PutAsync(urlUpdateQuantity, contentBillItem);
+                        var responseUpdateQuantity = await _httpClient.PutAsync(urlUpdateQuantity, contentUpdateQuantity);
                         if (!responseUpdateQuantity.IsSuccessStatusCode)
                         {
                             return BadRequest("Lỗi cập nhật lại số lượng sản phẩm");
@@ -471,12 +479,30 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                         }
                     }
                 }
-                return RedirectToAction("GetAllBill", "Bill");
+                //return RedirectToAction("FormCheckBill", new {id = newBill.BillID});
+                return RedirectToAction("GetAllBill");
             }
             
         }
-        [HttpGet]
+        public async Task<IActionResult> FormCheckBill(Guid id)
+        {
+            var urlBill = $"https://localhost:7079/api/Bill/GetBillByBillId/{id}";
+            var responeBill = await _httpClient.GetAsync(urlBill);
+            string apiDataBill = await responeBill.Content.ReadAsStringAsync();
+            Bill bill = JsonConvert.DeserializeObject<Bill>(apiDataBill);
 
+            var urlBillItems = $"https://localhost:7079/api/BillItem/GetAllBillItemByBillID/{id}";
+            var responBillItems = await _httpClient.GetAsync(urlBillItems);
+            string apiDataBillItems = await responBillItems.Content.ReadAsStringAsync();
+            List<BillItems> ListBillItems = JsonConvert.DeserializeObject<List<BillItems>>(apiDataBillItems);
+
+            ViewBag.Bill = bill;
+            ViewBag.BillItems = ListBillItems;
+            return View();
+        }
+
+
+        [HttpGet]
         public async Task<IActionResult> Book_AllRating(Guid id)
         {
 

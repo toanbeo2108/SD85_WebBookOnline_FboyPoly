@@ -10,7 +10,7 @@ namespace SD85_WebBookOnline.Share.Models
     public class InputSlip
     {
         public Guid InputSlipID { get; set; }
-        public Guid? IdNhanVienNhap { get; set; }
+        public string? IdNhanVienNhap { get; set; }
         public Guid? IdSachNhap { get; set; }
         public int? SoLuong { get; set; }
         public decimal? GiaNhap { get; set; }
