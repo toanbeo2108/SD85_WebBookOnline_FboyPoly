@@ -48,16 +48,14 @@ namespace SD85_WebBookOnline.Api.Data
             builder.Entity<IdentityRole>().HasData(
                     new IdentityRole() { Name = "Admin", NormalizedName = "ADMIN" },
                     new IdentityRole() { Name = "User", NormalizedName = "USER" },
-                    new IdentityRole() { Name = "Empolyee", NormalizedName = "EMPLOYEE" }
+                    new IdentityRole() { Name = "Employee", NormalizedName = "EMPLOYEE" }
                 );
         }
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-
-
-				optionsBuilder.UseSqlServer("Data Source=DESKTOP-T0CSGCJ\\SQLEXPRESS;Initial Catalog=WebBookOnline_DATN;Integrated Security=True;");
+				optionsBuilder.UseSqlServer("Data Source=DESKTOP-3A6J796\\SQLEXPRESS;Initial Catalog=WebBookOnline_DATN3;Integrated Security=True;");
 			}
 		}
 	}

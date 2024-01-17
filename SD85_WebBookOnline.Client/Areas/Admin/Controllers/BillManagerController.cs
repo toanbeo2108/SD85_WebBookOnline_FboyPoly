@@ -101,6 +101,28 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return BadRequest();
             }
         }
+        public async Task<IActionResult> YeucauHuyBill_admin(Guid id)
+        {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var urlBill = $"https://localhost:7079/api/Bill/GetBillByBillId/" + id;
+            var responeBill = await _httpClient.GetAsync(urlBill);
+            string apiBill = await responeBill.Content.ReadAsStringAsync();
+            var Bill = JsonConvert.DeserializeObject<Bill>(apiBill);
+            Bill.Status = 4; // chuyển sang trạng thái yêu cầu hủy
+
+            var urlUpdateBill = $"https://localhost:7079/api/Bill/UpdateBill/" + Bill.BillID;
+            var content = new StringContent(JsonConvert.SerializeObject(Bill), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync(urlUpdateBill, content);
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("GetAllBill_admin");
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
         public async Task<IActionResult> XacNhanHuyBill_admin(Guid id)
         {
             var token = Request.Cookies["Token"];

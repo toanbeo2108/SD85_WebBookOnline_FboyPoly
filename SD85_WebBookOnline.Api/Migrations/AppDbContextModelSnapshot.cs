@@ -51,22 +51,28 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1f5b3aa4-3702-4e1e-a3b1-c28ee6cdbaa6",
-                            ConcurrencyStamp = "5e92e656-b607-4df0-9acb-e1f9812866a8",
+=
+                            Id = "e36c9b96-b7b2-4ada-b481-e584d47cb285",
+                            ConcurrencyStamp = "186de966-a743-448c-92e8-4fc63997693c",
+
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "b061414c-6cc8-47c8-ac89-09aeeb946be0",
-                            ConcurrencyStamp = "07e9eae5-ae8c-4292-871a-fd932ee79b9b",
+
+                            Id = "3d6c1e43-bfa8-493a-863a-3345d6ec89cb",
+                            ConcurrencyStamp = "b4bde7b0-5b4d-448a-9162-31238952aafe",
+
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "e5aec01f-d73b-4c7b-9f1e-ecf0590f7bdc",
-                            ConcurrencyStamp = "60b1021d-ef2e-4eec-b322-a8713390e552",
+
+                            Id = "cda6b623-324b-4c8d-b34e-316edfb469f1",
+                            ConcurrencyStamp = "049d0fdd-5f85-4603-bed2-34d009b1a69c",
+
                             Name = "Empolyee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -450,8 +456,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<decimal>("Volume")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
 
                     b.Property<int>("YearOfRelease")
                         .HasColumnType("int");
