@@ -598,6 +598,39 @@ namespace SD85_WebBookOnline.Client.Controllers
             }
             return View();
         }
-        #endregion
-    }
+		#endregion
+		[HttpGet]
+		public async Task<IActionResult> SearchProduct(string valueSearch)
+		{
+			var urlBook = $"https://localhost:7079/api/Book/get-all-book";
+			var responBook = await _httpClient.GetAsync(urlBook);
+			string apiDataBook = await responBook.Content.ReadAsStringAsync();
+			var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+			if (lstBook == null)
+			{
+				return NotFound();
+			}
+
+			var lstBookOk = lstBook.Where(x => x.Status == 1).ToList();
+			if (lstBookOk == null)
+			{
+				return NotFound();
+			}
+			var lstSelectNew = lstBookOk.Where(x => x.BookName.ToLower().Contains(valueSearch));
+			ViewBag.lstSelectNew = lstSelectNew;
+			//
+			var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+			var httpClient = new HttpClient();
+			var responCombo = await _httpClient.GetAsync(urlCombo);
+			string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+			var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+			string json = Request.Cookies["lstComboItem"];
+			if (json != null)
+			{
+				List<ComboItem> myList = JsonConvert.DeserializeObject<List<ComboItem>>(json);
+				ViewBag.ListComboItem = myList;
+			}
+			return View();
+		}
+	}
 }

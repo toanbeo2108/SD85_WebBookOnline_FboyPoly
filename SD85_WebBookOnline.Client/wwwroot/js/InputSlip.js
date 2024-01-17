@@ -1,9 +1,6 @@
 ﻿
 
 $(document).ready(function () {
-    ///
-
-
 
     $('body').on('click', '#themmoi', function () {
         setData('');
@@ -32,6 +29,7 @@ $(document).ready(function () {
 
         if ($('#btn_inpID').val() == null || $('#btn_inpID').val() == '' || $('#btn_inpID').val() == undefined) {
             $.post('/themm-inputslipelp', { ip: send }, function (re) {
+
                 if (re.status) {
 
                     alert(re.message);
@@ -71,7 +69,7 @@ function setData(data) {
         $('#btn_soluong').val('');
         $('#btn_gianhap').val('');
         $('#btn_ban').val('');
-        $('#btn_ngaynhap').val('');
+      
 
 
 
@@ -86,6 +84,5 @@ function getData() {
         SoLuong: $('#btn_soluong').val(),
         GiaNhap: $('#btn_gianhap').val(),
         GiaBan: $('#btn_ban').val(),
-        
     }
 }

@@ -1,0 +1,100 @@
+﻿@using SD85_WebBookOnline.Share.Models;
+@{
+    User user = ViewBag.User;
+    Bill bill = ViewBag.Bill;
+    List<BillItems> billItems = ViewBag.BillItems;
+    decimal subtotal = 0;
+    foreach (BillItems items in billItems)
+    {
+        subtotal += items.ToTal;   
+    }
+}
+
+<header class="clearfix">
+    @if (bill.Status == 1)
+    {
+        <h1> Đơn chờ xác nhận</h1>
+    }
+    else if (bill.Status == 2)
+    {
+        <h1> Đơn đang giao</h1>
+    }
+    else if (bill.Status == 3)
+    {
+        <h1> Đơn đã hoàn thành</h1>
+    }
+    <div id="company" class="clearfix">
+        <div>FpolyBook</div>
+        <div>TDP 12 , Phố Kiều Mai<br /> BTL HN, VN</div>
+        <div>0869 055 623</div>
+        <div><a href="mailto:toannkph27888@fpt.edu.vn">toannkph27888@fpt.edu.vn</a></div>
+    </div>
+    <div id="project">
+        <div><span>BILLID</span>@bill.BillID</div>
+        <div><span>ĐỊA CHỈ</span> @bill.AddressUser</div>
+        <div><span>EMAIL</span> <a href="mailto:john@example.com">@bill.Email</a></div>
+        <div><span>NGÀY ĐẶT</span> @bill.OrderDate</div>
+        <div><span>NGƯỜI NHẬN</span> @bill.ReceiverName</div>
+    </div>
+</header>
+<main>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Tổng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in billItems)
+            {
+                <tr>
+                    <td></td>
+                    <td class="desc">@item.ItemName</td>
+                    <td class="unit">@item.Price đ</td>
+                    <td class="qty">@item.Quantity</td>
+                    <td class="total">@item.ToTal đ</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="4">SUBTOTAL</td>
+                <td class="total">@subtotal</td>
+            </tr>
+            <tr>
+                <td colspan="4">SHIP</td>
+                <td class="total">@bill.Shipmoney</td>
+            </tr>
+            @if (bill.VoucherID != null)
+            {
+                <tr>
+                    <td colspan="4">VOUCHER</td>
+                    <td class="total">-100k</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="4" class="grand total">GRAND TOTAL</td>
+                <td class="grand total">@bill.Total</td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+@if (bill.Status == 1)
+{
+    <a asp-area="Admin" asp-controller="BillManager" asp-action="XacNhanBill_admin" asp-route-id="@bill.BillID" class="btn btn-primary">Xác nhận đơn</a>
+}
+else if (bill.Status == 2)
+{
+    <a asp-area="Admin" asp-controller="BillManager" asp-action="XacNhanBill_admin" asp-route-id="@bill.BillID" class="btn btn-primary">Hoàn thành đơn</a>
+}
+else if (bill.Status == 3)
+{
+}
+<a asp-area="Admin" asp-controller="BillManager" asp-action="GetAllBill_admin" class="btn btn-primary">Quay lại trang quản lý Bill</a>
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="~/css/BillDetailsAdmin.css" />

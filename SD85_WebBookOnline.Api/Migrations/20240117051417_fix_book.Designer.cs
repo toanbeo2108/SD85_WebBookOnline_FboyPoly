@@ -12,8 +12,8 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240115151041_9999")]
-    partial class _9999
+    [Migration("20240117051417_fix_book")]
+    partial class fix_book
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,22 +53,22 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "930fe483-d370-4884-b16b-6ab921289596",
-                            ConcurrencyStamp = "4462bff4-d42a-4eff-893f-e460e4630a6e",
+                            Id = "e36c9b96-b7b2-4ada-b481-e584d47cb285",
+                            ConcurrencyStamp = "186de966-a743-448c-92e8-4fc63997693c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "2c93ab83-d24b-49b7-93f2-c9c91f57dfda",
-                            ConcurrencyStamp = "72eff912-345c-4b24-94ed-0cf7fc133480",
+                            Id = "3d6c1e43-bfa8-493a-863a-3345d6ec89cb",
+                            ConcurrencyStamp = "b4bde7b0-5b4d-448a-9162-31238952aafe",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "b3953a7d-452d-46e2-bfbb-112eb04be224",
-                            ConcurrencyStamp = "ae6c1093-0cb2-4a48-baa6-c0247f45e014",
+                            Id = "cda6b623-324b-4c8d-b34e-316edfb469f1",
+                            ConcurrencyStamp = "049d0fdd-5f85-4603-bed2-34d009b1a69c",
                             Name = "Empolyee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -359,6 +359,9 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<Guid?>("ComboID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("GiaNhap")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("ItemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -449,8 +452,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<decimal>("Volume")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
 
                     b.Property<int>("YearOfRelease")
                         .HasColumnType("int");
@@ -818,6 +821,9 @@ namespace SD85_WebBookOnline.Api.Migrations
 
                     b.Property<Guid?>("BookID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("GiaBan")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("GiaNhap")
                         .HasColumnType("decimal(18,2)");

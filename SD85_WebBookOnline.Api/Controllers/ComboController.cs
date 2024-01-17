@@ -12,10 +12,14 @@ namespace SD85_WebBookOnline.Api.Controllers
     public class ComboController : ControllerBase
     {
         private readonly IAllResponsitories<Combo> irespon;
+        private readonly IAllResponsitories<ComboItem> irespon_comboitem;
+        private readonly IAllResponsitories<Book> irespon_book;
         AppDbContext context = new AppDbContext();
         public ComboController()
         {
             irespon = new AllResponsitories<Combo>(context, context.Combo);
+            irespon_comboitem = new AllResponsitories<ComboItem>(context, context.ComboItem);
+            irespon_book = new AllResponsitories<Book>(context, context.Book);
         }
         
         [HttpGet("[Action]")]
@@ -93,6 +97,51 @@ namespace SD85_WebBookOnline.Api.Controllers
                 return await irespon.DeleteItem(cb);
             }
         }
+        [HttpPost("[Action]")]
+        public async Task<bool> CheckQuantity(Guid ComboID, int Quantity)
+        {
+            var combos = await irespon.GetAll();
+            var Combo = combos.FirstOrDefault(p => p.ComboID == ComboID);
+            if (Combo != null)
+            {
+                if (Quantity < Combo.Quantity)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else { return false; }
+        }
 
+        [HttpPut("BuyCombo")]
+        public async Task<bool> BuyCombo(Guid id, int quantityBuy)
+        {
+            var combo = await irespon.GetByID(id);
+            var listcomboItem = await irespon_comboitem.GetAll();
+            var comboitems = listcomboItem.Where(p => p.ComboID == id).ToList();
+            var listbook = await irespon_book.GetAll();
+            foreach( var comboItem in comboitems )
+            {
+                foreach (var book in listbook)
+                {
+                    if (comboItem.BookID == book.BookID)
+                    {
+                        book.QuantitySold += quantityBuy;
+                        await irespon_book.UpdateItem(book);
+                    }
+                }
+            }
+
+            if (combo == null)
+            {
+                return false;
+            }
+            combo.Quantity -= quantityBuy;
+
+            return await irespon.UpdateItem(combo);
+        }
     }
 }

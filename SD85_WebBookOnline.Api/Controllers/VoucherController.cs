@@ -23,6 +23,21 @@ namespace SD85_WebBookOnline.Api.Controllers
         {
             return await irespon.GetAll();
         }
+        [HttpGet("[Action]")]
+        public async Task<IEnumerable<Voucher>> LayVoucherTheoDieuKien(int discountCondition)
+        {
+            var listVoucher = await irespon.GetAll();
+            var ListVOucherByCondition = listVoucher.Where(p => p.DiscountCondition <= discountCondition && p.Status == 1).ToList();
+            return ListVOucherByCondition;
+        }
+        [HttpGet("[Action]")]
+        public async Task<Voucher> GetVoucherByVoucherCode(string VoucherCode)
+        {
+            var listVoucher = await irespon.GetAll();
+            var ListVOucherByCondition = listVoucher.FirstOrDefault(p => p.code == VoucherCode);
+            return ListVOucherByCondition;
+        }
+
         [HttpPost("[Action]")]
         public async Task<bool> CreateVoucher(Guid createByID, Guid deletByID, string name,decimal quantity,string code, string description, DateTime starDate, DateTime endDate, decimal discountCondition, decimal discountAmount, int status)
         {
