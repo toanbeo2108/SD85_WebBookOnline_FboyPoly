@@ -3,6 +3,7 @@
 @{
     User user = ViewBag.User;
     Bill bill = ViewBag.Bill;
+    Voucher voucher = ViewBag.Voucher;
 }
 
 <header class="clearfix">
@@ -55,18 +56,18 @@
                 </tr>
             }
             <tr>
-                <td colspan="4">SUBTOTAL</td>
-                <td class="total">@bill.Total</td>
-            </tr>
-            <tr>
                 <td colspan="4">SHIP</td>
                 <td class="total">@bill.Shipmoney</td>
+            </tr>
+            <tr>
+                <td colspan="4">SUBTOTAL</td>
+                <td class="total">@bill.PriceBeforeVoucher</td>
             </tr>
             @if (bill.VoucherID != null)
             {
                 <tr>
                     <td colspan="4">VOUCHER</td>
-                    <td class="total">-100k</td>
+                    <td class="total">- @voucher.DiscountAmount</td>
                 </tr>
             }
             <tr>
@@ -82,7 +83,7 @@
 }
 else if (bill.Status == 2)
 {
-    <a asp-area="Admin" asp-controller="BillManager" asp-action="XacNhanBill_admin" asp-route-id="@bill.BillID" class="btn btn-primary">Hoàn thành đơn</a>
+    <a asp-area="Admin" asp-controller="BillManager" asp-action="HoanthanhBill_admin" asp-route-id="@bill.BillID" class="btn btn-primary">Hoàn thành đơn</a>
 }
 else if (bill.Status == 3)
 {

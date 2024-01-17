@@ -49,7 +49,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 if (selectedYear.HasValue)
                 {
                     bills = bills
-                        .Where(b => b.OrderDate != null && b.OrderDate.Value.Year == selectedYear.Value && b.Status == 3);
+                        .Where(b => b.OrderDate != null && b.OrderDate.Value.Year == selectedYear.Value && b.Status == 3 );
                 }
 
                 if (selectedMonth.HasValue)
@@ -59,38 +59,40 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 }
 
                 var monthlyTotalRevenue = selectedMonth.HasValue
-                    ? Enumerable.Range(1, DateTime.DaysInMonth(selectedYear.Value, selectedMonth.Value))
-                        .Select(day =>
-                        {
-                            var totalRevenue = bills
-                                .Where(b => b.OrderDate != null && b.OrderDate.Value.Day == day)
-                                .Join(
-                                    billItems,
-                                    bill => bill.BillID,
-                                    billItem => billItem.BillID,
-                                    (bill, billItem) => billItem.ToTal)
-                                .DefaultIfEmpty(0)
-                                .Sum();
+     ? Enumerable.Range(1, DateTime.DaysInMonth(selectedYear.Value, selectedMonth.Value))
+         .Select(day =>
+         {
+             var totalRevenue = bills
+                 .Where(b => b.OrderDate != null && b.OrderDate.Value.Day == day)
+                 .Join(
+                     billItems.Where(bi => bi.BookID != null), // Thêm điều kiện BookId != null vào đây
+                     bill => bill.BillID,
+                     billItem => billItem.BillID,
+                     (bill, billItem) => billItem.ToTal)
 
-                            return new RevenueByMonth { Month = day, TotalRevenue = totalRevenue };
-                        })
-                        .ToList()
-                    : Enumerable.Range(1, 12)
-                        .Select(month =>
-                        {
-                            var totalRevenue = bills
-                                .Where(b => b.OrderDate != null && b.OrderDate.Value.Month == month)
-                                .Join(
-                                    billItems,
-                                    bill => bill.BillID,
-                                    billItem => billItem.BillID,
-                                    (bill, billItem) => billItem.ToTal)
-                                .DefaultIfEmpty(0)
-                                .Sum();
+                 .DefaultIfEmpty(0)
+                 .Sum();
 
-                            return new RevenueByMonth { Month = month, TotalRevenue = totalRevenue };
-                        })
-                        .ToList();
+             return new RevenueByMonth { Month = day, TotalRevenue = totalRevenue };
+         })
+         .ToList()
+     : Enumerable.Range(1, 12)
+         .Select(month =>
+         {
+             var totalRevenue = bills
+                 .Where(b => b.OrderDate != null && b.OrderDate.Value.Month == month)
+                 .Join(
+                     billItems.Where(bi => bi.BookID != null), // Thêm điều kiện BookId != null vào đây
+                     bill => bill.BillID,
+                     billItem => billItem.BillID,
+                     (bill, billItem) => billItem.ToTal)
+                 .DefaultIfEmpty(0)
+                 .Sum();
+
+             return new RevenueByMonth { Month = month, TotalRevenue = totalRevenue };
+         })
+         .ToList();
+
 
                 _data = monthlyTotalRevenue;
                 _mess = "Success";
