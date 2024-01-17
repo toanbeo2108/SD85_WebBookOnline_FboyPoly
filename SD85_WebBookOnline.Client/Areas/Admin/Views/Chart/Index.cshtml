@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+  
+}
+
+
+@*<script src="~/js/chart.js">
+   
+</script>*@
+
+<div style="width: 50%; margin: auto;" class="container">
+    <div class="row">
+        <div class="col-md-4"><label for="yearSelector">Chọn năm:</label>
+            <select id="yearSelector" class="form-control">
+                  
+                @for (int year = DateTime.Now.Year; year >= 2020; year--)
+                {
+                    <option value="@year">@year</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label for="monthSelector">Chọn tháng:</label>
+            <select id="monthSelector" class="form-control">
+              
+                @for (int month = 1; month <= 12; month++)
+                {
+                    <option value="@month">@month</option>
+                }
+            </select>
+        </div>
+    </div>
+    
+
+    
+
+    <canvas id="myBarChart" width="400" height="400"></canvas>
+</div>

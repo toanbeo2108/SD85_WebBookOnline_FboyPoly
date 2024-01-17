@@ -31,6 +31,26 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> AllBookManager()
         {
+            var urlCategory = $"https://localhost:7079/api/Category/GetAllCategory";
+            var responCategory = await _httpClient.GetAsync(urlCategory);
+            string apiDataCategory = await responCategory.Content.ReadAsStringAsync();
+            var lstCategory = JsonConvert.DeserializeObject<List<Category>>(apiDataCategory);
+            ViewBag.lstCategory = lstCategory;
+
+            var urlAuthor = $"https://localhost:7079/api/Author/GetAllAuthor";
+            var responAuthor = await _httpClient.GetAsync(urlAuthor);
+            string apiAuthor = await responAuthor.Content.ReadAsStringAsync();
+            var lstAuthor = JsonConvert.DeserializeObject<List<Author>>(apiAuthor);
+            ViewBag.lstAuthor = lstAuthor;
+
+            var urlLanguge = $"https://localhost:7079/api/Languge/GetAllLanguge";
+            var responLanguge = await _httpClient.GetAsync(urlLanguge);
+            string apiDataLanguge = await responLanguge.Content.ReadAsStringAsync();
+            var lstLanguge = JsonConvert.DeserializeObject<List<Languge>>(apiDataLanguge);
+            ViewBag.lstLanguge = lstLanguge;
+
+
+
             var urlManufacturer = $"https://localhost:7079/api/Manufacturer/GetAllManufacturer";
             var responManufacturer = await _httpClient.GetAsync(urlManufacturer);
             string apiDataManufacturer = await responManufacturer.Content.ReadAsStringAsync();
@@ -56,6 +76,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var responBook = await _httpClient.GetAsync(urlBook);
             string apiDataBook = await responBook.Content.ReadAsStringAsync();
             var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            ViewBag.lstBook = lstBook;
             return View(lstBook);
         }
         [HttpGet]
