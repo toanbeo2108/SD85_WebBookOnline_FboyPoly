@@ -87,7 +87,8 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> deTailCombo(Guid id)
+        public async Task<IActionResult> Detail_cb(Guid id)
+
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
