@@ -1,16 +1,22 @@
 ﻿$(document).ready(function () {
 
-    $('body').on('click', '#btn_add', function () {
-        setData(null);
-        $('#pp_Modal').modal('show')
+    $('body').on('click', '#btn_add_detail', function () {
+        let id = $(this).attr('data-id');
+      
+        setData('');
+        $('#cb_bookname').val(id);
+         $('#pp_Modal_detail').modal('show');
+
+          
+        })
     })
 
-    $('body').on('click', '#btn_chitiet', function () {
+$('body').on('click', '#btn_chitiet_detail', function () {
         let id = $(this).attr('data-id');
         $.get('/detail-bookdetail/' + id, function (re) {
             if (re.status) {
                 setData(re.data)
-                $('#pp_Modal').modal('show');
+                $('#pp_Modal_detail').modal('show');
 
             }
             else {
@@ -25,7 +31,7 @@
             $.post('/add-bookDetail', { bk: getData() }, function (re) {
                 if (re.status) {
                     alert(re.message);
-                    $('#pp_Modal').modal('hide');
+                    $('#pp_Modal_detail').modal('hide');
                     window.location.reload()
                 }
                 else {
@@ -39,7 +45,7 @@
 
                 if (re.status) {
                     alert(re.message);
-                    $('#pp_Modal').modal('hide');
+                    $('#pp_Modal_detail').modal('hide');
                     window.location.reload()
                 }
                 else {
@@ -49,8 +55,6 @@
         }
     })
 
-
-})
 function setData(data) {
     if (data != null && data != undefined && data != '') {
         $('#btn_bookdetailID').val(data.bookDetailID);

@@ -5,37 +5,63 @@
     IEnumerable<Book> lsttopBookTime = ViewBag.lstSelectNew as IEnumerable<Book>;
     IEnumerable<Book> lsttopBookTopQuantitySold = ViewBag.lstTopquantitySold as IEnumerable<Book>;
 }
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Thêm thư viện Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
+
+<script src="~/js/chart.js">
+   
+</script>
+
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor context
 @using Newtonsoft.Json
 @using SD85_WebBookOnline.Share.Models
+
 
 @if (User.IsInRole("Admin"))
 {
     <div class="details">
         <div class="recentOrder">
             <div class="cardHeader">
-                <h2>Khách Hàng Tiềm Năng</h2>
-                <a href="#" class="btn">View All</a>
+               
+              <h2>Biểu đồ doanh thu</h2>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <td>Họ Tên</td>
-                        <td>Số Điện Thoai</td>
-                        <td>Email</td>
-                        <td>Trạng Thái</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Nguyễn Tiến Hiệp</td>
-                        <td>0339414711</td>
-                        <td>Hiepdepzai2k3@gmail.com</td>
-                        <td><span class="status delivered">Đang Hoạt Động</span></td>
-                    </tr>
-                   
-                </tbody>
-            </table>
+
+          <div style="margin: auto;" class="container">
+    <div class="row">
+        <div class="col-md-4"><label for="yearSelector">Chọn năm:</label>
+            <select id="yearSelector" class="form-control">
+                  
+                @for (int year = DateTime.Now.Year; year >= 2020; year--)
+                {
+                    <option value="@year">@year</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label for="monthSelector">Chọn tháng:</label>
+            <select id="monthSelector" class="form-control">
+              
+                @for (int month = 1; month <= 12; month++)
+                {
+                    <option value="@month">@month</option>
+                }
+            </select>
+        </div>
+    </div>
+    
+
+    
+
+    <canvas id="myBarChart" width="400" height="150"></canvas>
+</div>
+
         </div>
         <!--Danh sách nhân viên-->
         <div class="recentEmpolyees">
