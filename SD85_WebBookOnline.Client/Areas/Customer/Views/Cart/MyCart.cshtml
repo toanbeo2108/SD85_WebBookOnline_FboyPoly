@@ -10,18 +10,6 @@
     {
         subtotal = ViewBag.Subtotal;
     }
-    int ship;
-    decimal finalTotal;
-    if (subtotal == 0)
-    {
-        ship = 0;
-        finalTotal = subtotal + ship;
-    }
-    else
-    {
-        ship = 10;
-        finalTotal = subtotal + ship;
-    }
 }
 <div class="container-fluid pt-5">
     <div class="row px-xl-5">
@@ -96,16 +84,11 @@
                         <h6 class="font-weight-medium">Subtotal</h6>
                         <h6 class="font-weight-medium subtotal">$@subtotal</h6>
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <h6 class="font-weight-medium">Shipping</h6>
-                        <h6 class="font-weight-medium shipping">$10</h6>
-
-                    </div>
                 </div>
                 <div class="card-footer border-secondary bg-transparent">
                     <div class="d-flex justify-content-between mt-2">
                         <h5 class="font-weight-bold">Total</h5>
-                        <h5 class="font-weight-bold finalTotal">$@(subtotal + 10)</h5>
+                        <h5 class="font-weight-bold finalTotal">$@(subtotal)</h5>
                     </div>
                     <a asp-action="Checkout" asp-controller="Cart" asp-area="Customer" class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</a>
                 </div>

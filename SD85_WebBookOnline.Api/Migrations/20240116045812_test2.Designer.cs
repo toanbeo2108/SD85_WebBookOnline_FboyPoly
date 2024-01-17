@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SD85_WebBookOnline.Api.Data;
 
@@ -11,9 +12,10 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240116045812_test2")]
+    partial class test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,22 +53,22 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e36c9b96-b7b2-4ada-b481-e584d47cb285",
-                            ConcurrencyStamp = "186de966-a743-448c-92e8-4fc63997693c",
+                            Id = "8c64b477-7de1-4d10-8e66-028263d0f089",
+                            ConcurrencyStamp = "b2d4bd81-cee0-4d92-b7af-22355fcb2249",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "3d6c1e43-bfa8-493a-863a-3345d6ec89cb",
-                            ConcurrencyStamp = "b4bde7b0-5b4d-448a-9162-31238952aafe",
+                            Id = "c39f0748-159f-4ced-a418-b47e8e4bfa58",
+                            ConcurrencyStamp = "2ff5bdb6-8e4a-4df7-a112-59289082832c",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "cda6b623-324b-4c8d-b34e-316edfb469f1",
-                            ConcurrencyStamp = "049d0fdd-5f85-4603-bed2-34d009b1a69c",
+                            Id = "222c62eb-19b3-4740-8ad3-244e5bc48641",
+                            ConcurrencyStamp = "9dbc38e9-b07f-4a7f-b72c-3814e4fe7e2f",
                             Name = "Empolyee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -450,8 +452,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<decimal>("Volume")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Weight")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Weight")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("YearOfRelease")
                         .HasColumnType("int");
