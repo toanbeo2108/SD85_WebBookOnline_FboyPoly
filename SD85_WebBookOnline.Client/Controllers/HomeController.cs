@@ -137,16 +137,7 @@ namespace SD85_WebBookOnline.Client.Controllers
                 ViewBag.lstTopquantitySold = lstselectTopquantitysold;
             }
             //
-			var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
-			var httpClient = new HttpClient();
-			var responCombo = await _httpClient.GetAsync(urlCombo);
-			string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
-			var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
-            if(lstCombo == null) { return NotFound(); }
-            foreach(var item in lstCombo)
-            {
-                TotalQuantityPro += item.Quantity;
-            }
+			
             var totalQuantityPro = JsonConvert.SerializeObject(TotalQuantityPro);
             Response.Cookies.Append("ToTalQuantityPro", totalQuantityPro);
 

@@ -1,8 +1,9 @@
 ﻿
 
 $(document).ready(function () {
-    InitComBo();
+   
     InitPage()
+    InitComBo()
     $('#tittle').text('Thống kê doanh thu sách bán lẻ')
 
     $('body').on('click', '#btn_loc', function () {
@@ -40,6 +41,7 @@ $(document).ready(function () {
 
         if ($('#thongke-options').val() == 1) {
             $('#tittle').text('Thống kê tổng doanh thu sách bán lẻ')
+            
             InitPage()
         }
         if ($('#thongke-options').val() == 2) {
@@ -97,8 +99,8 @@ function InitPage() {
                 re.data.forEach(row => {
                     let tr = `<tr>
                                 <td>${row.tensach}</td>
-                                <td>${row.tongDoanhThusach}</td>
                                 <td>${row.tongSoSachBanDuoc}</td>
+                                <td>${row.tongDoanhThusach}</td>
                                 <td>${row.loiNhuansach}</td>
                                 <td>${row.chiPhiGocsach}</td>
                                 <td>${row.soSachConLai != 0 ? row.soSachConLai : ''}</td>
@@ -244,20 +246,21 @@ function InitPage3() {
 }
 
 function InitComBo() {
+    $('#tittlecb').text('Thống kê tổng doanh thu Combo')
     $.get('/GetComBo', function (re) {
         if (re.status) {
             // Hủy DataTable hiện tại (nếu có)
-            if ($.fn.DataTable.isDataTable('#thong_keCombo')) {
-                $('#thong_keCombo').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#table-Combo')) {
+                $('#table-thongke').DataTable().destroy();
             }
 
             let header = `
                 <thead>
                     <tr>
                         <th>Tên sách</th>
-                        <th>Tổng Combo bán được</th>
+                        <th>Tổng số sách ComBo được</th>
                         <th>Tổng doanh thu</th>
-                       
+                        
                     </tr>
                 </thead>`;
             let body = '';
@@ -279,10 +282,10 @@ function InitComBo() {
             }
 
             // Thêm table vào HTML
-            $('#thong_keCombo').html(header + body);
+            $('#table-Combo').html(header + body);
 
             // Khởi tạo DataTable
-            $('#thong_keCombo').DataTable({
+            $('#table-Combo').DataTable({
                 "pageLength": 5,
                 "searching": false
             });
@@ -293,6 +296,7 @@ function InitComBo() {
         }
     });
 }
+
 
 
 function generateExcel() {
