@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SD85_WebBookOnline.Api.Data;
 
@@ -11,9 +12,10 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240117202432_betbet")]
+    partial class betbet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +53,6 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-
                             Id = "8579f0b6-c6e5-49ff-a0cd-74d47926e1f0",
                             ConcurrencyStamp = "73fd8342-2124-4201-b8f4-4487e7a818cb",
                             Name = "Admin",
@@ -59,7 +60,6 @@ namespace SD85_WebBookOnline.Api.Migrations
                         },
                         new
                         {
-
                             Id = "c26d6a61-b923-47fd-9e19-cae8e1095208",
                             ConcurrencyStamp = "7ccb0a91-358a-4e81-a64f-e46d9590f01b",
                             Name = "User",
@@ -67,7 +67,6 @@ namespace SD85_WebBookOnline.Api.Migrations
                         },
                         new
                         {
-
                             Id = "ddad87d6-4557-4c40-ae48-6bb41857f7ee",
                             ConcurrencyStamp = "9e094a91-27ca-4e62-b67c-e884a1cabada",
                             Name = "Employee",

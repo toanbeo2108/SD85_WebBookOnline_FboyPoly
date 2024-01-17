@@ -87,7 +87,8 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> deTailCombo(Guid id)
+        public async Task<IActionResult> Detail_cb(Guid id)
+
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -348,6 +349,26 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             return RedirectToAction("MyCart", "Cart", new { area = "Customer" });
 
         }
+        [HttpGet] 
+        public async Task<IActionResult> GetVoucherByCondition(decimal subtotal)
+        {
+            var token = Request.Cookies["Token"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var urlVoucher = $"https://localhost:7079/api/Voucher/GetAllVoucher";
+            var responVoucher = await _httpClient.GetAsync(urlVoucher);
+            string apiDataVoucher = await responVoucher.Content.ReadAsStringAsync();
+            var lstVoucher = JsonConvert.DeserializeObject<IEnumerable<Voucher>>(apiDataVoucher);
+            var lstVoucherok = lstVoucher.Where(x => x.Quantity > 0 && x.EndDate > DateTime.Now && x.Status > 0).ToList();
+            var lstvcFreeShip = lstVoucherok.Where(x => x.Status == 1 && x.DiscountCondition <= subtotal).ToList();
+            var lstvcGiamGia = lstVoucherok.Where(x => x.Status == 2 && x.DiscountCondition <= subtotal).ToList();
+            ViewBag.lstVoucherok = lstVoucherok;
+            ViewBag.lstvcFreeShip = lstvcFreeShip;
+            ViewBag.lstvcGiamGia = lstvcGiamGia;
+            return View();
+
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> MyCart()
         {
@@ -466,7 +487,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
         {
             // Authorize
             var UserId = Request.Cookies["UserID"];
-            var Voucher_code = Request.Cookies["Voucher_code"];
+            var Voucher_code = Request.Cookies["Voucher_id"];
 
             var UrlVoucher = $"https://localhost:7079/api/Voucher/GetVoucherByVoucherCode?VoucherCode={Voucher_code}";
             var responeVoucher = await _httpClient.GetAsync(UrlVoucher);
@@ -553,12 +574,17 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             }
             decimal shippingFee = feeShipData.data.total;
             decimal? voucher_amount = voucher.DiscountAmount;
-
+            // Kiểm tra nếu như điều kiện của Voucher không đúng thì phải báo lỗi :
+            if (voucher.DiscountCondition > Total)
+            {
+                return BadRequest("Có vẻ như đơn hàng của bạn không đủ điều kiện sử dụng Voucher, vui lòng chọn mã Voucher khác");
+            }
             // Tạo 1 Bill :
             var newBillId = Guid.NewGuid();
             Bill newBill = new Bill();
             newBill.BillID = newBillId;
             newBill.UserID = UserId;
+            newBill.VoucherID = voucher.VoucherID;
             newBill.Email = ModelBill.Email;
             newBill.ReceiverName = ModelBill.firstName + " " + ModelBill.lastName;
             newBill.UserPhone = ModelBill.UserPhone;
@@ -582,7 +608,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             newBill.Status = 1;
 
             // Lưu Bill vào cơ sở dữ liệu :
-            var urlBill = $"https://localhost:7079/api/Bill/CreateBillWithManualBillId?priceBeforeVoucher={newBill.Total}&ReceiverName={newBill.ReceiverName}&Email={newBill.Email}&BillID={newBill.BillID}&UserID={newBill.UserID}&shipmoney={newBill.Shipmoney}&userPhone={newBill.UserPhone}&addressUser={newBill.AddressUser}&orderDate={DateTime.Now}&deliveryDate={DateTime.Today.AddDays(5)}&total={newBill.Total}&paymentMethod={newBill.PaymentMethod}&status={newBill.Status}";
+            var urlBill = $"https://localhost:7079/api/Bill/CreateBillWithManualBillId?priceBeforeVoucher={newBill.PriceBeforeVoucher}&voucherID={newBill.VoucherID}&ReceiverName={newBill.ReceiverName}&Email={newBill.Email}&BillID={newBill.BillID}&UserID={newBill.UserID}&shipmoney={newBill.Shipmoney}&userPhone={newBill.UserPhone}&addressUser={newBill.AddressUser}&orderDate={DateTime.Now}&deliveryDate={DateTime.Today.AddDays(5)}&total={newBill.Total}&paymentMethod={newBill.PaymentMethod}&status={newBill.Status}";
             var content = new StringContent(JsonConvert.SerializeObject(newBill), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(urlBill, content);
             if (!response.IsSuccessStatusCode)
@@ -691,7 +717,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                         }
                     }
                 }
-                return RedirectToAction("GetAllBill");
+                return RedirectToAction("GetAllBill","Bill");
             }
             
         }
