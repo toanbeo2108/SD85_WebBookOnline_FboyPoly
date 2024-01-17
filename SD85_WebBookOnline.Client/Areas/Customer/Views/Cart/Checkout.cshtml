@@ -108,7 +108,14 @@
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Total</h5>
-                            <h5 class="font-weight-bold Total">@subtotal</h5>
+                            @if (GiamGIa != null)
+                            {
+                                <h5 class="font-weight-bold Total">@(subtotal - GiamGIa)</h5>
+                            }
+                            else
+                            {
+                                <h5 class="font-weight-bold Total">@subtotal</h5>
+                            }
                         </div>
                     </div>
                 </div>
@@ -238,7 +245,7 @@
             .catch(error => console.error("Error fetching wards:", error));
     });
 
-  
+
     // Lắng nghe sự kiện khi chọn xã
     document.getElementById("wardSelect").addEventListener("change", async function () {
         const wardSelectId = this.value;
@@ -253,17 +260,29 @@
 
         const result = await response.json();
         if (result.code === 200) {
+            // Cập nhật trường ẩn WardName
+            updateHiddenField('WardName', result.data.wardName);
+
             // Cập nhật phần tử feeShip trong HTML
             document.querySelector('.feeShip').innerText = `${result.data.total}`;
             // Lưu wardCode vào trường ẩn
             document.getElementById("wardCode").value = wardSelectId;
             // Cập nhật tổng
-            updateTotal(@subtotal, result.data.total,@GiamGIa);
+            updateTotal(@subtotal, result.data.total, @GiamGIa);
         } else {
             console.error('Phản hồi từ máy chủ không hợp lệ');
         }
     });
 
+    // Hàm cập nhật giá trị trường ẩn
+    const updateHiddenField = (fieldName, value) => {
+        const hiddenField = document.getElementById(fieldName);
+        if (hiddenField) {
+            hiddenField.value = value;
+        } else {
+            console.error(`Trường ẩn ${fieldName} không tìm thấy`);
+        }
+    };
     // Hàm cập nhật tổng giá trị
     const updateTotal = (subtotal, feeShip, discountAmount) => {
         // Kiểm tra nếu subtotal không phải là số, không thực hiện cập nhật

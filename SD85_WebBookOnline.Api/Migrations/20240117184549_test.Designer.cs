@@ -12,8 +12,8 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240117163115_9999999999")]
-    partial class _9999999999
+    [Migration("20240117184549_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,22 +53,22 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "bc21b820-2122-40a7-9896-0a22f431847a",
-                            ConcurrencyStamp = "163c25fe-327c-489e-8491-5c7c491e706e",
+                            Id = "bd83b6ed-8a76-4479-91c7-ac39d40e2d80",
+                            ConcurrencyStamp = "523b3b2a-3354-4acf-ae64-ac210cdb9c29",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "b924f90c-4ba1-4c0a-ba20-03414be5f013",
-                            ConcurrencyStamp = "69b0c1b9-ec61-4500-a601-0fa0ef21fdb2",
+                            Id = "62849a9d-6f0c-4efe-8d16-b1e9f9f528c7",
+                            ConcurrencyStamp = "15c72379-2033-43e2-ae37-875c4eb58ccd",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "a9f1d4a9-7262-48ef-b2ba-9cb1c5df160a",
-                            ConcurrencyStamp = "be565570-557e-4d9b-a7a3-8ddbb4305820",
+                            Id = "879c424f-d61f-4671-808c-c7fed6279323",
+                            ConcurrencyStamp = "358f935b-cd0c-4d9f-be23-211df2f4538b",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });

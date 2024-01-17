@@ -136,21 +136,10 @@ namespace SD85_WebBookOnline.Client.Controllers
                 var lstselectTopquantitysold = lstBookOk.OrderByDescending(x => x.QuantitySold).Take(8).ToList();
                 ViewBag.lstTopquantitySold = lstselectTopquantitysold;
             }
-            //
-			var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
-			var httpClient = new HttpClient();
-			var responCombo = await _httpClient.GetAsync(urlCombo);
-			string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
-			var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
-            if(lstCombo == null) { return NotFound(); }
-            foreach(var item in lstCombo)
-            {
-                TotalQuantityPro += item.Quantity;
-            }
+
             var totalQuantityPro = JsonConvert.SerializeObject(TotalQuantityPro);
             Response.Cookies.Append("ToTalQuantityPro", totalQuantityPro);
 
-            //
 
             var url = $"https://localhost:7079/api/user/GetUsersByRole?roleName=User";
             var response = await _httpClient.GetAsync(url);
