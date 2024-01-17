@@ -8,42 +8,48 @@
     
 }
 
-<h1>CreateRating</h1>
 
-<h4>Rating</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row" style="justify-content:center">
+    <div class="col-md-4" >
         <form asp-action="CreateRating">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
             <div class="form-group">
                 <label asp-for="Comment" class="control-label"></label>
-                <input asp-for="Comment" class="form-control" />
+                <input asp-for="Comment" class="form-control" style="border:1px solid #910d0d75" />
                 <span asp-validation-for="Comment" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Stars" class="control-label"></label>
-                <input asp-for="Stars" class="form-control" />
-                <span asp-validation-for="Stars" class="text-danger"></span>
+                <select asp-for="Stars" style="border:1px solid #910d0d75" class="form-control" aria-label="Default select example">
+                    <option value="5">5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1">1</option>
+                </select>
             </div>
             
             <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <a id="rollbackButton" class="btn btn-primary" style="margin-right:20px;background-color:darkgrey">Hủy</a>
+                <input type="submit" value="Thêm mới" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+
+    <!-- Đoạn mã JavaScript -->
+    <script>
+        // Xử lý sự kiện khi nút được nhấn
+        document.getElementById('rollbackButton').addEventListener('click', function () {
+            
+            window.history.back();
+        });
+    </script>

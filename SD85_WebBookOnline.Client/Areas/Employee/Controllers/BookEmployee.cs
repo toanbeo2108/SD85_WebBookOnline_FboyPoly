@@ -1,16 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http; // Thêm thư viện để sử dụng IFormFile
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SD85_WebBookOnline.Share.Models;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
-using System.IO; // Thêm thư viện để sử dụng FileStream và Path
 
-namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
+namespace SD85_WebBookOnline.Client.Areas.Employee.Controllers
 {
-    public class BookManagerController : Controller
+    public class BookEmployee : Controller
     {
         bool _stt = false;
         string _mess = "";
@@ -18,7 +14,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         private HttpClient _httpClient;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public BookManagerController(IWebHostEnvironment hostingEnvironment)
+        public BookEmployee(IWebHostEnvironment hostingEnvironment)
         {
             _httpClient = new HttpClient();
             _hostingEnvironment = hostingEnvironment;
@@ -29,7 +25,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> AllBookManager()
+        public async Task<IActionResult> AllBookEmployee()
         {
             var urlManufacturer = $"https://localhost:7079/api/Manufacturer/GetAllManufacturer";
             var responManufacturer = await _httpClient.GetAsync(urlManufacturer);
@@ -59,7 +55,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             return View(lstBook);
         }
         [HttpGet]
-        public async Task<IActionResult> CreateBook()
+        public async Task<IActionResult> CreateBookEmployee()
         {
             var urlManufacturer = $"https://localhost:7079/api/Manufacturer/GetAllManufacturer";
             var responManufacturer = await _httpClient.GetAsync(urlManufacturer);
@@ -80,8 +76,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             ViewBag.lstForm = lstForm;
             return View();
         }
-        [HttpPost,Route("Add-Book")]
-        public async Task<IActionResult> CreateBook(Book bk, IFormFile imageFile)
+        [HttpPost, Route("Add-Bookepl")]
+        public async Task<IActionResult> CreateBookEmployee(Book bk, IFormFile imageFile)
         {
             var urlAllBook = $"https://localhost:7079/api/Book/get-all-book";
             var responAllBook = await _httpClient.GetAsync(urlAllBook);
@@ -97,7 +93,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 }
 
             }
-            
+
             var book = lstBook.FirstOrDefault(x => x.BookName.ToLower() == bk.BookName.ToLower());
             if (book == null)
             {
@@ -121,9 +117,9 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 var respon = await _httpClient.PostAsync(urlBook, content);
                 if (respon.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                        _stt = true;
-                        _mess = "Thêm thành công!"; 
-                    
+                    _stt = true;
+                    _mess = "Thêm thành công!";
+
                 }
                 else
                 {
@@ -142,10 +138,10 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 message = _mess,
 
             });
-            
+
         }
-        [HttpGet,Route("detail-book/{id}")]
-        public async Task<IActionResult> BookDetail(Guid id)
+        [HttpGet, Route("detail-bookepl/{id}")]
+        public async Task<IActionResult> BookDetailEmployee(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -155,7 +151,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
             var Book = lstBook.FirstOrDefault(x => x.BookID == id);
 
-            
+
 
             if (responBook.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -182,11 +178,11 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 message = _mess,
                 data = _data
             });
-            
-           
+
+
         }
         [HttpGet]
-        public async Task<IActionResult> UpdateBook(Guid id)
+        public async Task<IActionResult> UpdateBookEmployee(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -204,8 +200,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return View(Book);
             }
         }
-        [HttpPost,Route("update-Book/{id}")]
-        public async Task<IActionResult> UpdateBook(Guid id, Book vc, IFormFile imageFile)
+        [HttpPost, Route("update-Book/{id}")]
+        public async Task<IActionResult> UpdateBookEmployee(Guid id, Book vc, IFormFile imageFile)
         {
             var urlBook = $"https://localhost:7079/api/Book/updat-Book/{id}";
             if (id != vc.BookID)
@@ -264,9 +260,9 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 message = _mess
             });
         }
-    
 
-        [HttpPost,Route("Dell-Book/{id}")]
+
+        [HttpPost, Route("Dell-Book/{id}")]
         public async Task<IActionResult> DeleteBook(Guid id)
         {
             //if (await TryDeleteBook(id))
@@ -316,8 +312,8 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost, Route("UpdateStatus/{id}")]
-        public async Task<IActionResult> UpdateBookStatus(Guid id, int newStatus)
+        [HttpPost, Route("UpdateStatusepl/{id}")]
+        public async Task<IActionResult> UpdateBookStatusEmployee(Guid id, int newStatus)
         {
             try
             {
@@ -338,7 +334,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                     _mess = "Cập nhật trạng thái thất bại!";
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -352,7 +348,5 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 message = _mess
             });
         }
-
-
     }
 }

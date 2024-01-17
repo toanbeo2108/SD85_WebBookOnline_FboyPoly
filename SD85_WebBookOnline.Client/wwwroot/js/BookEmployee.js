@@ -3,6 +3,8 @@
         document.getElementById("div_anh").style.display = "none";
         setData(null)
         $('#pp_Modal').modal('show');
+        $('#btn_save').css("display", "block");
+
     })
     $('body').on('click', '#btn_save', function () {
         var data = getData();
@@ -17,7 +19,7 @@
 
         if ($('#btn_IdBoook').val() == null || $('#btn_IdBoook').val() == undefined || $('#btn_IdBoook').val() == '') {
             $.ajax({
-                url: '/Add-Book',
+                url: '/Add-Bookepl',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -38,52 +40,22 @@
             });
 
         }
-        else {
-            let id = $('#btn_IdBoook').val();
-            $.ajax({
-                url: '/update-Book/' + id,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    if (response.status) {
-                        // Thêm thành công
-                        alert(response.message);
-                        window.location.reload();
-                    } else {
-                        // Thêm thất bại
-                        alert(response.message);
-                    }
-                },
-                error: function () {
-                    alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
-                }
-            });
-        }
+        
     })
     $('body').on('click', '#btn_chitiet', function () {
         let id = $(this).attr('data-id')
-        $.get('/detail-book/' + id, function (re) {
+        $.get('/detail-bookepl/' + id, function (re) {
             if (re.status) {
                 // Hiển thị lại div
                 document.getElementById("div_anh").style.display = "block";
 
                 setData(re.data)
                 $('#pp_Modal').modal('show');
+                $('#btn_save').css("display", "none");
             }
         })
     })
-    $('body').on('click', '#btn_xoa', function () {
-        let id = $(this).attr('data-id')
-        $.post('/Dell-Book/' + id, function (re) {
-            if (re.status) {
-                alert(re.message)
-                window.location.reload();
-            }
-
-        })
-    })
+    
     $(document).ready(function () {
         // Thêm sự kiện cho sự thay đổi của công tắc
         $('body').on('change', 'input[type="checkbox"][id^="statusToggle_"]', function () {
@@ -94,11 +66,12 @@
             updateBookStatus(bookID, $(this).prop('checked'));
         });
     });
+    
 })
 function updateBookStatus(bookID, newStatus) {
     // Gọi API để cập nhật trạng thái
     $.ajax({
-        url: '/UpdateStatus/' + bookID,
+        url: '/UpdateStatusepl/' + bookID,
         type: 'POST',
         data: { newStatus: newStatus ? 1 : 0 },
         success: function (response) {

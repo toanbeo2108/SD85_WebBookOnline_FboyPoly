@@ -35,14 +35,14 @@ namespace SD85_WebBookOnline.Api.Controllers
 
         [HttpGet]
         [Route("GetAllUser")]
-        [Authorize]
+        //[Authorize]
         public async Task<IEnumerable<User>> getUser()
         {
             return await _userManager.Users.ToListAsync();
         }
         [HttpGet]
         [Route("GetUsersByRole")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IEnumerable<User>> getUserByRole(string roleName)
         {
             return await _userManager.GetUsersInRoleAsync(roleName);    
