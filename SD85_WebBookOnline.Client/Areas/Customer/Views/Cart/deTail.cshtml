@@ -134,87 +134,97 @@
 
                 </div>
                 <div class="tab-pane fade" id="tab-pane-3">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4 class="mb-4">1 review for "Colorful Stylish Shirt"</h4>
-                            <div>
+                    @if (ViewBag.countStar >0)
+                    {
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4 class="mb-4">Những bình luận về sản phẩm</h4>
                                 <div>
-                                    @foreach (var item in lstSelectRating)
-                                    {
-                                        @if (item.IdBook == book.BookID)
+                                    <div>
+                                        @foreach (var item in lstSelectRating)
                                         {
-                                            <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                            <div class="media-body">
-                                                <h6>@(ListUser.FirstOrDefault(c => c.Id == item.IdNguoiDung).UserName)<small> - <i>@item.RatingDate</i></small></h6>
-                                                @if (item.Stars == 1)
-                                                {
-                                                    <div class="text-primary mb-2">
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="far fa-star"></i>
-                                                        <i class="far fa-star"></i>
-                                                        <i class="far fa-star"></i>
-                                                        <i class="far fa-star"></i>
-                                                    </div>
-                                                }
-                                                @if (item.Stars == 2)
-                                                {
-                                                    <div class="text-primary mb-2">
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="far fa-star"></i>
-                                                        <i class="far fa-star"></i>
-                                                        <i class="far fa-star"></i>
-                                                    </div>
-                                                }
-                                                @if (item.Stars == 3)
-                                                {
-                                                    <div class="text-primary mb-2">
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="far fa-star"></i>
-                                                        <i class="far fa-star"></i>
-                                                    </div>
-                                                }
-                                                @if (item.Stars == 4)
-                                                {
-                                                    <div class="text-primary mb-2">
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="far fa-star"></i>
-                                                    </div>
-                                                }
-                                                @if (item.Stars == 5)
-                                                {
-                                                    <div class="text-primary mb-2">
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                    </div>
-                                                }
+                                            @if (item.IdBook == book.BookID)
+                                            {
+                                                
+                                                <div class="media-body">
+                                                    <h6>@(ListUser.FirstOrDefault(c => c.Id == item.IdNguoiDung).UserName)<small> - <i>@item.RatingDate</i></small></h6>
+                                                    @if (item.Stars == 1)
+                                                    {
+                                                        <div class="text-primary mb-2">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                        </div>
+                                                    }
+                                                    @if (item.Stars == 2)
+                                                    {
+                                                        <div class="text-primary mb-2">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                        </div>
+                                                    }
+                                                    @if (item.Stars == 3)
+                                                    {
+                                                        <div class="text-primary mb-2">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                        </div>
+                                                    }
+                                                    @if (item.Stars == 4)
+                                                    {
+                                                        <div class="text-primary mb-2">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                        </div>
+                                                    }
+                                                    @if (item.Stars == 5)
+                                                    {
+                                                        <div class="text-primary mb-2">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                        </div>
+                                                    }
 
-                                                <p>@item.Comment</p>
-                                            </div>
+                                                    <p>@item.Comment</p>
+                                                </div>
+                                            }
                                         }
-                                    }
+                                    </div>
+                                    <div style="text-align:center">
+                                        <a asp-action="Book_AllRating" asp-controller="Cart" asp-route-id="@book.BookID">Xem Them</a>
+                                    </div>
+
                                 </div>
+                            </div>
+                            <div class="col-md-4" style="display:flex;justify-content:center;align-items:center">
                                 <div>
-                                    <a asp-action="Book_AllRating" asp-controller="Cart" asp-route-id="@book.BookID">Xem Them</a>
+                                    <a asp-action="CreateRating" asp-controller="Cart" asp-route-id="@book.BookID" class="btn btn-outline-warning">Them Danh Gia</a>
                                 </div>
 
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div>
-                                <a asp-action="CreateRating" asp-controller="Cart" asp-route-id="@book.BookID">Them Danh Gia</a>
-                            </div>
-
+                    }
+                    else
+                    {
+                        <div>
+                            <a asp-action="CreateRating" asp-controller="Cart" asp-route-id="@book.BookID" class="btn btn-outline-warning" style="text-align:center; margin-top:30px">Them Danh Gia</a>
                         </div>
-                    </div>
+                    }
+                    
                 </div>
             </div>
         </div>

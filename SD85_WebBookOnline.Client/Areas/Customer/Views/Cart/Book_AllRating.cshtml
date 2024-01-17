@@ -1,8 +1,10 @@
-﻿@model IEnumerable<SD85_WebBookOnline.Share.Models.Rating>
+﻿@using SD85_WebBookOnline.Share.Models
 
 @{
     ViewData["Title"] = "Book_AllRating";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    IEnumerable<User> ListUser = ViewBag.ListUser as IEnumerable<User>;
+    IEnumerable<Rating> lstRating = ViewBag.lstRating as IEnumerable<Rating>;
 }
 
 <h1>Book_AllRating</h1>
@@ -15,47 +17,89 @@
         <tr>
             
             <th>
-                @Html.DisplayNameFor(model => model.IdNguoiDung)
+                Người dùng
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Comment)
+                Bình luận
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Stars)
+                Đánh giá
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RatingDate)
+                Ngày đánh giá
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
+            
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in lstRating) {
         <tr>
             
             <td>
-                @Html.DisplayFor(modelItem => item.IdNguoiDung)
+                    @(item.IdNguoiDung != null
+                        ? ListUser.FirstOrDefault(c => c.Id == item.IdNguoiDung)?.UserName : "")
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Comment)
+                @item.Comment
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Stars)
+                    @if (item.Stars == 1)
+                    {
+                    <div class="text-primary mb-2">
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    }
+                    @if (item.Stars == 2)
+                    {
+                        <div class="text-primary mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                    }
+                    @if (item.Stars == 3)
+                    {
+                        <div class="text-primary mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                    }
+                    @if (item.Stars == 4)
+                    {
+                        <div class="text-primary mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                    }
+                    @if (item.Stars == 5)
+                    {
+                        <div class="text-primary mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RatingDate)
+                @item.RatingDate
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
+            
+            
         </tr>
 }
     </tbody>
