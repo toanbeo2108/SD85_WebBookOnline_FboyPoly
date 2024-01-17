@@ -4,6 +4,7 @@
     ViewData["Title"] = "Home Page";
     IEnumerable<Book> lsttopBookTime = ViewBag.lstSelectNew as IEnumerable<Book>;
     IEnumerable<Book> lsttopBookTopQuantitySold = ViewBag.lstTopquantitySold as IEnumerable<Book>;
+    IEnumerable<Combo> listCombo = ViewBag.listCombo as IEnumerable<Combo>;
 }
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor context
 @using Newtonsoft.Json
@@ -272,6 +273,34 @@ else if (User.IsInRole("User"))
                         <div class="card-footer d-flex justify-content-between bg-light border">
                             <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                             <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="container-fluid pt-5">
+        <div class="text-center mb-4">
+            <h2 class="section-title px-5"><span class="px-2">Combo mới</span></h2>
+        </div>
+        <div class="row px-xl-5 pb-3">
+            @foreach (var item in listCombo)
+            {
+                <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                    <div class="card product-item border-0 mb-4">
+                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                            <img class="img-fluid w-100" src="~/images/@item.Image" alt="">
+                        </div>
+                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                            <h6 class="text-truncate mb-3">@item.ComboName</h6>
+                            <div class="d-flex justify-content-center">
+                                <h6>@item.Price</h6><h6 class="text-muted ml-2"><del>@item.Price</del></h6>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between bg-light border">
+                            <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                            <a asp-action="deTailCombo" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.ComboID" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                         </div>
                     </div>
                 </div>
