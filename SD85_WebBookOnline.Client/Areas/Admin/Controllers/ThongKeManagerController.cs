@@ -279,6 +279,64 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             });
 
         }
-        
+        [HttpGet, Route("GetComBo")]
+        public async Task<IActionResult> GetComBo()
+        {
+
+
+            var urlBill = "https://localhost:7079/api/Bill/GetAllBill";
+            var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+            var urlBillitem = "https://localhost:7079/api/BillItem/GetAllBillItem";
+           
+
+            var BillksResponse = await _httpClient.GetAsync(urlBill);
+          
+            var billItemsResponse = await _httpClient.GetAsync(urlBillitem);
+            var ComBoResponse = await _httpClient.GetAsync(urlCombo);
+
+            BillksResponse.EnsureSuccessStatusCode();
+            ComBoResponse.EnsureSuccessStatusCode();
+            billItemsResponse.EnsureSuccessStatusCode();
+            
+
+            var billContent = await BillksResponse.Content.ReadAsStringAsync();
+            var ComboContent = await ComBoResponse.Content.ReadAsStringAsync();
+            var billItemsContent = await billItemsResponse.Content.ReadAsStringAsync();
+           
+
+            var ComBos = JsonConvert.DeserializeObject<IEnumerable<Combo>>(ComboContent);
+            var billItems = JsonConvert.DeserializeObject<IEnumerable<BillItems>>(billItemsContent);
+            var Bills = JsonConvert.DeserializeObject<IEnumerable<Bill>>(billContent);
+           
+
+            // Thống kê cho từng sách
+
+            var thongKeData = new List<ThongKeViewModel>(); // Sử dụng List thay vì IEnumerable
+
+            thongKeData.AddRange(
+                                    (from bi in billItems
+                                     join cb in ComBos on bi.ComboID equals cb.ComboID
+                                     join c in Bills on bi.BillID equals c.BillID
+                                     where c.Status == 3 && cb.ComboID != null && bi.Price != null
+                                     group new { bi, cb, c } by new { cb.ComboName
+                                     } into g
+                                     select new ThongKeViewModel
+                                     {
+                                         tensach = g.Key.ComboName,
+                                         TongSoSachBanDuoc = g.Sum(x => x.bi.Quantity),                                        
+                                         TongDoanhThusach = g.Sum(x => x.bi.Price * x.bi.Quantity),
+                                     }).OrderByDescending(x => x.TongDoanhThusach));
+
+
+
+
+            return Json(new
+            {
+                status = true,
+                message = _mess,
+                data = thongKeData,
+
+            });
+        }
     }
 }

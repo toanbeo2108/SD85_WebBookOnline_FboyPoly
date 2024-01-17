@@ -1,7 +1,7 @@
 ﻿
 
 $(document).ready(function () {
-    
+    InitComBo();
     InitPage()
     $('#tittle').text('Thống kê doanh thu sách bán lẻ')
 
@@ -242,6 +242,58 @@ function InitPage3() {
         }
     });
 }
+
+function InitComBo() {
+    $.get('/GetComBo', function (re) {
+        if (re.status) {
+            // Hủy DataTable hiện tại (nếu có)
+            if ($.fn.DataTable.isDataTable('#thong_keCombo')) {
+                $('#thong_keCombo').DataTable().destroy();
+            }
+
+            let header = `
+                <thead>
+                    <tr>
+                        <th>Tên sách</th>
+                        <th>Tổng Combo bán được</th>
+                        <th>Tổng doanh thu</th>
+                       
+                    </tr>
+                </thead>`;
+            let body = '';
+
+            // Log dữ liệu từ server
+            console.log("Dữ liệu từ server:", re.data);
+
+            if (re.data.length > 0) {
+                re.data.forEach(row => {
+                    let tr = `<tr>
+                                <td>${row.tensach}</td>
+                                <td>${row.tongDoanhThusach}</td>
+                                <td>${row.tongSoSachBanDuoc}</td>
+                               
+                              </tr>`;
+                    body += tr;
+
+                });
+            }
+
+            // Thêm table vào HTML
+            $('#thong_keCombo').html(header + body);
+
+            // Khởi tạo DataTable
+            $('#thong_keCombo').DataTable({
+                "pageLength": 5,
+                "searching": false
+            });
+
+
+        } else {
+            alert(re.message);
+        }
+    });
+}
+
 
 function generateExcel() {
     if ($('#thongke-options').val() == 1) {

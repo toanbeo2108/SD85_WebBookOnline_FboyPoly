@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SD85_WebBookOnline.Api.Migrations
 {
-    public partial class hiepdzvl : Migration
+    public partial class _9999999999 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -378,7 +378,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TransactionStatus = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Weight = table.Column<int>(type: "int", nullable: false),
                     Volume = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
@@ -550,7 +550,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                 columns: table => new
                 {
                     InputSlipID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdNhanVienNhap = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IdNhanVienNhap = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdSachNhap = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     SoLuong = table.Column<int>(type: "int", nullable: true),
                     GiaNhap = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
@@ -676,17 +676,17 @@ namespace SD85_WebBookOnline.Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6adaa781-c759-448a-bc36-7ef4431bc3f7", "8d382d68-b7f0-4550-a473-fda28bc4eb63", "Admin", "ADMIN" });
+                values: new object[] { "a9f1d4a9-7262-48ef-b2ba-9cb1c5df160a", "be565570-557e-4d9b-a7a3-8ddbb4305820", "Employee", "EMPLOYEE" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "9baa8d3e-b643-4922-98a7-54a0c796e596", "810dd295-79de-42f5-b3cc-a65c96d7dd9f", "Empolyee", "EMPLOYEE" });
+                values: new object[] { "b924f90c-4ba1-4c0a-ba20-03414be5f013", "69b0c1b9-ec61-4500-a601-0fa0ef21fdb2", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "c088cb0e-ea2f-41a9-b0a0-4a473347550f", "dac29592-09ae-410a-bd50-ea5798eaccf4", "User", "USER" });
+                values: new object[] { "bc21b820-2122-40a7-9896-0a22f431847a", "163c25fe-327c-489e-8491-5c7c491e706e", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

@@ -12,8 +12,8 @@ using SD85_WebBookOnline.Api.Data;
 namespace SD85_WebBookOnline.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240116045812_test2")]
-    partial class test2
+    [Migration("20240117163115_9999999999")]
+    partial class _9999999999
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,23 +53,23 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8c64b477-7de1-4d10-8e66-028263d0f089",
-                            ConcurrencyStamp = "b2d4bd81-cee0-4d92-b7af-22355fcb2249",
+                            Id = "bc21b820-2122-40a7-9896-0a22f431847a",
+                            ConcurrencyStamp = "163c25fe-327c-489e-8491-5c7c491e706e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "c39f0748-159f-4ced-a418-b47e8e4bfa58",
-                            ConcurrencyStamp = "2ff5bdb6-8e4a-4df7-a112-59289082832c",
+                            Id = "b924f90c-4ba1-4c0a-ba20-03414be5f013",
+                            ConcurrencyStamp = "69b0c1b9-ec61-4500-a601-0fa0ef21fdb2",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "222c62eb-19b3-4740-8ad3-244e5bc48641",
-                            ConcurrencyStamp = "9dbc38e9-b07f-4a7f-b72c-3814e4fe7e2f",
-                            Name = "Empolyee",
+                            Id = "a9f1d4a9-7262-48ef-b2ba-9cb1c5df160a",
+                            ConcurrencyStamp = "be565570-557e-4d9b-a7a3-8ddbb4305820",
+                            Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
                 });
@@ -452,8 +452,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<decimal>("Volume")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
 
                     b.Property<int>("YearOfRelease")
                         .HasColumnType("int");
@@ -828,8 +828,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<decimal?>("GiaNhap")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("IdNhanVienNhap")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("IdNhanVienNhap")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("IdSachNhap")
                         .HasColumnType("uniqueidentifier");
