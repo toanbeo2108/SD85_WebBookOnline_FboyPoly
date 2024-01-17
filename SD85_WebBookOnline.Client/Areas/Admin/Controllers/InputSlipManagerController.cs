@@ -27,6 +27,12 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var urluser = $"https://localhost:7079/api/user/GetAllUser";
+            var response = await _httpClient.GetAsync(urluser);
+            string apiDataUser = await response.Content.ReadAsStringAsync();
+            var ListUser = JsonConvert.DeserializeObject<List<User>>(apiDataUser);
+            ViewBag.listUser = ListUser;
+
             var url = $"https://localhost:7079/api/InputSlipController/GetAllInputSlip";
             var httpClient = new HttpClient();
             var respon = await _httpClient.GetAsync(url);
@@ -44,17 +50,17 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         [HttpPost, Route("themm-inputslip")]
         public async Task<IActionResult> CreateIP(InputSlip ip)
         {
-            string _mess = "";
-            bool _stt = false;
-
-
-
-
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string _mess = "";
+            bool _stt = false;
+            string UserId = Request.Cookies["UserID"];
+
 
             ip.InputSlipID = Guid.NewGuid();
-            var url = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&giaban={ip.GiaBan}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";
+            ip.IdNhanVienNhap = UserId;
+            ip.NgayNhap = DateTime.Now;
+            var url = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&giaban={ip.GiaBan}&idNhanVienNhap={UserId}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";
             // var url = $"https://localhost:7079/api/InputSlipController/CreateInputSlip?idSachNhap={ip.IdSachNhap}&soLuong={ip.SoLuong}&ngayNhap={ip.NgayNhap}&giaNhap={ip.GiaNhap}";
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(ip), Encoding.UTF8, "application/json");
