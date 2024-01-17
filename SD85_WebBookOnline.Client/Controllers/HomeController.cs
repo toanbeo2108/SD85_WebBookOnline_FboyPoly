@@ -140,7 +140,6 @@ namespace SD85_WebBookOnline.Client.Controllers
                 ViewBag.lstTopquantitySold = lstselectTopquantitysold;
             }
 
-            //	
             var totalQuantityPro = JsonConvert.SerializeObject(TotalQuantityPro);
             Response.Cookies.Append("ToTalQuantityPro", totalQuantityPro);
 
