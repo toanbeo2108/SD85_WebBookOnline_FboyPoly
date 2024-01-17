@@ -54,7 +54,7 @@ namespace SD85_WebBookOnline.Share.Data
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseSqlServer("Data Source=LAPTOP-DAV1LO0Q\\SQLEXPRESS;Initial Catalog=WebBookOnline_DATN1;Integrated Security=True;");
+				optionsBuilder.UseSqlServer("Data Source=DESKTOP-T0CSGCJ\\SQLEXPRESS;Initial Catalog=WebBookOnline_DATN1;Integrated Security=True;");
 			}
 		}
 	}

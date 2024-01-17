@@ -1,4 +1,4 @@
-﻿//using ClosedXML.Excel;
+﻿
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -279,12 +279,6 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             });
 
         }
-
-
-        public IActionResult Chart()
-        {
-           
-            return View();
-        }
+        
     }
 }

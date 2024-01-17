@@ -51,7 +51,7 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-=
+
                             Id = "e36c9b96-b7b2-4ada-b481-e584d47cb285",
                             ConcurrencyStamp = "186de966-a743-448c-92e8-4fc63997693c",
 
