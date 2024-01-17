@@ -51,29 +51,23 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.HasData(
                         new
                         {
-
-                            Id = "e36c9b96-b7b2-4ada-b481-e584d47cb285",
-                            ConcurrencyStamp = "186de966-a743-448c-92e8-4fc63997693c",
-
+                            Id = "bc21b820-2122-40a7-9896-0a22f431847a",
+                            ConcurrencyStamp = "163c25fe-327c-489e-8491-5c7c491e706e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-
-                            Id = "3d6c1e43-bfa8-493a-863a-3345d6ec89cb",
-                            ConcurrencyStamp = "b4bde7b0-5b4d-448a-9162-31238952aafe",
-
+                            Id = "b924f90c-4ba1-4c0a-ba20-03414be5f013",
+                            ConcurrencyStamp = "69b0c1b9-ec61-4500-a601-0fa0ef21fdb2",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-
-                            Id = "cda6b623-324b-4c8d-b34e-316edfb469f1",
-                            ConcurrencyStamp = "049d0fdd-5f85-4603-bed2-34d009b1a69c",
-
-                            Name = "Empolyee",
+                            Id = "a9f1d4a9-7262-48ef-b2ba-9cb1c5df160a",
+                            ConcurrencyStamp = "be565570-557e-4d9b-a7a3-8ddbb4305820",
+                            Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
                 });
@@ -832,8 +826,8 @@ namespace SD85_WebBookOnline.Api.Migrations
                     b.Property<decimal?>("GiaNhap")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("IdNhanVienNhap")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("IdNhanVienNhap")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("IdSachNhap")
                         .HasColumnType("uniqueidentifier");
