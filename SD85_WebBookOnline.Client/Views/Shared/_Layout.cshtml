@@ -13,6 +13,8 @@
         var cookievalue = context.HttpContext.Request.Cookies["QuantityPro"];
         var valueCookieTotalQTT = context.HttpContext.Request.Cookies["ToTalQuantityPro"];
         var valuecookieTotalUser = context.HttpContext.Request.Cookies["ToTalQuantityUser"];
+        var valuecookieDoanhthu = context.HttpContext.Request.Cookies["ToTalDanhThu"];
+        var valuecookieqttSold = context.HttpContext.Request.Cookies["totalQuantitySold"];
     }
     @if (!User.Identity.IsAuthenticated)
     {
@@ -229,7 +231,7 @@
                 <div class="navigation">
                     <ul>
                         <li>
-                            <a href="">
+                            <a asp-action="Index" asp-controller="Home">
                                 <span class="icon"><ion-icon name="laptop-outline"></ion-icon></span>
                                 <span class="title">Admin Manager</span>
                             </a>
@@ -361,24 +363,28 @@
                                 </div>
                             </div>
                        </a>
-                        <div class="card">
+                        <a asp-action="AllBookManager" asp-controller="BookManager" asp-area="Admin">
+                            <div class="card">
                             <div>
-                                <div class="number">2023</div>
+                                <div class="number">@valuecookieqttSold</div>
                                 <div class="cardName">Số Sản Phẩm đã Bán</div>
                             </div>
                             <div class="iconBx">
                                 <ion-icon name="cart-outline"></ion-icon>
                             </div>
                         </div>
-                        <div class="card">
-                            <div>
-                                <div class="number">1012</div>
-                                <div class="cardName">Tổng Số Hóa Đơn</div>
+                        </a>
+                        <a asp-action="Index" asp-controller="ThongKeManager" asp-area="Admin">
+                            <div class="card">
+                                <div>
+                                    <div class="number">@valuecookieDoanhthu</div>
+                                    <div class="cardName">Tổng Doanh Thu</div>
+                                </div>
+                                <div class="iconBx">
+                                    <ion-icon name="id-card-outline"></ion-icon>
+                                </div>
                             </div>
-                            <div class="iconBx">
-                                <ion-icon name="id-card-outline"></ion-icon>
-                            </div>
-                        </div>
+                        </a>
                     </div>
                     <div>
                         <main role="main" class="pb-3">
