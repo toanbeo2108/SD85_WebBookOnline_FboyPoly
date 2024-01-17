@@ -20,6 +20,8 @@ namespace SD85_WebBookOnline.Client.Controllers
         private readonly HttpClient _httpClient;
         private readonly HttpClient _HttpClient;
         public List<CartItems> CartItemss { get; set; } = new List<CartItems>();
+        public int? TotalQuantitySold { get; set; } = 0;
+        public decimal? DoanhThu { get; set; } = 0;
         public int? TotalQuantityPro { get; set; } = 0;
         public int TotalQuantityUser { get; set; } = 0;
         public string erro { get; set; }
@@ -124,6 +126,7 @@ namespace SD85_WebBookOnline.Client.Controllers
                 foreach(var item in lstBook)
                 {
                     TotalQuantityPro += item.TotalQuantity;
+                    TotalQuantitySold += item.QuantitySold; 
                 }
                 //
                 var lstBookOk = lstBook.Where(x => x.Status == 1).ToList();
@@ -137,10 +140,15 @@ namespace SD85_WebBookOnline.Client.Controllers
                 ViewBag.lstTopquantitySold = lstselectTopquantitysold;
             }
 
+            //	
             var totalQuantityPro = JsonConvert.SerializeObject(TotalQuantityPro);
             Response.Cookies.Append("ToTalQuantityPro", totalQuantityPro);
 
+            var totalQuantitySold = JsonConvert.SerializeObject(TotalQuantitySold);
+            Response.Cookies.Append("totalQuantitySold", totalQuantitySold);
 
+            //
+        
             var url = $"https://localhost:7079/api/user/GetUsersByRole?roleName=User";
             var response = await _httpClient.GetAsync(url);
             string apiDataUser = await response.Content.ReadAsStringAsync();
@@ -151,6 +159,22 @@ namespace SD85_WebBookOnline.Client.Controllers
             }
             var valueTotalqttUser = JsonConvert.SerializeObject(TotalQuantityUser);
             Response.Cookies.Append("ToTalQuantityUser", valueTotalqttUser);
+            //
+            var Url = $"https://localhost:7079/api/Bill/GetAllBill";
+            var respone = await _httpClient.GetAsync(Url);
+            string apiData = await respone.Content.ReadAsStringAsync();
+            var Bills = JsonConvert.DeserializeObject<List<Bill>>(apiData);
+            if(Bills == null)
+            {
+                return NotFound();
+            }
+            var BillOk = Bills.Where(x => x.Status == 3);
+            foreach(var item in BillOk)
+            {
+                DoanhThu += item.Total;
+            }
+            var cookieValueDanhthu = JsonConvert.SerializeObject(Convert.ToInt32(DoanhThu));
+            Response.Cookies.Append("ToTalDanhThu", cookieValueDanhthu);
             return View();
         }
 

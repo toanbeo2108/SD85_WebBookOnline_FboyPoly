@@ -1,12 +1,10 @@
 ﻿@model SD85_WebBookOnline.Share.ViewModels.RegisterUser;
 
 @{
-    ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_LayoutLogin.cshtml";
 
 }
 
-<h4>RegisterUser</h4>
 <hr />
 <div class="all-Layout">
     <link rel="stylesheet" href="~/css/StyleLogin.css">
@@ -14,14 +12,14 @@
     <div class="nav-menubar">
         <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background: transparent !important;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Trang Chủ</a>
+                <a class="navbar-brand" asp-action="Index" asp-controller="Home">Trang Chủ</a>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Gian Hàng</a>
+                            <a class="nav-link active" aria-current="page" asp-action="All" asp-controller="Shop">Gian Hàng</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Chương Trình Đặc Biệt</a>
+                            <a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Home">Chương Trình Đặc Biệt</a>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
@@ -61,7 +59,7 @@
                 </div>
                 <div class="links">
                 </div>
-                <input type="submit" value="ĐĂNG KÝ">
+                <input type="submit" style="margin-top : 30px" value="ĐĂNG KÝ">
             </form>
         </div>
     </section>
