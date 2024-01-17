@@ -24,13 +24,13 @@ namespace SD85_WebBookOnline.Share.ViewModels
         public string lastName { get; set; }
 
         [Required]
-        public string City { get; set; }
+        public string ProvinceName { get; set; }
 
         [Required]
-        public string District { get; set; }
+        public string DistrictName { get; set; }
 
         [Required]
-        public string Ward { get; set; }
+        public string WardName { get; set; }
 
         public string? Street { get; set; }
 

@@ -4,6 +4,12 @@
     ViewData["Title"] = "GetBillDetails";
     Bill bill = ViewBag.Bill;
     User user = ViewBag.User;
+    List<BillItems> billItems = Model.ToList();
+    decimal subtotal = 0;
+    foreach (BillItems items in billItems)
+    {
+        subtotal += items.ToTal;
+    }
 }
 
 <div class="web-container">
@@ -82,7 +88,7 @@
             <tr>
                 <td class="payment-info">
                     <div>
-                        Account : <strong>@bill.</strong>
+                        Account : <strong>@user.UserName</strong>
                     </div>
                     <div>
                         Routing No: <strong>120000547</strong>
@@ -106,6 +112,12 @@
         </div>
     </div>
 </div>
+
+@if (bill.Status == 1)
+{
+    <a class="btn btn-primary" asp-controller="Bill" asp-action="HuyHoaDon" asp-route-id="@bill.BillID" onclick="return confirm('Bạn có chắc muốn hủy đơn hàng?')">Hủy hóa đơn mua hàng</a>
+}
+<a asp-area="Customer" asp-controller="Bill" asp-action="GetAllBill">Quay lại trang quản lý Bill</a>
 
 <link rel="stylesheet" href="./web/modern-normalize.css">
 <link rel="stylesheet" href="./web/web-base.css">
