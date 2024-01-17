@@ -47,10 +47,10 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var respon = await httpClient.PostAsync(urlBook, content);
             if (respon.IsSuccessStatusCode)
             {
-                return RedirectToAction("AllFormManager", "FormManager", new { area = "Admin" });
+                return RedirectToAction("MessageFormPageSucces", "FormManager", new { area = "Admin" });
             }
-            TempData["erro message"] = "thêm thất bại";
-            return View();
+            ViewBag.MessageSucces = "Thêm thất bại";
+            return RedirectToAction("MessageFormPageFalse", "FormManager", new { area = "Admin" });
         }
         [HttpGet]
         public async Task<IActionResult> FormDetail(Guid id)
@@ -104,6 +104,14 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             return RedirectToAction("AllFormManager", "FormManager", new { area = "Admin" });
 
+        }
+        public IActionResult MessageFormPageSucces()
+        {
+            return View();
+        }
+        public IActionResult MessageFormPageFalse()
+        {
+            return View();
         }
     }
 }

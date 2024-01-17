@@ -20,6 +20,8 @@ namespace SD85_WebBookOnline.Client.Controllers
         private readonly HttpClient _httpClient;
         private readonly HttpClient _HttpClient;
         public List<CartItems> CartItemss { get; set; } = new List<CartItems>();
+        public int? TotalQuantityPro { get; set; } = 0;
+        public int TotalQuantityUser { get; set; } = 0;
         public string erro { get; set; }
         public int QuantityPro { get; set; } = 0;
         public List<Form> listForm { get; set; }
@@ -28,6 +30,7 @@ namespace SD85_WebBookOnline.Client.Controllers
             _logger = logger;
             _httpClient = httpClient;
             _HttpClient = new HttpClient();
+            //SetDataProduct();
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -44,24 +47,25 @@ namespace SD85_WebBookOnline.Client.Controllers
             }
             var lstFormOk = JsonConvert.SerializeObject(listForm);
             Response.Cookies.Append("lstForm", lstFormOk);
-            //
-            string urlctd = $"https://localhost:7079/api/CategoryParent/GetAllCategoryParents";
-            var responctd = await _httpClient.GetAsync(urlctd);
-            string apidatactd = await responctd.Content.ReadAsStringAsync();
-            var lstctd = JsonConvert.DeserializeObject<List<CategoryParent>>(apidatactd);
-            if(lstctd == null)
-            {
-                erro = "Danh muc null";
-            }
-            var lstcatePOk = JsonConvert.SerializeObject(lstctd);
-            Response.Cookies.Append("lstCateParent", lstcatePOk);
-            //var lstCTPValue = Request.Cookies["lstCateParent"];
-            //
-            var urllanguage = $"https://localhost:7079/api/Languge/GetAllLanguge";
+
+			//
+			string urlctd = $"https://localhost:7079/api/CategoryParent/GetAllCategoryParents";
+			var responctd = await _httpClient.GetAsync(urlctd);
+			string apidatactd = await responctd.Content.ReadAsStringAsync();
+			var lstctd = JsonConvert.DeserializeObject<List<CategoryParent>>(apidatactd);
+			if (lstctd == null)
+			{
+				erro = "Danh muc null";
+			}
+			var lstcatePOk = JsonConvert.SerializeObject(lstctd);
+			Response.Cookies.Append("lstCateParent", lstcatePOk);
+			//var lstCTPValue = Request.Cookies["lstCateParent"];
+			//
+			var urllanguage = $"https://localhost:7079/api/Languge/GetAllLanguge";
             var responlaguage = await _httpClient.GetAsync(urllanguage);
             string apiDatalanguae = await responlaguage.Content.ReadAsStringAsync();
             var lstLanguage = JsonConvert.DeserializeObject<List<Languge>>(apiDatalanguae);
-            if(lstLanguage == null)
+            if (lstLanguage == null)
             {
                 erro = "Danh muc null";
             }
@@ -72,7 +76,7 @@ namespace SD85_WebBookOnline.Client.Controllers
             var responauthor = await _httpClient.GetAsync(urlauthor);
             string apiDataauthor = await responauthor.Content.ReadAsStringAsync();
             var lstauthor = JsonConvert.DeserializeObject<List<Author>>(apiDataauthor);
-            if(lstauthor == null)
+            if (lstauthor == null)
             {
                 erro = "Danh muc null";
             }
@@ -83,7 +87,7 @@ namespace SD85_WebBookOnline.Client.Controllers
             var responCate = await _httpClient.GetAsync(urlCate);
             string apiDataCate = await responCate.Content.ReadAsStringAsync();
             var lstCate = JsonConvert.DeserializeObject<List<Category>>(apiDataCate);
-            if(lstCate == null)
+            if (lstCate == null)
             {
                 erro = "null roi";
             }
@@ -94,7 +98,7 @@ namespace SD85_WebBookOnline.Client.Controllers
             var responManufacturer = await _httpClient.GetAsync(urlManufacturer);
             string apiDataManufacturer = await responManufacturer.Content.ReadAsStringAsync();
             var lstManufacturer = JsonConvert.DeserializeObject<List<Manufacturer>>(apiDataManufacturer);
-            if(lstManufacturer == null)
+            if (lstManufacturer == null)
             {
                 erro = "null roi kia";
             }
@@ -104,17 +108,22 @@ namespace SD85_WebBookOnline.Client.Controllers
 
 
             var urlBook = $"https://localhost:7079/api/Book/get-all-book";
-            var responBook =  await _httpClient.GetAsync(urlBook);
+            var responBook = await _httpClient.GetAsync(urlBook);
             string apiDataBook = await responBook.Content.ReadAsStringAsync();
             var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
-            if(lstBook == null)         
+            if (lstBook == null)
             {
                 return NotFound();
             }
             else
             {
+                foreach(var item in lstBook)
+                {
+                    TotalQuantityPro += item.TotalQuantity;
+                }
+                //
                 var lstBookOk = lstBook.Where(x => x.Status == 1).ToList();
-                if(lstBookOk == null)
+                if (lstBookOk == null)
                 {
                     return NotFound();
                 }
@@ -123,7 +132,32 @@ namespace SD85_WebBookOnline.Client.Controllers
                 var lstselectTopquantitysold = lstBookOk.OrderByDescending(x => x.QuantitySold).Take(8).ToList();
                 ViewBag.lstTopquantitySold = lstselectTopquantitysold;
             }
-            
+            //
+			var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+			var httpClient = new HttpClient();
+			var responCombo = await _httpClient.GetAsync(urlCombo);
+			string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+			var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+            if(lstCombo == null) { return NotFound(); }
+            foreach(var item in lstCombo)
+            {
+                TotalQuantityPro += item.Quantity;
+            }
+            var totalQuantityPro = JsonConvert.SerializeObject(TotalQuantityPro);
+            Response.Cookies.Append("ToTalQuantityPro", totalQuantityPro);
+
+            //
+
+            var url = $"https://localhost:7079/api/user/GetUsersByRole?roleName=User";
+            var response = await _httpClient.GetAsync(url);
+            string apiDataUser = await response.Content.ReadAsStringAsync();
+            var ListUser = JsonConvert.DeserializeObject<List<User>>(apiDataUser);
+            if (ListUser != null)
+            {
+                TotalQuantityUser += ListUser.Count();
+            }
+            var valueTotalqttUser = JsonConvert.SerializeObject(TotalQuantityUser);
+            Response.Cookies.Append("ToTalQuantityUser", valueTotalqttUser);
             return View();
         }
 
@@ -180,7 +214,7 @@ namespace SD85_WebBookOnline.Client.Controllers
                     string apiDataCart = await responCart.Content.ReadAsStringAsync();
                     var ListCart = JsonConvert.DeserializeObject<List<Cart>>(apiDataCart);
                     //Lấy toàn bộ Cart có UserId = Userid truyền đến
-                     if(ListCart != null)
+                    if (ListCart != null)
                     {
                         foreach (var Cart in ListCart)
                         {
@@ -188,12 +222,12 @@ namespace SD85_WebBookOnline.Client.Controllers
                             var responCartItems = await _httpClient.GetAsync(urlCartItems);
                             string apiDataCartItems = await responCartItems.Content.ReadAsStringAsync();
                             List<CartItems> ListCartItems = JsonConvert.DeserializeObject<List<CartItems>>(apiDataCartItems);
-                            if(ListCartItems != null)
+                            if (ListCartItems != null)
                             {
                                 QuantityPro = ListCartItems.Count;
                                 Response.Cookies.Append("QuantityPro", QuantityPro.ToString());
                             }
-                        } 
+                        }
 
                         ViewBag.QuantityPro = QuantityPro;
                     }
@@ -264,7 +298,7 @@ namespace SD85_WebBookOnline.Client.Controllers
                 string apiDataImage = await responImage.Content.ReadAsStringAsync();
                 var lstImage = JsonConvert.DeserializeObject<List<Images>>(apiDataImage);
                 var lstImageBookDetail = lstImage.Where(x => x.BookID == Book.BookID).ToList();
-                if(lstImageBookDetail != null)
+                if (lstImageBookDetail != null)
                 {
                     ViewBag.lstImageBookDetail = lstImageBookDetail;
                 }
@@ -294,7 +328,7 @@ namespace SD85_WebBookOnline.Client.Controllers
 
             string json = Request.Cookies["myCart"];
             List<CartItems> myListCartItem = new List<CartItems>();
-            if(json != null)
+            if (json != null)
             {
                 myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
             }
@@ -335,7 +369,7 @@ namespace SD85_WebBookOnline.Client.Controllers
                 }
                 myListCartItem.Add(cartItems);
             }
-            
+
 
             string updateJson = JsonConvert.SerializeObject(myListCartItem);
             Response.Cookies.Append("myCart", updateJson);
@@ -356,7 +390,7 @@ namespace SD85_WebBookOnline.Client.Controllers
             ViewBag.lstBook = lstBook;
 
             string json = Request.Cookies["myCart"];
-            if(json != null)
+            if (json != null)
             {
                 List<CartItems> myListCartItem = JsonConvert.DeserializeObject<List<CartItems>>(json);
                 ViewBag.myCart = myListCartItem;
@@ -373,8 +407,9 @@ namespace SD85_WebBookOnline.Client.Controllers
                 {
                     ViewBag.Subtotal = subtotal;
                 }
-            }ViewBag.Subtotal = 0;
-            
+            }
+            ViewBag.Subtotal = 0;
+
             return View();
         }
         public async Task<IActionResult> DeleteToCart(Guid id)
@@ -410,7 +445,7 @@ namespace SD85_WebBookOnline.Client.Controllers
             string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
             var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
             var combo = lstCombo.FirstOrDefault(x => x.ComboID == id);
-            if(combo == null)
+            if (combo == null)
             {
                 return NotFound("Combo này đang null, kiểm tra lại dùm");
             }
@@ -419,43 +454,72 @@ namespace SD85_WebBookOnline.Client.Controllers
             {
                 List<ComboItem> myList = JsonConvert.DeserializeObject<List<ComboItem>>(json);
                 ViewBag.ListComboItem = myList;
-                
+
             }
             ViewBag.combo = combo;
             return View();
         }
-        //[HttpGet]
-        //public async Task<IActionResult> Shop()
-        //{
-        //    // Đọc cookie
-        //    var urlBook = $"https://localhost:7079/api/Book/get-all-book";
-        //    var responBook = await _httpClient.GetAsync(urlBook);
-        //    string apiDataBook = await responBook.Content.ReadAsStringAsync();
-        //    var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
-        //    if (lstBook == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    else
-        //    {
-        //        var lstBookOk = lstBook.Where(x => x.Status == 1).ToList();
-        //        if (lstBookOk == null)
-        //        {
-        //            return NotFound();
-        //        }
-        //        var lstSelect = lstBookOk.Take(18).ToList();
-        //        ViewBag.lstSelect = lstSelect;
-               
-        //    }
 
-        //    return View();
-        //}
         [HttpPost]
 
         public IActionResult Checkout()
         {
-           
+
             return View();
+        }
+        
+
+        [HttpGet]
+        public async void SetDataProduct()
+        {
+           
+            //var urlBook = $"https://localhost:7079/api/Book/get-all-book";
+            //var responBook = await _httpClient.GetAsync(urlBook);
+            //string apiDataBook = await responBook.Content.ReadAsStringAsync();
+            //var lstBook = JsonConvert.DeserializeObject<List<Book>>(apiDataBook);
+            //if (lstBook != null)
+            //{
+            //    foreach (var item in lstBook)
+            //    {
+            //        TotalQuantityPro += item.TotalQuantity;
+            //        if (item.QuantityExists == 0)
+            //        {
+            //            item.Status = 0;
+            //        }
+            //    }
+            //    var valueTotalqttPro = JsonConvert.SerializeObject(TotalQuantityPro);
+            //    Response.Cookies.Append("ToTalQuantityBook", valueTotalqttPro);
+            //}
+
+
+            //var token = Request.Cookies["Token"];
+            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            //var url = $"https://localhost:7079/api/user/GetUsersByRole?roleName=User";
+            //var response = await _httpClient.GetAsync(url);
+            //string apiDataUser = await response.Content.ReadAsStringAsync();
+            //var ListUser = JsonConvert.DeserializeObject<List<User>>(apiDataUser);
+            //if(ListUser != null)
+            //{
+            //    TotalQuantityUser += ListUser.Count();
+            //}
+            //var valueTotalqttUser = JsonConvert.SerializeObject(TotalQuantityUser);
+            //Response.Cookies.Append("ToTalQuantityUser",valueTotalqttUser);
+
+
+            //var urlCombo = $"https://localhost:7079/api/Combo/GetAllCombo";
+            //var responCombo = await _httpClient.GetAsync(urlCombo);
+            //string apiDataCombo = await responCombo.Content.ReadAsStringAsync();
+            //var lstCombo = JsonConvert.DeserializeObject<List<Combo>>(apiDataCombo);
+            //if(lstCombo != null )
+            //{
+            //    foreach(var item in lstCombo)
+            //    {
+            //        if(item.Quantity == 0)
+            //        {
+            //            item.Status = 0;
+            //        }
+            //    }
+            //}
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

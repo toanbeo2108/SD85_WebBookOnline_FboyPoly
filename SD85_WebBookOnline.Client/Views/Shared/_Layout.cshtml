@@ -11,6 +11,8 @@
     @inject Microsoft.AspNetCore.Http.IHttpContextAccessor context
     @{
         var cookievalue = context.HttpContext.Request.Cookies["QuantityPro"];
+        var valueCookieTotalQTT = context.HttpContext.Request.Cookies["ToTalQuantityPro"];
+        var valuecookieTotalUser = context.HttpContext.Request.Cookies["ToTalQuantityUser"];
     }
     @if (!User.Identity.IsAuthenticated)
     {
@@ -122,7 +124,7 @@
             <div class="row px-xl-5 pt-5">
                 <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
                     <a asp-action="Index" asp-controller="Home" class="text-decoration-none">
-                        <a href="#"><img class="logo" src="~/img/fptBookLogo.png" style="width: 50%;"></a>
+                        <a asp-action="Index" asp-controller="Home"><img class="logo" src="~/img/fptBookLogo.png" style="width: 50%;"></a>
                     </a>
                     <p>Dolore erat dolor sit lorem vero amet. Sed sit lorem magna, ipsum no sit erat lorem et magna ipsum dolore amet erat.</p>
                     <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
@@ -332,29 +334,33 @@
                         </div> *@
                         <!--User Img-->
                         <div class="user">
-                            <a asp-controller="Home" asp-action="Logout" asp-area=""><img src="~/user.jpg"></a>
+                            <a asp-controller="Home" asp-action="Logout" asp-area=""><img src="~/img/user-128.png"></a>
                         </div>
                     </div>
                     <!--Cards-->
                     <div class="cardBox">
-                        <div class="card">
-                            <div>
-                                <div class="number">999</div>
-                                <div class="cardName">Tổng số Tài Khoản</div>
+                        <a asp-area="Admin" asp-controller="UserManager" asp-action="GetAllUser">
+                            <div class="card">
+                                <div>
+                                    <div class="number">@valuecookieTotalUser</div>
+                                    <div class="cardName">Tổng số Tài Khoản</div>
+                                </div>
+                                <div class="iconBx">
+                                    <ion-icon name="accessibility-outline"></ion-icon>
+                                </div>
                             </div>
-                            <div class="iconBx">
-                                <ion-icon name="accessibility-outline"></ion-icon>
+                        </a>
+                        <a asp-action="AllBookManager" asp-controller="BookManager" asp-area="Admin">
+                            <div class="card">
+                                <div>
+                                    <div class="number">@valueCookieTotalQTT</div>
+                                    <div class="cardName">Tổng số Sản Phẩm</div>
+                                </div>
+                                <div class="iconBx">
+                                    <ion-icon name="laptop-outline"></ion-icon>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card">
-                            <div>
-                                <div class="number">7532</div>
-                                <div class="cardName">Tổng số Sản Phẩm</div>
-                            </div>
-                            <div class="iconBx">
-                                <ion-icon name="laptop-outline"></ion-icon>
-                            </div>
-                        </div>
+                       </a>
                         <div class="card">
                             <div>
                                 <div class="number">2023</div>
