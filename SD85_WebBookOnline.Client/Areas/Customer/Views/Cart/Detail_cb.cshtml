@@ -227,5 +227,24 @@
             this.value = value;
         }
     });
+    var h6Elements = document.querySelectorAll('.font-weight-semi-bold');
 
+    // Duyệt qua từng phần tử h6 và thực hiện thay đổi giá trị
+    h6Elements.forEach(function (h6Element) {
+        // Lấy giá trị từ phần tử
+        var amount = parseFloat(h6Element.innerText);
+
+        // Chuyển đổi giá trị thành định dạng tiền tệ và gán lại vào phần tử
+        var formatted_amount = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        h6Element.innerText = formatted_amount;
+
+        // Hiển thị kết quả trong console
+        console.log(formatted_amount);
+    });
 </script>
+
+<style>
+    h3 {
+        color: orangered;
+    }
+</style>
