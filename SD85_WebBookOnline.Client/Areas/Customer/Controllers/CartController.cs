@@ -768,7 +768,15 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             newBill.Status = 1;
 
             // Lưu Bill vào cơ sở dữ liệu :
-            var urlBill = $"https://localhost:7079/api/Bill/CreateBillWithManualBillId?priceBeforeVoucher={newBill.PriceBeforeVoucher}&voucherID={newBill.VoucherID}&ReceiverName={newBill.ReceiverName}&Email={newBill.Email}&BillID={newBill.BillID}&UserID={newBill.UserID}&shipmoney={newBill.Shipmoney}&userPhone={newBill.UserPhone}&addressUser={newBill.AddressUser}&orderDate={DateTime.Now}&deliveryDate={DateTime.Today.AddDays(5)}&total={newBill.Total}&paymentMethod={newBill.PaymentMethod}&status={newBill.Status}";
+            string urlBill;
+            if (newBill.VoucherID == Guid.Parse("00000000-0000-0000-0000-000000000000") )
+            {
+                 urlBill = $"https://localhost:7079/api/Bill/CreateBillWithManualBillId?priceBeforeVoucher={newBill.PriceBeforeVoucher}&ReceiverName={newBill.ReceiverName}&Email={newBill.Email}&BillID={newBill.BillID}&UserID={newBill.UserID}&shipmoney={newBill.Shipmoney}&userPhone={newBill.UserPhone}&addressUser={newBill.AddressUser}&orderDate={DateTime.Now}&deliveryDate={DateTime.Today.AddDays(5)}&total={newBill.Total}&paymentMethod={newBill.PaymentMethod}&status={newBill.Status}";
+            }
+            else
+            {
+                urlBill = $"https://localhost:7079/api/Bill/CreateBillWithManualBillId?priceBeforeVoucher={newBill.PriceBeforeVoucher}&voucherID={newBill.VoucherID}&ReceiverName={newBill.ReceiverName}&Email={newBill.Email}&BillID={newBill.BillID}&UserID={newBill.UserID}&shipmoney={newBill.Shipmoney}&userPhone={newBill.UserPhone}&addressUser={newBill.AddressUser}&orderDate={DateTime.Now}&deliveryDate={DateTime.Today.AddDays(5)}&total={newBill.Total}&paymentMethod={newBill.PaymentMethod}&status={newBill.Status}";
+            }
             var content = new StringContent(JsonConvert.SerializeObject(newBill), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(urlBill, content);
             if (!response.IsSuccessStatusCode)
