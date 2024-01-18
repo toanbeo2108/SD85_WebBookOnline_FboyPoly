@@ -2,11 +2,16 @@
 @model IEnumerable<SD85_WebBookOnline.Share.Models.Book>
 
 @{
-    ViewData["Title"] = "AllBookEmployee";
+    ViewData["Title"] = "AllBookManager";
     Layout = "~/Views/Shared/_Layout.cshtml";
     IEnumerable<Manufacturer> lstManu = ViewBag.lstManufacturer as IEnumerable<Manufacturer>;
     IEnumerable<Form> lstForm = ViewBag.lstForm as IEnumerable<Form>;
     IEnumerable<Coupon> lstCoupon = ViewBag.lstCoupon as IEnumerable<Coupon>;
+    IEnumerable<Book> lstBook = ViewBag.lstBook as IEnumerable<Book>;
+    IEnumerable<Category> lstCategory = ViewBag.lstCategory as IEnumerable<Category>;
+    IEnumerable<Author> lstAuthor = ViewBag.lstAuthor as IEnumerable<Author>;
+    IEnumerable<Languge> lstLanguge = ViewBag.lstLanguge as IEnumerable<Languge>;
+    IEnumerable<BookDetail> lstBookDetail = ViewBag.lstBookDetail as IEnumerable<BookDetail>;
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -15,7 +20,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
 
-<script src="~/js/BookManager.js"></script>
+<script src="~/js/BookDetailEpl.js"></script>
+<script src="~/js/BookEmployee.js"></script>
 <style>
     .modal {
         --bs-modal-width: 900px;
@@ -104,7 +110,10 @@
                             </div>
                         </td>
                         <td style="text-align : center; margin-bottom : 20px">
-                            <button class="btn btn-primary" type="button" id="btn_chitiet" data-id="@item.BookID">Xem chi tiết</button>
+                            <button class="btn btn-primary" style="margin-bottom: 5px;" type="button" id="btn_chitiet" data-id="@item.BookID">Xem chi tiết</button>
+
+                            <button type="button" class="btn btn-primary" id="btn_add_detail" data-id="@item.BookID">Thêm chi tiết sách</button>
+
                         </td>
                     </tr>
                 }
@@ -129,7 +138,7 @@
                 <div class="row">
 
                     <div class="col-md-6">
-                        <label class="form-label">Manufacture Name</label>
+                        <label class="form-label">Nhà sản xuất</label>
 
                         <select id="cb_manu" class="form-select" aria-label="Default select example">
 
@@ -141,7 +150,7 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Coupon Name</label>
+                        <label class="form-label">Khuyến mại</label>
 
                         <select id="cb_coupon" class="form-select" aria-label="Default select example">
 
@@ -153,7 +162,7 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Form Name</label>
+                        <label class="form-label">Hình thúc</label>
 
                         <select id="cb_form" class="form-select" aria-label="Default select example">
 
@@ -205,7 +214,7 @@
                         <input id="btn_Y_release" type="number" class="form-control" />
                     </div>
                     <div class="col-md-6">
-                        <label>Create Date</label>
+                        <label>Ngày tạo</label>
                         <input id="btn_createdate" type="date" class="form-control" />
                     </div>
                     @* <div class="col-md-6">
@@ -257,6 +266,76 @@
 
 
 
+<div class="modal fade" id="pp_Modal_detail">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <input type="text" style="display:none" id="btn_bookdetailID">
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="cb_bookname" class="form-label">Book Name</label>
+                    <select id="cb_bookname" class="form-select" disabled="disabled">
+
+                        @foreach (var item in lstBook)
+                        {
+
+                            <option value="@item.BookID">@item.BookName</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="cb_category" class="form-label">Category</label>
+                    <select id="cb_category" class="form-select">
+
+                        @foreach (var item in lstCategory)
+                        {
+
+                            <option value="@item.CategoryID">@item.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="cb_author" class="form-label">Author</label>
+                    <select id="cb_author" class="form-select">
+
+                        @foreach (var item in lstAuthor)
+                        {
+
+                            <option value="@item.AuthorID">@item.AuthorName</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="cb_languge" class="form-label">Languge</label>
+                    <select id="cb_languge" class="form-select">
+
+                        @foreach (var item in lstLanguge)
+                        {
+
+                            <option value="@item.LangugeID">@item.Name</option>
+                        }
+                    </select>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn_luu">Lưu</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 @*Link datatable*@
 <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -269,7 +348,6 @@
             var dataTable = $('#page').DataTable();
             // Chuyển datatable thành JSON
             var data = table.toJSON();
-
             // In dữ liệu JSON ra console
             console.log(data);
         });

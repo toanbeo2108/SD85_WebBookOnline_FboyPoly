@@ -1,21 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using SD85_WebBookOnline.Client.Services;
 using SD85_WebBookOnline.Share.Models;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
+namespace SD85_WebBookOnline.Client.Areas.Employee.Controllers
 {
-    public class BillManagerController : Controller
+    public class BillEmployeeController : Controller
     {
         private HttpClient _httpClient;
-        public BillManagerController()
+        public BillEmployeeController()
         {
             _httpClient = new HttpClient();
         }
-        public async Task<IActionResult> GetAllBill_admin()
+        public async Task<IActionResult> GetAllBill_epl()
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -32,7 +30,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             ViewBag.Users = users;
 
             var Voucher_code = Request.Cookies["Voucher_id"];
-            if (Voucher_code!= null)
+            if (Voucher_code != null)
             {
                 var UrlVoucher = $"https://localhost:7079/api/Voucher/GetVoucherByVoucherCode?VoucherCode={Voucher_code}";
                 var responeVoucher = await _httpClient.GetAsync(UrlVoucher);
@@ -44,7 +42,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             return View(Bills);
         }
 
-        public async Task<IActionResult> DetailBill_admin(Guid id)
+        public async Task<IActionResult> DetailBill_epl(Guid id)
         {
             var UserId = Request.Cookies["UserID"];
             var token = Request.Cookies["Token"];
@@ -67,7 +65,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             ViewBag.User = User;
             return View(ListBillItems);
         }
-        public async Task<IActionResult> XacNhanBill_admin(Guid id)
+        public async Task<IActionResult> XacNhanBill_epl(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -89,7 +87,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return BadRequest();
             }
         }
-        public async Task<IActionResult> HoanthanhBill_admin(Guid id)
+        public async Task<IActionResult> HoanthanhBill_epl(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -111,29 +109,29 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
                 return BadRequest();
             }
         }
-        public async Task<IActionResult> YeucauHuyBill_admin(Guid id)
-        {
-            var token = Request.Cookies["Token"];
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var urlBill = $"https://localhost:7079/api/Bill/GetBillByBillId/" + id;
-            var responeBill = await _httpClient.GetAsync(urlBill);
-            string apiBill = await responeBill.Content.ReadAsStringAsync();
-            var Bill = JsonConvert.DeserializeObject<Bill>(apiBill);
-            Bill.Status = 4; // chuyển sang trạng thái yêu cầu hủy
+        //public async Task<IActionResult> YeucauHuyBill_epl(Guid id)
+        //{
+        //    var token = Request.Cookies["Token"];
+        //    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        //    var urlBill = $"https://localhost:7079/api/Bill/GetBillByBillId/" + id;
+        //    var responeBill = await _httpClient.GetAsync(urlBill);
+        //    string apiBill = await responeBill.Content.ReadAsStringAsync();
+        //    var Bill = JsonConvert.DeserializeObject<Bill>(apiBill);
+        //    Bill.Status = 4; // chuyển sang trạng thái yêu cầu hủy
 
-            var urlUpdateBill = $"https://localhost:7079/api/Bill/UpdateBill/" + Bill.BillID;
-            var content = new StringContent(JsonConvert.SerializeObject(Bill), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync(urlUpdateBill, content);
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("GetAllBill_admin");
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-        public async Task<IActionResult> XacNhanHuyBill_admin(Guid id)
+        //    var urlUpdateBill = $"https://localhost:7079/api/Bill/UpdateBill/" + Bill.BillID;
+        //    var content = new StringContent(JsonConvert.SerializeObject(Bill), Encoding.UTF8, "application/json");
+        //    var response = await _httpClient.PutAsync(urlUpdateBill, content);
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        return RedirectToAction("GetAllBill_admin");
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
+        public async Task<IActionResult> XacNhanHuyBill_epl(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -148,38 +146,6 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var urlUpdateBill = $"https://localhost:7079/api/Bill/UpdateBill/" + Bill.BillID;
             var content = new StringContent(JsonConvert.SerializeObject(Bill), Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync(urlUpdateBill, content);
-            // Lấy tất cả những BillItem từ Bill trên :
-            var urlBillItems = $"https://localhost:7079/api/BillItem/GetAllBillItemByBillID/" + Bill.BillID;
-            var responeBillItems = await _httpClient.GetAsync(urlBillItems);
-            string apiBillItems = await responeBillItems.Content.ReadAsStringAsync();
-            var BillItems = JsonConvert.DeserializeObject<List<BillItems>>(apiBillItems);
-            foreach (var item in BillItems)
-            {
-                // Cập nhật lại số lượng cho sản phẩm:
-                if (item.ComboID == null) // billitem k có comboid tức là billItem của book
-                {
-                    // cập nhật lại sl bán được và sl tồn của sách
-                    var UrlUpdateBook = $"https://localhost:7079/api/Book/PlusBook/?id={item.BookID}&quantity={item.Quantity}";
-                    var contentUpdateBook = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
-                    var responseUpdateBook = await _httpClient.PostAsync(UrlUpdateBook, contentUpdateBook);
-                    if (!responseUpdateBook.IsSuccessStatusCode)
-                    {
-                        return BadRequest("Lỗi cập nhật lại số lượng tồn của sản phẩm");
-                    }
-                }
-                else
-                {
-                    // cập nhật lại sl bán được và sl tồn của combo
-                    var UrlUpdateBook = $"https://localhost:7079/api/Combo/CancelBill/?id={item.ComboID}&quantityBuy={item.Quantity}";
-                    var contentUpdateBook = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
-                    var responseUpdateBook = await _httpClient.PostAsync(UrlUpdateBook, contentUpdateBook);
-                    if (!responseUpdateBook.IsSuccessStatusCode)
-                    {
-                        return BadRequest("Lỗi cập nhật lại số lượng tồn của sản phẩm");
-                    }
-                }
-            }
-
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("GetAllBill_admin");

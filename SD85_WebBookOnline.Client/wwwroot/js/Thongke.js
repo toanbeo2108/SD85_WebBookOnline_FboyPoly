@@ -272,8 +272,8 @@ function InitComBo() {
                 re.data.forEach(row => {
                     let tr = `<tr>
                                 <td>${row.tensach}</td>
-                                <td>${row.tongDoanhThusach}</td>
                                 <td>${row.tongSoSachBanDuoc}</td>
+                                <td>${row.tongDoanhThusach}</td>
                                
                               </tr>`;
                     body += tr;

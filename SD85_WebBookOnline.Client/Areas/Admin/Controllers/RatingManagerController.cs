@@ -21,7 +21,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
         [HttpGet]
 
         public async Task<IActionResult> Book_AllRating(Guid idbookrt)
-          {
+        {
 
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -40,9 +40,9 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             string apiDataRating = await responRating.Content.ReadAsStringAsync();
             var lstRating = JsonConvert.DeserializeObject<List<Rating>>(apiDataRating);
             var lstRatingok = lstRating.Where(x => x.IdBook == idbookrt).ToList();
-            if (lstRatingok == null)
+            if (lstRatingok.Count == 0)
             {
-                return BadRequest("Sản phẩm này ko có bình luận nào");
+                return RedirectToAction("MessageNull", "RatingManager", new { area = "Admin" });
             }
             else
             {
@@ -52,7 +52,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
 
         }
 
-        [HttpGet,Route("delete_rating/{id}")]
+        [HttpGet, Route("delete_rating/{id}")]
         public async Task<IActionResult> RatingDelete(Guid id)
         {
             string _mess = "";

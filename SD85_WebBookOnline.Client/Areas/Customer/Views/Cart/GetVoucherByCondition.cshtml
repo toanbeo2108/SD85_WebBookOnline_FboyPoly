@@ -113,53 +113,11 @@
     <div class="container">
 
         <div class="formvr">
-            <div class="voucher">
-                <h3>Voucher Free Ship</h3>
-                @foreach (var vrsf in lstvcFreeShip)
-                {
 
-
-                    <div class="itemvoucher flex-container">
-                        <div class="image_voucher">
-                            <div class="bgvr">
-                                <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico_freeship.svg?q=10428" alt="">
-                            </div>
-                        </div>
-                        <div class="contenvr">
-                            <div class="thongtinvr flex-container">
-                                <div class="giatrivr ">
-                                    <h4>@vrsf.Name</h4>
-                                    <label id="myLabel" style="display:none">@vrsf.code</label>
-                                    <label for="">@vrsf.Description</label>
-                                </div>
-                                <div class="btn-click">
-                                    <button onclick="copyText()">Copy</button>
-                                </div>
-                            </div>
-                            <div class="hsdvr">
-
-                                <div class="datevr flex-container">
-                                    <div class="quantity">
-                                        <small>@vrsf.Quantity</small>
-                                    </div>
-                                    <div class="timeve">
-                                        <label for="">@vrsf.EndDate</label>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                }
-            </div>
             <div class="voucher">
                 <h3>Voucher giảm giá</h3>
                 @foreach (var vrsf in lstvcGiamGia)
                 {
-
-
                     <div class="itemvoucher flex-container">
                         <div class="image_voucher">
                             <div class="bgvr">
@@ -170,15 +128,14 @@
                             <div class="thongtinvr flex-container">
                                 <div class="giatrivr ">
                                     <h4>@vrsf.Name</h4>
-                                    <label id="myLabel" style="display:none">@vrsf.code</label>
+                                    <label class="codeLabel">@vrsf.code</label>
                                     <label for="">@vrsf.Description</label>
                                 </div>
                                 <div class="btn-click">
-                                    <button onclick="copyText()">Copy</button>
+                                    <button onclick="copyText('.codeLabel', this)">Copy</button>
                                 </div>
                             </div>
                             <div class="hsdvr">
-
                                 <div class="datevr flex-container">
                                     <div class="quantity">
                                         <small>@vrsf.Quantity</small>
@@ -186,11 +143,8 @@
                                     <div class="timeve">
                                         <label for="">@vrsf.EndDate</label>
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
                     </div>
                 }
@@ -199,21 +153,27 @@
     </div>
 </div>
 <script>
-    function copyText() {
-        var labelElement = document.getElementById("myLabel");
+    function copyText(selector, button) {
+        // Lấy nội dung của label dựa trên selector
+        var labelContent = $(button).closest('.thongtinvr').find(selector).text();
 
+        // Tạo một input tạm để chứa nội dung cần sao chép
         var tempInput = document.createElement("input");
-        tempInput.value = labelElement.innerText;
+        tempInput.value = labelContent;
 
+        // Thêm input vào body để có thể chọn và sao chép nó
         document.body.appendChild(tempInput);
 
+        // Chọn toàn bộ nội dung trong input
         tempInput.select();
 
+        // Sao chép nội dung vào clipboard
         document.execCommand("copy");
 
+        // Xóa input ẩn
         document.body.removeChild(tempInput);
 
-        alert("Đã sao chép: " + labelElement.innerText);
+        // Thông báo copy thành công (có thể sử dụng cách thông báo khác)
+        alert("Đã sao chép mã giảm giá: " + labelContent);
     }
-
 </script>

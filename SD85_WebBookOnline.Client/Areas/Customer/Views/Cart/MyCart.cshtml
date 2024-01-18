@@ -39,15 +39,34 @@
                                 <td class="align-middle">
                                     <div class="input-group quantity mx-auto" style="width: 100px;">
                                         <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-primary btn-minus">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
+                                            @if (item.ComboID != null)
+                                            {
+                                                <a asp-action="MinusCartItem" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.ComboID" class="btn btn-sm btn-primary btn-minus">
+                                                    <i class="fa fa-minus"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="MinusCartItem" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.BookID" class="btn btn-sm btn-primary btn-minus">
+                                                    <i class="fa fa-minus"></i>
+                                                </a>
+                                            }
+                                            
                                         </div>
                                         <input type="text" class="form-control form-control-sm bg-secondary text-center quantity" value="@item.Quantity">
                                         <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-primary btn-plus">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
+                                            @if (item.ComboID != null)
+                                            {
+                                                <a asp-action="PlusCartItem" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.ComboID" class="btn btn-sm btn-primary btn-plus">
+                                                    <i class="fa fa-plus"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="PlusCartItem" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.BookID" class="btn btn-sm btn-primary btn-plus">
+                                                    <i class="fa fa-plus"></i>
+                                                </a>
+                                            }
                                         </div>
                                     </div>
                                 </td>
@@ -122,68 +141,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
 <script>
-    document.querySelectorAll('.btn-minus').forEach(function (button) {
-        button.addEventListener('click', function () {
-            let quantityInput = this.parentElement.nextElementSibling;
-            let quantity = parseInt(quantityInput.value);
-            if (quantity > 1) {
-                quantity -= 1;
-                quantityInput.value = quantity;
-                updateTotal(this.parentElement.parentElement.parentElement.parentElement);
-            }
-            updateSubtotal();
-        });
-    });
-
-    document.querySelectorAll('.btn-plus').forEach(function (button) {
-        button.addEventListener('click', function () {
-            let quantityInput = this.parentElement.previousElementSibling;
-            let quantity = parseInt(quantityInput.value);
-            quantity += 1;
-            quantityInput.value = quantity;
-            updateTotal(this.parentElement.parentElement.parentElement.parentElement);
-            updateSubtotal();
-        });
-    });
-
-    document.querySelectorAll('.quantity input').forEach(function (input) {
-        input.addEventListener('change', function () {
-            updateTotal(this.parentElement.parentElement.parentElement.parentElement);
-            updateSubtotal();
-        });
-        input.addEventListener('input', function () {
-            let value = parseInt(this.value);
-            if (isNaN(value) || value <= 0) {
-                this.value = 1;
-            } else {
-                this.value = value;
-            }
-        });
-
-    });
-    window.addEventListener('DOMContentLoaded', (event) => {
-        document.querySelectorAll('tr').forEach(function (row) {
-            updateTotal(row);
-        });
-        updateSubtotal();
-    });
-
-    function updateTotal(row) {
-        let price = parseFloat(row.querySelector('.price').innerText.replace('$', ''));
-        let quantity = parseInt(row.querySelector('.quantity input').value);
-        let totalCell = row.querySelector('.itemTotal');
-        totalCell.innerText = '$' + (price * quantity).toFixed(2);
-    }
-    function updateSubtotal() {
-        let subtotal = 0;
-        document.querySelectorAll('.itemTotal').forEach(function (totalCell) {
-            subtotal += parseFloat(totalCell.innerText.replace('$', ''));
-        });
-        let shipping = parseFloat(document.querySelector('.shipping').innerText.replace('$', ''));
-        let finalTotal = subtotal + shipping;
-        document.querySelector('.subtotal').innerText = '$' + subtotal.toFixed(2);
-        document.querySelector('.finalTotal').innerText = '$' + finalTotal.toFixed(2);
-    }
        //sử dụng API Clipboard
     async function pasteText() {
                 try {

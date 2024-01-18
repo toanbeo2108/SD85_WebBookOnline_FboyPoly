@@ -52,9 +52,7 @@
                     <th style="text-align : center;">
                         Giảm Giá(Đồng)
                     </th>
-                    <th style="text-align : center;">
-                        Trạng Thái
-                    </th>
+                    
                     <th></th>
                 </tr>
             </thead>
@@ -87,20 +85,7 @@
                         <td style="text-align : center;">
                             @item.DiscountAmount
                         </td>
-                        <td style="text-align : center;">
-                            @if (item.Status==0)
-                            {
-                                <p>Không khả dụng</p>
-                            }
-                            @if (item.Status==1)
-                            {
-                                <p>Free Ship</p>
-                            }
-                            @if (item.Status==2)
-                            {
-                                <p>Giảm Tiền</p>
-                            }
-                        </td>
+                        
                         <td style="text-align : center;">
                           @*  <a asp-action="UpdateVoucher" asp-route-id="@item.VoucherID" class="btn btn-warning">Update</a>
                             <a asp-action="VoucherDetail" asp-route-id="@item.VoucherID" class="btn btn-info">Details</a>*@
@@ -156,13 +141,7 @@
             <label for="btn_DiscountAmount">DiscountAmount</label>
             <input type="text" id="btn_DiscountAmount"  class="form-control" />
         </div>
-        <div>
-            <label for="btn_Status">Status</label>
-            <select id="btn_Status" class="form-select" aria-label="Default select example">
-                <option value="1">Free Ship</option>
-                <option value="2">Giảm tiền</option>
-            </select>
-        </div>
+        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

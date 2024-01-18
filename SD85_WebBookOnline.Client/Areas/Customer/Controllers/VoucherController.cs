@@ -25,11 +25,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             string apiDataVoucher = await responVoucher.Content.ReadAsStringAsync();
             var lstVoucher = JsonConvert.DeserializeObject<IEnumerable<Voucher>>(apiDataVoucher);
             var lstVoucherok = lstVoucher.Where(x => x.Quantity >0 && x.EndDate > DateTime.Now && x.Status>0).ToList();
-            var lstvcFreeShip = lstVoucherok.Where(x => x.Status == 1).ToList();
-            var lstvcGiamGia = lstVoucherok.Where(x => x.Status == 2).ToList();
             ViewBag.lstVoucherok = lstVoucherok;
-            ViewBag.lstvcFreeShip = lstvcFreeShip;
-            ViewBag.lstvcGiamGia = lstvcGiamGia;
             return View();
         }
 

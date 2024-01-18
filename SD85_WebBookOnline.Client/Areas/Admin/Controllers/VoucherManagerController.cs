@@ -46,7 +46,7 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             vc.VoucherID = Guid.NewGuid();
-            
+            vc.Status = 1;
             var urlVoucher = $"https://localhost:7079/api/Voucher/CreateVoucher?name={vc.Name}&quantity={vc.Quantity}&code={vc.code}&description={vc.Description}&starDate={vc.StartDate}&endDate={vc.EndDate}&discountCondition={vc.DiscountCondition}&discountAmount={vc.DiscountAmount}&status={vc.Status}";
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(vc), Encoding.UTF8,"application/json");
