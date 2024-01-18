@@ -7,14 +7,17 @@
     IEnumerable<User> ListUser = ViewBag.ListUser as IEnumerable<User>;
     IEnumerable<Rating> lstSelectRating = ViewBag.lstSelectRating as IEnumerable<Rating>;
     Book book = ViewBag.BookDetail as Book;
-    decimal averageStars =0;
+    double avg =0;
+    double averageStars = 0;
     if (ViewBag.countStar == 0)
     {
-         averageStars = 0;
+         avg = 0;
+        averageStars = 0;
     }
     else
     {
-         averageStars = ViewBag.sumStar / ViewBag.countStar;
+         avg = ViewBag.sumStar / ViewBag.countStar;
+         averageStars = Math.Round(avg, 1);
     }
     
 
@@ -57,7 +60,7 @@
                     <small class="fas fa-star"></small>
 
                 </div>
-                <small class="pt-1">(50 Reviews)</small>
+               
             </div>
             <h3 class="font-weight-semi-bold mb-4" id="element-price">@book.Price</h3>
             <p class="mb-4">@book.Description</p>
@@ -217,7 +220,7 @@
                     }
                     else
                     {
-                        <div>
+                        <div style="text-align:center">
                             <a asp-action="CreateRating" asp-controller="Cart" asp-route-id="@book.BookID" class="btn btn-outline-warning" style="text-align:center; margin-top:30px">Them Danh Gia</a>
                         </div>
                     }

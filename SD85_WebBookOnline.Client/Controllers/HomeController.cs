@@ -297,6 +297,29 @@ namespace SD85_WebBookOnline.Client.Controllers
         [HttpGet]
         public async Task<IActionResult> deTail(Guid id)
         {
+            var url = $"https://localhost:7079/api/user/GetAllUser";
+            var response = await _httpClient.GetAsync(url);
+            string apiDataUser = await response.Content.ReadAsStringAsync();
+            var ListUser = JsonConvert.DeserializeObject<List<User>>(apiDataUser);
+            ViewBag.ListUser = ListUser;
+
+            var urlRating = $"https://localhost:7079/api/Rating/GetAllRating";
+            var httpClient = new HttpClient();
+            var responRating = await _httpClient.GetAsync(urlRating);
+            string apiDataRating = await responRating.Content.ReadAsStringAsync();
+            var lstRating = JsonConvert.DeserializeObject<List<Rating>>(apiDataRating);
+            var lstRating_book = lstRating.Where(x => x.IdBook == id).ToList();
+            ViewBag.lstRating_book = lstRating_book;
+
+            int countStar = lstRating_book.Count(x => x.IdBook == id);
+            ViewBag.countStar = countStar;
+            double sumStar = (double)lstRating_book.Sum(x => x.Stars);
+            ViewBag.sumStar = sumStar;
+            //decimal averageStars = sumStar / countStar;
+            //ViewBag.AverageStars = averageStars;
+            var lstSelectRating = lstRating_book.OrderByDescending(x => x.RatingDate).Take(4).ToList();
+            ViewBag.lstSelectRating = lstSelectRating;
+
             var urlBook = $"https://localhost:7079/api/Book/get-all-book";
             var responBook = await _httpClient.GetAsync(urlBook);
             string apiDataBook = await responBook.Content.ReadAsStringAsync();

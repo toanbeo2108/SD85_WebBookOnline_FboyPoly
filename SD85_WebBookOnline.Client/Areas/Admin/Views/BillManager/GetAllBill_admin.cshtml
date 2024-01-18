@@ -25,9 +25,11 @@
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="HoanThanh-tab" data-bs-toggle="tab" data-bs-target="#HoanThanh" type="button" role="tab" aria-controls="HoanThanh" aria-selected="false">Hoàn thành</button>
     </li>
+
    @*  <li class="nav-item" role="presentation">
+
         <button class="nav-link" id="YcHuy-tab" data-bs-toggle="tab" data-bs-target="#YcHuy" type="button" role="tab" aria-controls="YcHuy" aria-selected="false">Yêu cầu hủy</button>
-    </li>
+    </li>*@
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="Huy-tab" data-bs-toggle="tab" data-bs-target="#Huy" type="button" role="tab" aria-controls="Huy" aria-selected="false">Đã hủy</button>
     </li> *@
@@ -84,7 +86,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.UserPhone)
                             </td>
-                            <td>
+                            <td class ="tienv">
                                 @Html.DisplayFor(modelItem => item.Total)
                             </td>
                             <td>
@@ -187,7 +189,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.UserPhone)
                             </td>
-                            <td>
+                            <td class="tienv">
                                 @Html.DisplayFor(modelItem => item.Total)
                             </td>
                             <td>
@@ -291,7 +293,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.UserPhone)
                             </td>
-                            <td>
+                            <td class="tienv">
                                 @Html.DisplayFor(modelItem => item.Total)
                             </td>
                             <td>
@@ -395,7 +397,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.UserPhone)
                             </td>
-                            <td>
+                            <td class="tienv">
                                 @Html.DisplayFor(modelItem => item.Total)
                             </td>
                             <td>
@@ -499,7 +501,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.UserPhone)
                             </td>
-                            <td>
+                            <td class="tienv">
                                 @Html.DisplayFor(modelItem => item.Total)
                             </td>
                             <td>
@@ -602,7 +604,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.UserPhone)
                             </td>
-                            <td>
+                            <td class="tienv">
                                 @Html.DisplayFor(modelItem => item.Total)
                             </td>
                             <td>
@@ -655,3 +657,20 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Lấy tất cả các thẻ h6 trong trang
+    var h6Elements = document.querySelectorAll('.tienv');
+
+    // Duyệt qua từng phần tử h6 và thực hiện thay đổi giá trị
+    h6Elements.forEach(function (h6Element) {
+        // Lấy giá trị từ phần tử
+        var amount = parseFloat(h6Element.innerText);
+
+        // Chuyển đổi giá trị thành định dạng tiền tệ và gán lại vào phần tử
+        var formatted_amount = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        h6Element.innerText = formatted_amount;
+
+        // Hiển thị kết quả trong console
+        console.log(formatted_amount);
+    });
+</script>

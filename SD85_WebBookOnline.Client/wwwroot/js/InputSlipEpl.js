@@ -30,7 +30,34 @@ $(document).ready(function () {
     $('body').on('click', '#btn-them', function () {
         var send = getData();
 
-        if ($('#btn_inpID').val() == null || $('#btn_inpID').val() == '' || $('#btn_inpID').val() == undefined) {
+        iif($('#btn_inpID').val() == null || $('#btn_inpID').val() == '' || $('#btn_inpID').val() == undefined) {
+
+            if ($('#cb_bookname').val() == '' || $('#cb_bookname').val() == null || $('#cb_bookname').val() == undefined) {
+                alert('Bạn phải nhập tên sách');
+                $('#cb_bookname').focus();
+                return;
+            }
+            if ($('#btn_soluong').val() == '' || $('#btn_soluong').val() == null || $('#btn_soluong').val() == undefined || $('#btn_soluong').val() <= 0) {
+                alert('Bạn phải nhập số lượng (Số lượng >0)');
+                $('#btn_soluong').focus()
+                return;
+            }
+            if ($('#btn_gianhap').val() == '' || $('#btn_gianhap').val() == null || $('#btn_gianhap').val() == undefined || $('#btn_gianhap').val() <= 0) {
+                alert('Bạn phải nhập giá nhập  (giá nhập >0)');
+                $('#btn_gianhap').focus()
+                return;
+            }
+            if ($('#btn_ban').val() == '' || $('#btn_ban').val() == null || $('#btn_ban').val() == undefined || $('#btn_ban').val() <= 0) {
+                alert('Bạn phải nhập giá bán  (giá bán > 0 )');
+                $('#btn_ban').focus()
+                return;
+            }
+            if ($('#btn_ban').val() <= $('#btn_gianhap').val()) {
+
+                alert('Bạn phải nhập giá bán  > giá nhập');
+                $('#btn_ban').focus()
+                return;
+            }
             $.post('/themm-inputslipelp', { ip: send }, function (re) {
                 if (re.status) {
 

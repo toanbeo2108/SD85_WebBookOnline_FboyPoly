@@ -51,7 +51,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 
             int countStar = lstRating_book.Count(x => x.IdBook == id);
             ViewBag.countStar = countStar;
-            decimal sumStar = (decimal)lstRating_book.Sum(x => x.Stars);
+            double sumStar = (double)lstRating_book.Sum(x => x.Stars);
             ViewBag.sumStar = sumStar;
             //decimal averageStars = sumStar / countStar;
             //ViewBag.AverageStars = averageStars;
