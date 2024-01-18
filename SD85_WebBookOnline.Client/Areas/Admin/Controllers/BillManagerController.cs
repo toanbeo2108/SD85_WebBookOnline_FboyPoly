@@ -148,6 +148,38 @@ namespace SD85_WebBookOnline.Client.Areas.Admin.Controllers
             var urlUpdateBill = $"https://localhost:7079/api/Bill/UpdateBill/" + Bill.BillID;
             var content = new StringContent(JsonConvert.SerializeObject(Bill), Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync(urlUpdateBill, content);
+            // Lấy tất cả những BillItem từ Bill trên :
+            var urlBillItems = $"https://localhost:7079/api/BillItem/GetAllBillItemByBillID/" + Bill.BillID;
+            var responeBillItems = await _httpClient.GetAsync(urlBillItems);
+            string apiBillItems = await responeBillItems.Content.ReadAsStringAsync();
+            var BillItems = JsonConvert.DeserializeObject<List<BillItems>>(apiBillItems);
+            foreach (var item in BillItems)
+            {
+                // Cập nhật lại số lượng cho sản phẩm:
+                if (item.ComboID == null) // billitem k có comboid tức là billItem của book
+                {
+                    // cập nhật lại sl bán được và sl tồn của sách
+                    var UrlUpdateBook = $"https://localhost:7079/api/Book/PlusBook/?id={item.BookID}&quantity={item.Quantity}";
+                    var contentUpdateBook = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+                    var responseUpdateBook = await _httpClient.PostAsync(UrlUpdateBook, contentUpdateBook);
+                    if (!responseUpdateBook.IsSuccessStatusCode)
+                    {
+                        return BadRequest("Lỗi cập nhật lại số lượng tồn của sản phẩm");
+                    }
+                }
+                else
+                {
+                    // cập nhật lại sl bán được và sl tồn của combo
+                    var UrlUpdateBook = $"https://localhost:7079/api/Combo/CancelBill/?id={item.ComboID}&quantityBuy={item.Quantity}";
+                    var contentUpdateBook = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+                    var responseUpdateBook = await _httpClient.PostAsync(UrlUpdateBook, contentUpdateBook);
+                    if (!responseUpdateBook.IsSuccessStatusCode)
+                    {
+                        return BadRequest("Lỗi cập nhật lại số lượng tồn của sản phẩm");
+                    }
+                }
+            }
+
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("GetAllBill_admin");

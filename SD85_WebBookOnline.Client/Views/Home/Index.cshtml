@@ -300,7 +300,7 @@ else if (User.IsInRole("User"))
                         </div>
                         <div class="card-footer d-flex justify-content-between bg-light border">
                             <a asp-action="deTail" asp-area="Customer" asp-controller="Cart" asp-route-id="@item.BookID" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                            <a asp-action="AddToCart" asp-area="Customer" asp-controller="Cart" asp-route-id="@item.BookID" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                            <a asp-action="AddToCart" asp-area="Customer" asp-controller="Cart" asp-route-id="@item.BookID" asp-route-quantity="1" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                         </div>
                     </div>
                 </div>
@@ -325,7 +325,7 @@ else if (User.IsInRole("User"))
                         </div>
                         <div class="card-footer d-flex justify-content-between bg-light border">
                             <a asp-action="Detail_cb" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.ComboID" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                            <a asp-action="AddToCart" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.ComboID" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                            <a asp-action="AddToCart" asp-controller="Cart" asp-area="Customer" asp-route-id="@item.ComboID" asp-route-quantity="1" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                         </div>
                     </div>
                 </div>
