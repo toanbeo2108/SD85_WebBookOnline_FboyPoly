@@ -86,10 +86,10 @@
                         <td style="text-align : center; margin-bottom : 20px">
                             @Html.DisplayFor(modelItem => item.QuantityExists)
                         </td>
-                        <td style="text-align : center; margin-bottom : 20px">
+                        <td style="text-align : center; margin-bottom : 20px" class="tienv">
                             @Html.DisplayFor(modelItem => item.EntryPrice)
                         </td>
-                        <td style="text-align : center; margin-bottom : 20px">
+                        <td style="text-align : center; margin-bottom : 20px" class="tienv">
                             @Html.DisplayFor(modelItem => item.Price)
                         </td>
                         <td style="text-align : center; margin-bottom : 20px">
@@ -110,6 +110,7 @@
                     </td>
                         <td style="text-align : center; margin-bottom : 20px">
                             <button class="btn btn-primary" type="button" id="btn_chitiet" data-id="@item.BookID">Xem chi tiết</button>
+                            <button type="button" class="btn btn-primary" id="btn_add_detail" data-id="@item.BookID">Thêm chi tiết sách</button>
                             <a asp-action="Book_AllRating" asp-controller="RatingManager" asp-area="Admin" class="btn btn-primary" asp-route-idbookrt="@item.BookID">danh giá</a>
                         </td>
                     </tr>
@@ -348,6 +349,21 @@
 
             // In dữ liệu JSON ra console
             console.log(data);
+        });
+        // Lấy tất cả các thẻ h6 trong trang
+        var h6Elements = document.querySelectorAll('.tienv');
+
+        // Duyệt qua từng phần tử h6 và thực hiện thay đổi giá trị
+        h6Elements.forEach(function (h6Element) {
+            // Lấy giá trị từ phần tử
+            var amount = parseFloat(h6Element.innerText);
+
+            // Chuyển đổi giá trị thành định dạng tiền tệ và gán lại vào phần tử
+            var formatted_amount = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+            h6Element.innerText = formatted_amount;
+
+            // Hiển thị kết quả trong console
+            console.log(formatted_amount);
         });
     </script>
 }

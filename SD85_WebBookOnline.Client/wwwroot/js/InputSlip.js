@@ -56,7 +56,7 @@ $(document).ready(function () {
                     $('#btn_ban').focus()
                     return;
             }
-            $.post('/themm-inputslipelp', { ip: send }, function (re) {
+            $.post('/themm-inputslip', { ip: send }, function (re) {
 
                 if (re.status) {
 
