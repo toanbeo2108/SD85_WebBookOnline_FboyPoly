@@ -287,7 +287,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 
 
         #region Form
-        public async Task<IActionResult> FilterBy_Form(Guid formid)
+        public async Task<IActionResult> FilterBy_Form(Guid id)
         {
             var urlBook = $"https://localhost:7079/api/Book/get-all-book";
             var responBook = await _httpClient.GetAsync(urlBook);
@@ -304,7 +304,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                 {
                     return NotFound();
                 }
-                var lstBookFilterByForm = lstBookOk.Where(x => x.FormID == formid).Take(18).ToList();
+                var lstBookFilterByForm = lstBookOk.Where(x => x.FormID == id).Take(18).ToList();
                 if (lstBookFilterByForm == null)
                 {
                     return NotFound();
@@ -317,7 +317,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 
 
         #region Author
-        public async Task<IActionResult> FilterBy_Author(Guid authorID)
+        public async Task<IActionResult> FilterBy_Author(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -331,7 +331,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             {
                 return NotFound("Null rồi");
             }
-            var lstBDFilter = lstBD.Where(x => x.AuthorID == authorID).ToList();
+            var lstBDFilter = lstBD.Where(x => x.AuthorID == id).ToList();
             if (lstBDFilter == null)
             {
                 return NotFound("BD Null Đoạn này");
@@ -373,7 +373,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 
 
         #region category
-        public async Task<IActionResult> FilterBy_Category(Guid categoryID)
+        public async Task<IActionResult> FilterBy_Category(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -387,7 +387,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             {
                 return NotFound("Null rồi");
             }
-            var lstBDFilter = lstBD.Where(x => x.CategoriesID == categoryID).ToList();
+            var lstBDFilter = lstBD.Where(x => x.CategoriesID == id).ToList();
             if (lstBDFilter == null)
             {
                 return NotFound("BD Null Đoạn này");
@@ -429,7 +429,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 
 
         #region Language
-        public async Task<IActionResult> FilterBy_Language(Guid languageID)
+        public async Task<IActionResult> FilterBy_Language(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -443,7 +443,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             {
                 return NotFound("Null rồi");
             }
-            var lstBDFilter = lstBD.Where(x => x.LagugeID == languageID).ToList();
+            var lstBDFilter = lstBD.Where(x => x.LagugeID == id).ToList();
             if (lstBDFilter == null)
             {
                 return NotFound("BD Null Đoạn này");
@@ -485,7 +485,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
 
 
         #region Manufacture
-        public async Task<IActionResult> FilterBy_Manufacture(Guid manuID)
+        public async Task<IActionResult> FilterBy_Manufacture(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -507,7 +507,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
                 {
                     return NotFound();
                 }
-                var lstFilterManu = lstBookOk.Where(x => x.ManufacturerID == manuID).Take(18).ToList();
+                var lstFilterManu = lstBookOk.Where(x => x.ManufacturerID == id).Take(18).ToList();
 
                 ViewBag.lstFilterManu = lstFilterManu;
             }
@@ -516,7 +516,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
         #endregion
 
         #region CategoryParent
-        public async Task<IActionResult> FilterBy_CategoryParent(Guid categoryparentID)
+        public async Task<IActionResult> FilterBy_CategoryParent(Guid id)
         {
             var token = Request.Cookies["Token"];
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -528,7 +528,7 @@ namespace SD85_WebBookOnline.Client.Areas.Customer.Controllers
             {
                 return NotFound("Không tồn tại thể loại cha nào của sách");
             }
-            var CateOk = lstCateP.FirstOrDefault(x => x.CategoryParentID == categoryparentID); // lấy cate cha thỏa mãn 
+            var CateOk = lstCateP.FirstOrDefault(x => x.CategoryParentID == id); // lấy cate cha thỏa mãn 
             if (CateOk == null)
             {
                 return NotFound("Không tồn tại Danh Mục sách này");

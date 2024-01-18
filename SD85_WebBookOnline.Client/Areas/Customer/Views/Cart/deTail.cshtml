@@ -62,7 +62,7 @@
                 </div>
                
             </div>
-            <h3 class="font-weight-semi-bold mb-4">$ @book.Price</h3>
+            <h3 class="font-weight-semi-bold mb-4" id="element-price">@book.Price</h3>
             <p class="mb-4">@book.Description</p>
             <p class="mb-4">
                 1 Sản Phẩm của FPolyBook Shop mang đến cho mọi người những trải nghiệm mới.
@@ -250,7 +250,7 @@
     var btnPlus = document.querySelector('.btn-plus');
     var btnMinus = document.querySelector('.btn-minus');
     var input = document.querySelector('#quantity');
-
+    var h6Elements = document.querySelectorAll('#element-price');
     // Remove existing event listeners
     btnPlus.removeEventListener('click', incrementQuantity);
     btnMinus.removeEventListener('click', decrementQuantity);
@@ -288,4 +288,25 @@
             this.value = value;
         }
     });
+    
+
+    // Duyệt qua từng phần tử h6 và thực hiện thay đổi giá trị
+    h6Elements.forEach(function (h6Element) {
+        // Lấy giá trị từ phần tử
+        var amount = parseFloat(h6Element.innerText);
+
+        // Chuyển đổi giá trị thành định dạng tiền tệ và gán lại vào phần tử
+        var formatted_amount = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        h6Element.innerText = formatted_amount;
+
+        // Hiển thị kết quả trong console
+        console.log(formatted_amount);
+    });
+    // Lấy tất cả các thẻ h6 trong trang
+    
 </script>
+<style>
+    .font-weight-semi-bold {
+        color: orangered;
+    }
+</style>
